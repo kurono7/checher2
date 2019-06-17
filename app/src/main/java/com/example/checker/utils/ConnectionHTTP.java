@@ -22,11 +22,12 @@ public class ConnectionHTTP {
     private boolean finishProcess;
 
     //SERVER
-    public final static String SERVER = "http://192.168.96.34:3000";
+    public final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8000";
     public final static int WAIT = 20000;
 
     // URL API'S
     public final static String AUTENTIFICATION = "/api/user/login";
+    public final static String GETTASKS = "/api/v1/tareas/busqueda/tareas-usuario/";
 
     public ConnectionHTTP() {
         finishProcess = false;
@@ -53,6 +54,10 @@ public class ConnectionHTTP {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void getTasks(String projectID, String responsable) {
+        new SendDeviceDetailsGET().execute(SERVER + GETTASKS, projectID, responsable);
     }
 
     private class SendDeviceDetailsPOST extends AsyncTask<String, Void, String> {
@@ -121,7 +126,7 @@ public class ConnectionHTTP {
             String data = "";
             HttpURLConnection httpURLConnection = null;
             try {
-                httpURLConnection = (HttpURLConnection) new URL(params[0] + "?phone=" + params[1]).openConnection();
+                httpURLConnection = (HttpURLConnection) new URL(params[0] + params[1] + "?responsable=" + params[2]).openConnection();
                 httpURLConnection.setRequestMethod("GET");
                 //httpURLConnection.setRequestProperty("Content-Type", "application/json");
                 //httpURLConnection.setRequestProperty("Accept", "application/json");

@@ -2,6 +2,7 @@ package com.example.checker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -32,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 final ConnectionHTTP connectionHTTP = new ConnectionHTTP();
                 int time = 0;
                 if (connectionHTTP.isNetworkAvailable(LoginActivity.this)) {
