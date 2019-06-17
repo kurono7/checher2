@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Checker</string>
+
+    <!--SHARED PREFERENCES -->
+    <string name="shared_mail">mail</string>
+
+    <!--MAIN ACTIVITY-->
+    <string name="mailTxt">Correo electrónico</string>
+    <string name="passwordTxt">Contraseña</string>
+    <string name="loginTxt">Ingresar</string>
+
 </resources>
