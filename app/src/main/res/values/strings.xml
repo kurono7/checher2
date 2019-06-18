@@ -5,7 +5,7 @@
     <string name="shared_mail">mail</string>
 
     <!--MAIN ACTIVITY-->
-    <string name="mailTxt">Correo electrónico</string>
+    <string name="usernameTxt">Usuario</string>
     <string name="passwordTxt">Contraseña</string>
     <string name="loginTxt">Ingresar</string>
 

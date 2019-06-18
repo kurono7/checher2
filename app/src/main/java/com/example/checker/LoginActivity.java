@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        loginMail = findViewById(R.id.loginMail);
+        loginMail = findViewById(R.id.loginUsername);
         loginPassword = findViewById(R.id.loginPassword);
         loginBtn = findViewById(R.id.loginBtn);
         progressBar = findViewById(R.id.progressBar);
@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                 final ConnectionHTTP connectionHTTP = new ConnectionHTTP();
 
                 if (connectionHTTP.isNetworkAvailable(LoginActivity.this)) {
-                    connectionHTTP.sendAutentification("", loginMail.getText().toString(), encryptText(loginPassword.getText().toString()),"",createTransactionID());
+                    connectionHTTP.sendAutentification("", loginMail.getText().toString(), encryptText(loginPassword.getText().toString()), "", createTransactionID());
                     progressBar.setVisibility(View.VISIBLE);
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                     // Create and start a new Thread
                     new Thread(new Runnable() {
                         int time = 0;
+
                         public void run() {
                             try {
                                 for (time = 0; time < ConnectionHTTP.WAIT && !connectionHTTP.isFinishProcess(); time += 100) {
@@ -97,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                         SharedPreferences.Editor editor = preferences.edit();
-                                        editor.putString("token",token);
+                                        editor.putString("token", token);
                                         editor.apply();
 
                                         startActivity(new Intent(LoginActivity.this, HomeActivity.class));
@@ -123,13 +124,13 @@ public class LoginActivity extends AppCompatActivity {
 
             byte[] tdesKeyData = "JCm6Xx4TnA94K8A8SJCAjXTUzE3DnYBtJCm6".getBytes("UTF-8");
             byte[] myIV = "CAjXTUzXx4TnA94K8A8SJE3DnYBt".getBytes("UTF-8");
-            SecretKeySpec myKey = new SecretKeySpec(tdesKeyData,0,128/8, "DESede");
-            IvParameterSpec ivspec = new IvParameterSpec(myIV,0,128/16);
+            SecretKeySpec myKey = new SecretKeySpec(tdesKeyData, 0, 128 / 8, "DESede");
+            IvParameterSpec ivspec = new IvParameterSpec(myIV, 0, 128 / 16);
             Cipher c3des = Cipher.getInstance("DESede/CBC/PKCS7Padding");
             c3des.init(Cipher.ENCRYPT_MODE, myKey, ivspec);
             byte[] cipherText = c3des.doFinal(plaintext);
             encryptedString = Base64.encodeToString(cipherText, Base64.DEFAULT);
-            encryptedString = encryptedString.substring(0,encryptedString.length()-1);
+            encryptedString = encryptedString.substring(0, encryptedString.length() - 1);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (NoSuchPaddingException e) {
@@ -149,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public String createTransactionID(){
+    public String createTransactionID() {
         return UUID.randomUUID().toString();
     }
 }
