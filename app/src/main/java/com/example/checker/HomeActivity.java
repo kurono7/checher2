@@ -2,8 +2,10 @@ package com.example.checker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ListView;
@@ -29,10 +31,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         tasksList = findViewById(R.id.tasksList);
         progressBar = findViewById(R.id.progressBar);
-
         refreshList();
     }
 
@@ -42,7 +42,9 @@ public class HomeActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-            connectionHTTP.getTasks("a94309a4-9cc4-4bbc-8436-b4378b9f2cb9", "3");
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String token = preferences.getString("token","");
+            connectionHTTP.getTasks("a94309a4-9cc4-4bbc-8436-b4378b9f2cb9", "3",token);
 
             // Create a Handler instance on the main thread
             final Handler handler = new Handler();

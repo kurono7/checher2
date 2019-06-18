@@ -22,11 +22,12 @@ public class ConnectionHTTP {
     private boolean finishProcess;
 
     //SERVER
-    public final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8000";
+    //public final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8000";
+    public final static String SERVER = "http://192.168.43.218:8000";
     public final static int WAIT = 20000;
 
     // URL API'S
-    public final static String AUTENTIFICATION = "/api/user/login";
+    public final static String AUTENTIFICATION = "/auth/autenticar";
     public final static String GETTASKS = "/api/v1/tareas/busqueda/tareas-usuario/";
 
     public ConnectionHTTP() {
@@ -45,30 +46,32 @@ public class ConnectionHTTP {
         return finishProcess;
     }
 
-    public void sendAutentification(String mail, String password) {
+    public void sendAutentification(String idUsuario, String nombreUsuario, String claveUsuario, String captcha, String pdata) {
         JSONObject post = new JSONObject();
         try {
-            post.put("mail", mail);
-            post.put("password", password);
-            new SendDeviceDetailsPOST().execute(SERVER + AUTENTIFICATION, post.toString());
+            post.put("idUsuario", "");
+            post.put("nombreUsuario", "freddy");
+            post.put("claveUsuario", "Ws0ZZ7AQqMk=");
+            post.put("captcha", "");
+            post.put("pdata", "19e6456f-1cae-4566-bf6f-3dc1644efe4c");
+            new SendDeviceDetailsPOST().execute(AUTENTIFICATION, post.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public void getTasks(String projectID, String responsable) {
-        new SendDeviceDetailsGET().execute(SERVER + GETTASKS, projectID, responsable);
+    public void getTasks(String projectID, String responsable, String token) {
+        new SendDeviceDetailsGET().execute(GETTASKS, projectID, responsable, token);
     }
 
     private class SendDeviceDetailsPOST extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {
-
             String data = "";
             HttpURLConnection httpURLConnection = null;
             try {
-                httpURLConnection = (HttpURLConnection) new URL(params[0]).openConnection();
+                httpURLConnection = (HttpURLConnection) new URL(SERVER+params[0]).openConnection();
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setRequestProperty("Content-Type", "application/json");
                 httpURLConnection.setRequestProperty("Accept", "application/json");
@@ -126,8 +129,9 @@ public class ConnectionHTTP {
             String data = "";
             HttpURLConnection httpURLConnection = null;
             try {
-                httpURLConnection = (HttpURLConnection) new URL(params[0] + params[1] + "?responsable=" + params[2]).openConnection();
+                httpURLConnection = (HttpURLConnection) new URL(SERVER+params[0] + params[1] + "?responsable=" + params[2]).openConnection();
                 httpURLConnection.setRequestMethod("GET");
+                httpURLConnection.setRequestProperty("Authorization", "Bearer "+ params[2]);
                 //httpURLConnection.setRequestProperty("Content-Type", "application/json");
                 //httpURLConnection.setRequestProperty("Accept", "application/json");
                 //httpURLConnection.setDoOutput(true);
@@ -155,7 +159,6 @@ public class ConnectionHTTP {
                     httpURLConnection.disconnect();
                 }
             }
-
             return data;
         }
 
