@@ -23,12 +23,13 @@ public class ConnectionHTTP {
 
     //SERVER
     //public final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8000";
-    public final static String SERVER = "http://192.168.43.218:8000";
-    public final static int WAIT = 20000;
+    public final static String SERVER = "http://172.19.15.49:8000";
+    public final static int WAIT = 25000;
 
     // URL API'S
     public final static String AUTENTIFICATION = "/auth/autenticar";
     public final static String GETTASKS = "/api/v1/tareas/busqueda/tareas-usuario/";
+    public final static String SIGNOUT = "/api/v1/usuarios/cerrar-sesion/";
 
     public ConnectionHTTP() {
         finishProcess = false;
@@ -50,10 +51,10 @@ public class ConnectionHTTP {
         JSONObject post = new JSONObject();
         try {
             post.put("idUsuario", "");
-            post.put("nombreUsuario", "freddy");
-            post.put("claveUsuario", "Ws0ZZ7AQqMk=");
+            post.put("nombreUsuario", "CBOGBOGAMERICAS");
+            post.put("claveUsuario", "tOrbrLcDrtmaoguN/T3hHw==");
             post.put("captcha", "");
-            post.put("pdata", "19e6456f-1cae-4566-bf6f-3dc1644efe4c");
+            post.put("pdata", "da07f6d4-e446-4a1a-bda2-9d7805596239");
             new SendDeviceDetailsPOST().execute(AUTENTIFICATION, post.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -64,6 +65,10 @@ public class ConnectionHTTP {
         new SendDeviceDetailsGET().execute(GETTASKS, projectID, responsable, token);
     }
 
+    public void signOut(String IdUsuario, String token) {
+        new SendDeviceDetailsGET().execute(SIGNOUT, IdUsuario, token);
+    }
+
     private class SendDeviceDetailsPOST extends AsyncTask<String, Void, String> {
 
         @Override
@@ -71,7 +76,7 @@ public class ConnectionHTTP {
             String data = "";
             HttpURLConnection httpURLConnection = null;
             try {
-                httpURLConnection = (HttpURLConnection) new URL(SERVER+params[0]).openConnection();
+                httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]).openConnection();
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setRequestProperty("Content-Type", "application/json");
                 httpURLConnection.setRequestProperty("Accept", "application/json");
@@ -129,12 +134,15 @@ public class ConnectionHTTP {
             String data = "";
             HttpURLConnection httpURLConnection = null;
             try {
-                httpURLConnection = (HttpURLConnection) new URL(SERVER+params[0] + params[1] + "?responsable=" + params[2]).openConnection();
-                httpURLConnection.setRequestMethod("GET");
-                httpURLConnection.setRequestProperty("Authorization", "Bearer "+ params[2]);
-                //httpURLConnection.setRequestProperty("Content-Type", "application/json");
-                //httpURLConnection.setRequestProperty("Accept", "application/json");
-                //httpURLConnection.setDoOutput(true);
+                if(params[0].equals(SIGNOUT)){
+                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]+params[1]).openConnection();
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[2]);
+                }else {
+                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[1] + "?responsable=" + params[2]).openConnection();
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[3]);
+                }
 
                 InputStream in = httpURLConnection.getInputStream();
                 InputStreamReader inputStreamReader = new InputStreamReader(in);

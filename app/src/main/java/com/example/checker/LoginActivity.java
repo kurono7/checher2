@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.SyncStateContract;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
@@ -58,7 +60,11 @@ public class LoginActivity extends AppCompatActivity {
                 final ConnectionHTTP connectionHTTP = new ConnectionHTTP();
 
                 if (connectionHTTP.isNetworkAvailable(LoginActivity.this)) {
-                    connectionHTTP.sendAutentification("", loginMail.getText().toString(), encryptText(loginPassword.getText().toString()), "", createTransactionID());
+                    String uuid = createTransactionID();
+                    Log.e("TAG", "UUDI CORT "+uuid.substring(1,15));
+                    String password = encryptText(loginPassword.getText().toString()+""+uuid.substring(1,15));
+                    Log.e("TAG", "PASSWORD: "+password+"    UUID: "+uuid);
+                    connectionHTTP.sendAutentification("", loginMail.getText().toString(), password, "", uuid);
                     progressBar.setVisibility(View.VISIBLE);
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
@@ -88,20 +94,37 @@ public class LoginActivity extends AppCompatActivity {
                                     } else if (connectionHTTP.getStatusResponse() >= 300) {
                                         Toast.makeText(LoginActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        String token = "";
+
                                         try {
                                             JSONObject respon = new JSONObject(connectionHTTP.getResponse());
-                                            token = respon.getString("token");
+                                            JSONObject respuesta = respon.getJSONObject("respuesta");
+                                            String mensaje = respuesta.getString("message");
+                                            boolean exito = respuesta.getBoolean("exito");
+                                            if(exito){
+                                                JSONObject data = respuesta.getJSONObject("data");
+                                                String code = data.getString("CodigoCargo");
+                                                String token = respon.getString("token");
+                                                String IdUsuario = data.getString("IdUsuario");
+                                                String Nombres = data.getString("Nombres");
+                                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                                SharedPreferences.Editor editor = preferences.edit();
+                                                editor.putString("token", token);
+                                                editor.putString("CodigoCargo",code);
+                                                editor.putString("IdUsuario",IdUsuario);
+                                                editor.putString("Nombres",Nombres);
+                                                editor.apply();
+
+                                                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                                            }else{
+                                                Toast.makeText(getApplicationContext(),mensaje,Toast.LENGTH_LONG).show();
+                                            }
+
+
+
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
 
-                                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                        SharedPreferences.Editor editor = preferences.edit();
-                                        editor.putString("token", token);
-                                        editor.apply();
-
-                                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                                     }
                                     // Set the View's visibility back on the main UI Thread
                                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -122,8 +145,8 @@ public class LoginActivity extends AppCompatActivity {
             // ---- Use specified 3DES key and IV from other source --------------
             byte[] plaintext = plainText.getBytes();//input
 
-            byte[] tdesKeyData = "JCm6Xx4TnA94K8A8SJCAjXTUzE3DnYBtJCm6".getBytes("UTF-8");
-            byte[] myIV = "CAjXTUzXx4TnA94K8A8SJE3DnYBt".getBytes("UTF-8");
+            byte[] tdesKeyData = "JCm6Xx4TnA94K8A8SJCAjXTUzE3DnYBtJCm6".getBytes(StandardCharsets.UTF_8);
+            byte[] myIV = "CAjXTUzXx4TnA94K8A8SJE3DnYBt".getBytes(StandardCharsets.UTF_8);
             SecretKeySpec myKey = new SecretKeySpec(tdesKeyData, 0, 128 / 8, "DESede");
             IvParameterSpec ivspec = new IvParameterSpec(myIV, 0, 128 / 16);
             Cipher c3des = Cipher.getInstance("DESede/CBC/PKCS7Padding");
@@ -142,8 +165,6 @@ public class LoginActivity extends AppCompatActivity {
         } catch (IllegalBlockSizeException e) {
             e.printStackTrace();
         } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return encryptedString;
