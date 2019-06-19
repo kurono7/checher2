@@ -49,10 +49,10 @@ public class TaskAdapter extends BaseAdapter {
             }
         });
         TextView taskName = convertView.findViewById(R.id.taskName);
-        TextView taskStatus = convertView.findViewById(R.id.taskStatus);
+        TextView taskExpirationDate = convertView.findViewById(R.id.taskExpirationDate);
         Task task = tasksList.get(position);
         taskName.setText(task.getTaskName());
-        taskStatus.setText(task.getExpirationDate());
+        taskExpirationDate.setText(task.getExpirationDate());
         return convertView;
     }
 }

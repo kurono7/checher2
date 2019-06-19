@@ -2,7 +2,7 @@
     <string name="app_name">Checker</string>
 
     <!--SHARED PREFERENCES -->
-    <string name="shared_mail">mail</string>
+    <string name="shared_username">username</string>
 
     <!--MAIN ACTIVITY-->
     <string name="usernameTxt">Usuario</string>

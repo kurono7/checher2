@@ -173,7 +173,7 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }).start();
         } else {
-            Toast.makeText(HomeActivity.this, "Error de conexión, not netwoek available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(HomeActivity.this, "Error de conexión, not network available", Toast.LENGTH_SHORT).show();
         }
     }
 }
