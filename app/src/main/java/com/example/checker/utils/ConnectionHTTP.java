@@ -22,12 +22,12 @@ public class ConnectionHTTP {
     private boolean finishProcess;
 
     //SERVER
-    //public final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8000";
-    public final static String SERVER = "http://172.19.15.49:8000";
-    public final static int WAIT = 25000;
+    public final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8080";
+    //public final static String SERVER = "http://172.19.15.49:8000";
+    public final static int WAIT = 30000;
 
     // URL API'S
-    public final static String AUTENTIFICATION = "/auth/autenticar";
+    public final static String AUTENTIFICATION = "/auth/autenticar/mobile";
     public final static String GETTASKS = "/api/v1/tareas/busqueda/tareas-usuario/";
     public final static String SIGNOUT = "/api/v1/usuarios/cerrar-sesion/";
 
@@ -50,11 +50,11 @@ public class ConnectionHTTP {
     public void sendAutentification(String idUsuario, String nombreUsuario, String claveUsuario, String captcha, String pdata) {
         JSONObject post = new JSONObject();
         try {
-            post.put("idUsuario", "");
-            post.put("nombreUsuario", "CBOGBOGAMERICAS");
-            post.put("claveUsuario", "tOrbrLcDrtmaoguN/T3hHw==");
-            post.put("captcha", "");
-            post.put("pdata", "da07f6d4-e446-4a1a-bda2-9d7805596239");
+            post.put("idUsuario", idUsuario);
+            post.put("nombreUsuario", nombreUsuario);
+            post.put("claveUsuario", claveUsuario);
+            post.put("captcha", captcha);
+            post.put("pdata", pdata);
             new SendDeviceDetailsPOST().execute(AUTENTIFICATION, post.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -70,7 +70,6 @@ public class ConnectionHTTP {
     }
 
     private class SendDeviceDetailsPOST extends AsyncTask<String, Void, String> {
-
         @Override
         protected String doInBackground(String... params) {
             String data = "";

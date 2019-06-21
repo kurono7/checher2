@@ -57,6 +57,12 @@ public class TaskAdapter extends BaseAdapter {
         Task task = tasksList.get(position);
         taskName.setText(task.getTaskName());
         taskExpirationDate.setText(task.getExpirationDate());
+        if (task.getTaskType() == 0) {
+            statusCheckbox.setVisibility(View.VISIBLE);
+        } else {
+            statusSpinner.setVisibility(View.VISIBLE);
+        }
+
         return convertView;
     }
 }

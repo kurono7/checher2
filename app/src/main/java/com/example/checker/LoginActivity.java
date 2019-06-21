@@ -64,7 +64,8 @@ public class LoginActivity extends AppCompatActivity {
                     Log.e("TAG", "UUDI CORT "+uuid.substring(1,15));
                     String password = encryptText(loginPassword.getText().toString()+""+uuid.substring(1,15));
                     Log.e("TAG", "PASSWORD: "+password+"    UUID: "+uuid);
-                    connectionHTTP.sendAutentification("", loginMail.getText().toString(), password, "", uuid);
+
+                    connectionHTTP.sendAutentification("", loginMail.getText().toString(), loginPassword.getText().toString(), "", uuid);
                     progressBar.setVisibility(View.VISIBLE);
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 

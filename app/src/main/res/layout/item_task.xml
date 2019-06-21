@@ -20,12 +20,11 @@
         android:id="@+id/taskExpirationDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_margin"
         android:text="Fecha"
         android:textSize="@dimen/text_size"
-        app:layout_constraintBottom_toBottomOf="@id/taskName"
-        app:layout_constraintStart_toEndOf="@id/taskName"
-        app:layout_constraintTop_toTopOf="@id/taskName" />
+        app:layout_constraintStart_toStartOf="@id/taskName"
+        app:layout_constraintTop_toBottomOf="@id/taskName" />
 
     <CheckBox
         android:id="@+id/statusCheckbox"
