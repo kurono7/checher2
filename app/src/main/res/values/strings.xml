@@ -9,5 +9,11 @@
     <string name="passwordTxt">Contraseña</string>
     <string name="loginTxt">Ingresar</string>
     <string name="signOut">Cerrar sesión</string>
+    <string-array name="deliverableOptionsTxt">
+        <item>Opción 1</item>
+        <item>Opción 2</item>
+        <item>Opción 3</item>
+        <item>Opción 4</item>
+    </string-array>
 
 </resources>

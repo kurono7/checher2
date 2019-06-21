@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.checker.model.Task;
@@ -50,6 +52,8 @@ public class TaskAdapter extends BaseAdapter {
         });
         TextView taskName = convertView.findViewById(R.id.taskName);
         TextView taskExpirationDate = convertView.findViewById(R.id.taskExpirationDate);
+        CheckBox statusCheckbox = convertView.findViewById(R.id.statusCheckbox);
+        Spinner statusSpinner = convertView.findViewById(R.id.statusSpinner);
         Task task = tasksList.get(position);
         taskName.setText(task.getTaskName());
         taskExpirationDate.setText(task.getExpirationDate());

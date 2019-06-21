@@ -20,10 +20,32 @@
         android:id="@+id/taskExpirationDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginLeft="@dimen/fab_margin"
         android:text="Fecha"
         android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toBottomOf="@id/taskName"
+        app:layout_constraintStart_toEndOf="@id/taskName"
+        app:layout_constraintTop_toTopOf="@id/taskName" />
+
+    <CheckBox
+        android:id="@+id/statusCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/taskName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/taskName" />
+
+    <Spinner
+        android:id="@+id/statusSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:entries="@array/deliverableOptionsTxt"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/taskName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/taskName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
