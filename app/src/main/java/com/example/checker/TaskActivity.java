@@ -32,4 +32,6 @@ public class TaskActivity extends AppCompatActivity {
         status.setText(task.getStatus());
         expirationDate.setText(task.getExpirationDate());
     }
+
+
 }

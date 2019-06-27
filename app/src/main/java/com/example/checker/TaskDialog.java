@@ -3,7 +3,9 @@ package com.example.checker;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.checker.model.Task;
@@ -15,6 +17,7 @@ public class TaskDialog extends Dialog {
     private TextView status;
     private TextView expirationDate;
     private Task task;
+    private Button reportTaskBtn;
 
     public TaskDialog(Context context, Task task) {
         super(context);
@@ -26,6 +29,13 @@ public class TaskDialog extends Dialog {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_task);
+        reportTaskBtn= findViewById(R.id.reportTaskBtn);
+        reportTaskBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reportTaskBtn.setEnabled(false);
+            }
+        });
 
         taskID = findViewById(R.id.taskID);
         processID = findViewById(R.id.processID);

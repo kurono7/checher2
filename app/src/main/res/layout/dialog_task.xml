@@ -122,6 +122,7 @@
         app:layout_constraintTop_toTopOf="@id/expirationDateTitle" />
 
     <Button
+        android:id="@+id/reportTaskBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_margin"
