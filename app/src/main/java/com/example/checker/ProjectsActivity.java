@@ -41,10 +41,8 @@ public class ProjectsActivity extends AppCompatActivity {
         AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
-                Bundle args = new Bundle();
-                args.putSerializable("task", (Task) projectsList.getSelectedItem());
-                TaskDialog taskDialog = new TaskDialog(ProjectsActivity.this, args);
-                taskDialog.setCancelable(false);
+                TaskDialog taskDialog = new TaskDialog(ProjectsActivity.this,(Task) projectsList.getAdapter().getItem(position));
+                taskDialog.setCancelable(true);
                 taskDialog.show();
             }
         };
