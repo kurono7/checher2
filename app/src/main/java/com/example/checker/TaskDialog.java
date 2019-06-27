@@ -14,10 +14,19 @@ public class TaskDialog extends Dialog {
     private TextView taskName;
     private TextView status;
     private TextView expirationDate;
+    private Task task;
 
-    public TaskDialog(Context context, Bundle bundle) {
+    public TaskDialog(Context context, Task task) {
         super(context);
-        Task task = (Task) bundle.getSerializable("task");
+        this.task = task;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.dialog_task);
+
         taskID = findViewById(R.id.taskID);
         processID = findViewById(R.id.processID);
         taskName = findViewById(R.id.taskName);
@@ -28,12 +37,5 @@ public class TaskDialog extends Dialog {
         taskName.setText(task.getTaskName());
         status.setText(task.getStatus());
         expirationDate.setText(task.getExpirationDate());
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.dialog_task);
     }
 }
