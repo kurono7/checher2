@@ -1,13 +1,16 @@
 package com.example.checker;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.checker.model.Task;
@@ -42,24 +45,7 @@ public class TaskAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         convertView = LayoutInflater.from(context).inflate(R.layout.item_task, null);
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /**
-                 Intent intent = new Intent(context, TaskActivity.class);
-                 intent.putExtra("task", tasksList.get(position));
-                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                 context.startActivity(intent);
-                 */
 
-                Bundle args = new Bundle();
-                args.putSerializable("task", tasksList.get(position));
-                TaskDialog taskDialog = new TaskDialog(context, args);
-                taskDialog.setCancelable(false);
-                taskDialog.show();
-
-            }
-        });
         TextView taskName = convertView.findViewById(R.id.taskName);
         TextView location = convertView.findViewById(R.id.location);
         TextView taskExpirationDate = convertView.findViewById(R.id.taskExpirationDate);

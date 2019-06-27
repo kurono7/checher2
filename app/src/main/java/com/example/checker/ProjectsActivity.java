@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -36,6 +37,20 @@ public class ProjectsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_projects);
         projectsList = findViewById(R.id.projectsList);
+
+        AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
+                Bundle args = new Bundle();
+                args.putSerializable("task", (Task) projectsList.getSelectedItem());
+                TaskDialog taskDialog = new TaskDialog(ProjectsActivity.this, args);
+                taskDialog.setCancelable(false);
+                taskDialog.show();
+            }
+        };
+
+        projectsList.setOnItemClickListener(listener);
+
         progressBar = findViewById(R.id.progressBar);
         refreshList();
     }
