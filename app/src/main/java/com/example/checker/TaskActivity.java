@@ -9,7 +9,6 @@ import com.example.checker.model.Task;
 
 public class TaskActivity extends AppCompatActivity {
     private TextView taskID;
-    private TextView taskType;
     private TextView processID;
     private TextView taskName;
     private TextView status;
@@ -22,14 +21,12 @@ public class TaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task);
         Task task = (Task) getIntent().getSerializableExtra("task");
         taskID = findViewById(R.id.taskID);
-        taskType = findViewById(R.id.taskType);
         processID = findViewById(R.id.processID);
         taskName = findViewById(R.id.taskName);
         status = findViewById(R.id.status);
         expirationDate = findViewById(R.id.expirationDate);
 
         taskID.setText(task.getTaskID());
-        taskType.setText(task.getTaskType() + "");
         processID.setText(task.getProcessID());
         taskName.setText(task.getTaskName());
         status.setText(task.getStatus());

@@ -15,7 +15,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ProjectsActivity"></activity>
+        <activity android:name=".DeliverableActivity"></activity>
+        <activity android:name=".ProjectsActivity" />
         <activity android:name=".TerritoriesActivity" />
         <activity
             android:name=".TaskActivity"
