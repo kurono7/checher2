@@ -11,40 +11,86 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/fab_margin"
+        android:fontFamily="sans-serif-black"
         android:text="Nombre del hito"
         android:textSize="@dimen/text_size"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/taskExpirationDate"
+        android:id="@+id/locationTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:text="Fecha"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:text="@string/locationTitleTxt"
         android:textSize="@dimen/text_size"
         app:layout_constraintStart_toStartOf="@id/taskName"
         app:layout_constraintTop_toBottomOf="@id/taskName" />
 
-    <CheckBox
-        android:id="@+id/statusCheckbox"
+    <TextView
+        android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/taskName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/taskName" />
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:text="Puesto"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toBottomOf="@id/locationTitle"
+        app:layout_constraintStart_toEndOf="@id/locationTitle"
+        app:layout_constraintTop_toTopOf="@id/locationTitle" />
 
-    <Spinner
-        android:id="@+id/statusSpinner"
+    <TextView
+        android:id="@+id/statusTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:text="@string/statusTitleTxt"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintStart_toStartOf="@id/taskName"
+        app:layout_constraintTop_toBottomOf="@id/locationTitle" />
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:text="POR REPORTAR"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toBottomOf="@id/statusTitle"
+        app:layout_constraintStart_toEndOf="@id/statusTitle"
+        app:layout_constraintTop_toTopOf="@id/statusTitle" />
+
+
+    <TextView
+        android:id="@+id/taskExpirationDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:text="25/06/2019"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintStart_toStartOf="@id/taskName"
+        app:layout_constraintTop_toBottomOf="@id/statusTitle" />
+
+    <ImageView
+        android:id="@+id/statusIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/fab_margin"
-        android:entries="@array/deliverableOptionsTxt"
+        android:src="@drawable/ic_vector_status_point_icon"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/taskName"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/taskName" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/attachIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:src="@drawable/ic_vector_attach_icon"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

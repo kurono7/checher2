@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/fab_margin"
+    android:paddingBottom="@dimen/fab_margin">
+
+    <ImageView
+        android:id="@+id/closeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginRight="@dimen/normal_margin"
+        android:src="@drawable/ic_vector_close_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/taskIDTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ID de la tarea:"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/closeBtn" />
+
+    <TextView
+        android:id="@+id/taskID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:text="taskID"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toBottomOf="@id/taskIDTitle"
+        app:layout_constraintStart_toEndOf="@id/taskIDTitle"
+        app:layout_constraintTop_toTopOf="@id/taskIDTitle" />
+
+    <TextView
+        android:id="@+id/processIDTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:text="ID del proceso"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintStart_toStartOf="@id/taskIDTitle"
+        app:layout_constraintTop_toBottomOf="@id/taskIDTitle" />
+
+    <TextView
+        android:id="@+id/processID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:text="processID"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toBottomOf="@id/processIDTitle"
+        app:layout_constraintStart_toEndOf="@id/processIDTitle"
+        app:layout_constraintTop_toTopOf="@id/processIDTitle" />
+
+    <TextView
+        android:id="@+id/taskNameTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:text="Nombre de la tarea:"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintStart_toStartOf="@id/processIDTitle"
+        app:layout_constraintTop_toBottomOf="@id/processIDTitle" />
+
+    <TextView
+        android:id="@+id/taskName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:text="taskName"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toBottomOf="@id/taskNameTitle"
+        app:layout_constraintStart_toEndOf="@id/taskNameTitle"
+        app:layout_constraintTop_toTopOf="@id/taskNameTitle" />
+
+    <TextView
+        android:id="@+id/statusTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:text="Estado:"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintStart_toStartOf="@id/taskNameTitle"
+        app:layout_constraintTop_toBottomOf="@id/taskNameTitle" />
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:text="POR ENTREGAR"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toBottomOf="@id/statusTitle"
+        app:layout_constraintStart_toEndOf="@id/statusTitle"
+        app:layout_constraintTop_toTopOf="@id/statusTitle"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/expirationDateTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:text="Fecha de vencimiento:"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintStart_toStartOf="@id/statusTitle"
+        app:layout_constraintTop_toBottomOf="@id/statusTitle" />
+
+    <TextView
+        android:id="@+id/expirationDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:text="expirationDate"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toBottomOf="@id/expirationDateTitle"
+        app:layout_constraintStart_toEndOf="@id/expirationDateTitle"
+        app:layout_constraintTop_toTopOf="@id/expirationDateTitle" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:text="@string/reportTaskTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/expirationDateTitle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

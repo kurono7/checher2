@@ -7,37 +7,40 @@
     tools:context=".HomeActivity">
 
     <TextView
-        android:id="@+id/welcomeUser"
+        android:id="@+id/tasksAndDeliverableTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
-        android:text="Bienvenido, Luis Alejandro"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/tasksAndDeliverableTitleTxt"
         android:textSize="@dimen/text_size"
         app:layout_constraintBottom_toTopOf="@id/tasksList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/optionsMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/fab_margin"
+        android:paddingTop="@dimen/fab_margin"
+        android:paddingRight="@dimen/fab_margin"
+        android:paddingBottom="@dimen/fab_margin"
+        android:src="@drawable/ic_vector_options_icon"
+        app:layout_constraintBottom_toBottomOf="@id/tasksAndDeliverableTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tasksAndDeliverableTitle" />
+
     <ListView
         android:id="@+id/tasksList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/fab_margin"
-        app:layout_constraintBottom_toTopOf="@id/signOutBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/welcomeUser" />
-
-    <Button
-        android:id="@+id/signOutBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/signOut"
-        android:textSize="@dimen/text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tasksAndDeliverableTitle" />
 
     <ProgressBar
         android:id="@+id/progressBar"

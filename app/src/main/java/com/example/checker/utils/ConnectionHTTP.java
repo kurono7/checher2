@@ -65,7 +65,7 @@ public class ConnectionHTTP {
         new SendDeviceDetailsGET().execute(GETTASKS, projectID, responsable, token);
     }
 
-    public void signOut(String IdUsuario, String token) {
+    public void logout(String IdUsuario, String token) {
         new SendDeviceDetailsGET().execute(SIGNOUT, IdUsuario, token);
     }
 
