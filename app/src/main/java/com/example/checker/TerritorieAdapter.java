@@ -44,8 +44,9 @@ public class TerritorieAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(context, TaskActivity.class);
-                intent.putExtra("task", territoriesList.get(position));
+                Intent intent = new Intent(context, ProjectsActivity.class);
+                intent.putExtra("territorie", territoriesList.get(position));
+                intent.putExtra("idProject", territoriesList.get(position).getProjectID());
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }

@@ -30,6 +30,7 @@ public class ConnectionHTTP {
     public final static String AUTENTIFICATION = "/auth/autenticar/mobile";
     public final static String GETTASKS = "/api/v1/tareas/busqueda/tareas-usuario/";
     public final static String SIGNOUT = "/api/v1/usuarios/cerrar-sesion/";
+    public final static String GETPROYECTS = "/api/v1/general/autenticacion/mobile/";
 
     public ConnectionHTTP() {
         finishProcess = false;
@@ -63,6 +64,10 @@ public class ConnectionHTTP {
 
     public void getTasks(String projectID, String responsable, String token) {
         new SendDeviceDetailsGET().execute(GETTASKS, projectID, responsable, token);
+    }
+
+    public void getproyects(String responsable, String idUsuario, String token){
+        new SendDeviceDetailsGET().execute(GETPROYECTS, idUsuario, responsable, token);
     }
 
     public void logout(String IdUsuario, String token) {
@@ -137,6 +142,10 @@ public class ConnectionHTTP {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]+params[1]).openConnection();
                     httpURLConnection.setRequestMethod("GET");
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[2]);
+                }else if(params[0].equals(GETPROYECTS)){
+                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]+params[2]+"/"+params[1]).openConnection();
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[3]);
                 }else {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[1] + "?responsable=" + params[2]).openConnection();
                     httpURLConnection.setRequestMethod("GET");

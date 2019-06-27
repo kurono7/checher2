@@ -2,6 +2,7 @@ package com.example.checker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.checker.model.Project;
 import com.example.checker.model.Task;
+import com.example.checker.model.Territorie;
 import com.example.checker.utils.ConnectionHTTP;
 
 import org.json.JSONArray;
@@ -47,7 +49,11 @@ public class ProjectsActivity extends AppCompatActivity {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String token = preferences.getString("token", "");
             String code = preferences.getString("CodigoCargo", "");
-            connectionHTTP.getTasks("e8386888-9006-463b-a3b2-448d0a2b1fa5", code, token);
+
+            Intent intent = getIntent();
+            String idProject = intent.getStringExtra("idProject");
+
+            connectionHTTP.getTasks(idProject, code, token);
             String Nombres = preferences.getString("Nombres", "");
 
             // Create a Handler instance on the main thread
@@ -78,22 +84,30 @@ public class ProjectsActivity extends AppCompatActivity {
                             } else if (connectionHTTP.getStatusResponse() >= 300) {
                                 Toast.makeText(ProjectsActivity.this, "Error de conexión 300", Toast.LENGTH_SHORT).show();
                             } else if (connectionHTTP.getStatusResponse() == 200) {
-                                ArrayList<Project> projects = new ArrayList<>();
+                                ArrayList<Task> tasks = new ArrayList<>();
                                 try {
                                     JSONObject respuesta = new JSONObject(connectionHTTP.getResponse());
                                     JSONArray array = respuesta.getJSONArray("data");
                                     for (int i = 0; i < array.length(); i++) {
-                                        JSONObject project = array.getJSONObject(i);
-                                        String projectID = project.getString("IdProyecto");
-                                        String projectName = project.getString("NombreProyecto");
+                                        JSONObject task = array.getJSONObject(i);
+                                        String taskID = task.getString("IdTarea");
+                                        int taskType = task.getInt("TipoTarea");
+                                        String processID = task.getString("IdProceso");
+                                        String taskName = task.getString("NombreHito");
+                                        String status = task.getString("TipoLocalizacion");
+                                        String expirationDate = task.getString("FechaVencimiento");
 
-                                        projects.add(new Project(projectName, projectID));
+                                        Date data = new Date();
+                                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                        expirationDate = sdf.format(data);
+
+                                        tasks.add(new Task(taskID, taskType, processID, taskName, status, expirationDate));
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                ProjectAdapter projectAdapter = new ProjectAdapter(getApplicationContext(), projects);
-                                projectsList.setAdapter(projectAdapter);
+                                TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasks);
+                                projectsList.setAdapter(taskAdapter);
                             }
                             // Set the View's visibility back on the main UI Thread
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);

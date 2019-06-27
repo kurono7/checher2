@@ -40,18 +40,19 @@ public class ProjectAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         convertView = LayoutInflater.from(context).inflate(R.layout.item_project, null);
+        final Project project = projectsList.get(position);
+
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent = new Intent(context, TerritoriesActivity.class);
-                intent.putExtra("task", projectsList.get(position));
+                intent.putExtra("IdProyecto", project.getProjectID());
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });
         TextView projectName = convertView.findViewById(R.id.projectName);
-        Project project = projectsList.get(position);
+
         projectName.setText(project.getProjectName());
         return convertView;
     }

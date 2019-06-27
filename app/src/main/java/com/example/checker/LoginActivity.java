@@ -107,11 +107,13 @@ public class LoginActivity extends AppCompatActivity {
                                                 String token = respon.getString("token");
                                                 String IdUsuario = data.getString("IdUsuario");
                                                 String Nombres = data.getString("Nombres");
+                                                String IdPerfil= data.getString("IdPerfil");
                                                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                                 SharedPreferences.Editor editor = preferences.edit();
                                                 editor.putString("token", token);
                                                 editor.putString("CodigoCargo",code);
                                                 editor.putString("IdUsuario",IdUsuario);
+                                                editor.putString("IdPerfil",IdPerfil);
                                                 editor.putString("Nombres",Nombres);
                                                 editor.apply();
 

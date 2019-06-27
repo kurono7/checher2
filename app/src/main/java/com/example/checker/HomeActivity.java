@@ -18,6 +18,7 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.checker.model.Project;
 import com.example.checker.model.Task;
 import com.example.checker.utils.ConnectionHTTP;
 
@@ -41,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
         optionsMenu = findViewById(R.id.optionsMenu);
         tasksList = findViewById(R.id.tasksList);
         progressBar = findViewById(R.id.progressBar);
-        refreshList();
+        refreshProyects();
 
         optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +51,87 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void refreshProyects() {
+        final ConnectionHTTP connectionHTTP = new ConnectionHTTP();
+        if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
+            progressBar.setVisibility(View.VISIBLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String token = preferences.getString("token", "");
+            String code = preferences.getString("CodigoCargo", "");
+            String Nombres = preferences.getString("Nombres", "");
+            String IdUsuario = preferences.getString("IdUsuario","");
+            String IdPerfil = preferences.getString("IdPerfil","");
+            connectionHTTP.getproyects(IdPerfil, IdUsuario,token);
+
+            // Create a Handler instance on the main thread
+            final Handler handler = new Handler();
+
+            // Create and start a new Thread
+            new Thread(new Runnable() {
+                int time;
+
+                public void run() {
+                    try {
+                        for (time = 0; time < ConnectionHTTP.WAIT && !connectionHTTP.isFinishProcess(); time += 100) {
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                Toast.makeText(HomeActivity.this, "Se ha superado el tiempo de espera", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    } catch (Exception e) {
+                        // Just catch the InterruptedException
+                    }
+                    // Now we use the Handler to post back to the main thread
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (time >= connectionHTTP.WAIT) {
+                                Toast.makeText(HomeActivity.this, "Se ha superado el tiempo de espera", Toast.LENGTH_SHORT).show();
+                            } else if (connectionHTTP.getStatusResponse() >= 300) {
+                                Toast.makeText(HomeActivity.this, "Error de conexión 300", Toast.LENGTH_SHORT).show();
+                            } else if (connectionHTTP.getStatusResponse() == 200) {
+                                ArrayList<Project> projects = new ArrayList<>();
+                                try {
+                                    JSONObject respuesta = new JSONObject(connectionHTTP.getResponse());
+                                    JSONObject proyectos = respuesta.getJSONObject("proyectos");
+
+                                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                    JSONObject territorios = respuesta.getJSONObject("territorios");
+                                    preferences.edit().putString("territorios", territorios.toString()).apply();
+
+                                    JSONArray array = proyectos.getJSONArray("data");
+
+                                    for (int i = 0; i < array.length(); i++) {
+                                        JSONObject project = array.getJSONObject(i);
+                                        String IdProyecto = project.getString("IdProyecto");
+                                        String NombreProyecto = project.getString("NombreProyecto");
+
+                                        Project p = new Project(NombreProyecto, IdProyecto);
+                                        projects.add(p);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                ProjectAdapter pAdapter = new ProjectAdapter(getApplicationContext(), projects);
+                                tasksList.setAdapter(pAdapter);
+                            }
+                            // Set the View's visibility back on the main UI Thread
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    });
+                }
+            }).start();
+        } else {
+            Toast.makeText(HomeActivity.this, "Error de conexión, not network available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
     public void refreshList() {
         final ConnectionHTTP connectionHTTP = new ConnectionHTTP();
