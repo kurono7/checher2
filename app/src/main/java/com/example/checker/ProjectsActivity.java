@@ -44,7 +44,6 @@ public class ProjectsActivity extends AppCompatActivity {
                 Bundle args = new Bundle();
                 args.putSerializable("task", (Task) projectsList.getSelectedItem());
                 TaskDialog taskDialog = new TaskDialog(ProjectsActivity.this, args);
-                taskDialog.setCancelable(false);
                 taskDialog.show();
             }
         };
