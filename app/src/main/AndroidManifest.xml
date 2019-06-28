@@ -15,14 +15,14 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".DeliverableActivity"></activity>
-        <activity android:name=".ProjectsActivity" />
-        <activity android:name=".TerritoriesActivity" />
         <activity
-            android:name=".TaskActivity"
+            android:name=".TasksActivity"
             android:theme="@style/BlueStatusbarTheme" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".TerritoriesActivity"
+            android:theme="@style/BlueStatusbarTheme" />
+        <activity
+            android:name=".ProjectsActivity"
             android:theme="@style/BlueStatusbarTheme" />
         <activity
             android:name=".LoginActivity"

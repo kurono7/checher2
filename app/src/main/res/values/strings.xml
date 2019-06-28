@@ -16,8 +16,11 @@
         <item>Opción 4</item>
     </string-array>
     <string name="tasksAndDeliverableTitleTxt">Tareas / Entregables</string>
+    <string name="projectsTitleTxt">Proyectos</string>
+    <string name="territoriesTitleTxt">Territorios</string>
     <string name="locationTitleTxt">Localización:</string>
     <string name="statusTitleTxt">Estado:</string>
+    <string name="expirationDateTitleTxt">Fecha de vencimiento:</string>
     <string name="toReportTxt">POR REPORTAR</string>
     <string name="reportedTxt">REPORTADO</string>
     <string name="rejectedTxt">RECHAZADO</string>

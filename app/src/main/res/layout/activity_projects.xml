@@ -6,6 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".ProjectsActivity">
 
+    <TextView
+        android:id="@+id/projectsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/projectsTitleTxt"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toTopOf="@id/projectsList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/optionsMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/fab_margin"
+        android:paddingTop="@dimen/fab_margin"
+        android:paddingRight="@dimen/fab_margin"
+        android:paddingBottom="@dimen/fab_margin"
+        android:src="@drawable/ic_vector_options_icon"
+        app:layout_constraintBottom_toBottomOf="@id/projectsTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/projectsTitle" />
+
     <ListView
         android:id="@+id/projectsList"
         android:layout_width="match_parent"
@@ -13,7 +40,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/projectsTitle" />
 
     <ProgressBar
         android:id="@+id/progressBar"

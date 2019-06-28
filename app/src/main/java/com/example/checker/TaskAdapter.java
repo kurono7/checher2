@@ -1,16 +1,11 @@
 package com.example.checker;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.checker.model.Task;
@@ -49,13 +44,13 @@ public class TaskAdapter extends BaseAdapter {
         TextView taskName = convertView.findViewById(R.id.taskName);
         TextView location = convertView.findViewById(R.id.location);
         TextView taskExpirationDate = convertView.findViewById(R.id.taskExpirationDate);
-        TextView status = convertView.findViewById(R.id.status);
+        //TextView status = convertView.findViewById(R.id.status);
         ImageView statusIcon = convertView.findViewById(R.id.statusIcon);
         ImageView attachIcon = convertView.findViewById(R.id.attachIcon);
         Task task = tasksList.get(position);
         taskName.setText(task.getTaskName());
         taskExpirationDate.setText(task.getExpirationDate());
-        status.setText(task.getStatus());
+        //status.setText(task.getStatus());
         if (task.getTaskType() == 0) {
             statusIcon.setVisibility(View.VISIBLE);
         } else {

@@ -31,7 +31,7 @@
         android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/normal_margin"
+        android:layout_marginLeft="@dimen/min_margin"
         android:text="Puesto"
         android:textSize="@dimen/text_size"
         app:layout_constraintBottom_toBottomOf="@id/locationTitle"
@@ -52,23 +52,34 @@
         android:id="@+id/status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/normal_margin"
+        android:layout_marginLeft="@dimen/min_margin"
         android:text="POR REPORTAR"
         android:textSize="@dimen/text_size"
         app:layout_constraintBottom_toBottomOf="@id/statusTitle"
         app:layout_constraintStart_toEndOf="@id/statusTitle"
         app:layout_constraintTop_toTopOf="@id/statusTitle" />
 
+    <TextView
+        android:id="@+id/taskExpirationDateTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:text="@string/expirationDateTitleTxt"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintStart_toStartOf="@id/taskName"
+        app:layout_constraintTop_toBottomOf="@id/statusTitle" />
+
 
     <TextView
         android:id="@+id/taskExpirationDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginLeft="@dimen/min_margin"
         android:text="25/06/2019"
         android:textSize="@dimen/text_size"
-        app:layout_constraintStart_toStartOf="@id/taskName"
-        app:layout_constraintTop_toBottomOf="@id/statusTitle" />
+        app:layout_constraintBottom_toBottomOf="@id/taskExpirationDateTitle"
+        app:layout_constraintStart_toEndOf="@id/taskExpirationDateTitle"
+        app:layout_constraintTop_toTopOf="@id/taskExpirationDateTitle" />
 
     <ImageView
         android:id="@+id/statusIcon"

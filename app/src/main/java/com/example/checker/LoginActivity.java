@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.provider.SyncStateContract;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -22,13 +21,10 @@ import com.example.checker.utils.ConnectionHTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.UUID;
 
 import javax.crypto.BadPaddingException;
@@ -117,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 editor.putString("Nombres",Nombres);
                                                 editor.apply();
 
-                                                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                                                startActivity(new Intent(LoginActivity.this, ProjectsActivity.class));
                                             }else{
                                                 Toast.makeText(getApplicationContext(),mensaje,Toast.LENGTH_LONG).show();
                                             }
