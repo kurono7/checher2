@@ -31,6 +31,7 @@ public class ConnectionHTTP {
     public final static String GETTASKS = "/api/v1/tareas/busqueda/tareas-usuario/";
     public final static String SIGNOUT = "/api/v1/usuarios/cerrar-sesion/";
     public final static String GETPROYECTS = "/api/v1/general/autenticacion/mobile/";
+    public final static String UPDATETASKSTATE = "/api/v1/tareasProyecto/procesar-tarea/";
 
     public ConnectionHTTP() {
         finishProcess = false;
@@ -46,6 +47,19 @@ public class ConnectionHTTP {
 
     public boolean isFinishProcess() {
         return finishProcess;
+    }
+
+    public void updateTaskState(String IdProyecto, String IdTerritorio, String IdTarea) {
+        JSONObject post = new JSONObject();
+        try {
+            post.put("idProyecto", IdProyecto);
+            post.put("idTerritorio", IdTerritorio);
+            post.put("idTarea", IdTarea);
+            new SendDeviceDetailsPOST().execute(UPDATETASKSTATE, post.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void sendAutentification(String idUsuario, String nombreUsuario, String claveUsuario, String captcha, String pdata) {
@@ -66,7 +80,7 @@ public class ConnectionHTTP {
         new SendDeviceDetailsGET().execute(GETTASKS, projectID, responsable, token);
     }
 
-    public void getproyects(String responsable, String idUsuario, String token){
+    public void getproyects(String responsable, String idUsuario, String token) {
         new SendDeviceDetailsGET().execute(GETPROYECTS, idUsuario, responsable, token);
     }
 
@@ -138,15 +152,15 @@ public class ConnectionHTTP {
             String data = "";
             HttpURLConnection httpURLConnection = null;
             try {
-                if(params[0].equals(SIGNOUT)){
-                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]+params[1]).openConnection();
+                if (params[0].equals(SIGNOUT)) {
+                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[1]).openConnection();
                     httpURLConnection.setRequestMethod("GET");
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[2]);
-                }else if(params[0].equals(GETPROYECTS)){
-                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]+params[2]+"/"+params[1]).openConnection();
+                } else if (params[0].equals(GETPROYECTS)) {
+                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[2] + "/" + params[1]).openConnection();
                     httpURLConnection.setRequestMethod("GET");
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[3]);
-                }else {
+                } else {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[1] + "?responsable=" + params[2]).openConnection();
                     httpURLConnection.setRequestMethod("GET");
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[3]);
