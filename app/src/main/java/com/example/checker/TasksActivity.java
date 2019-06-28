@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.checker.model.Task;
+import com.example.checker.model.Territorie;
 import com.example.checker.utils.ConnectionHTTP;
 
 import org.json.JSONArray;
@@ -40,6 +41,7 @@ public class TasksActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tasks);
         tasksList = findViewById(R.id.tasksList);
         optionsMenu = findViewById(R.id.optionsMenu);
+        progressBar = findViewById(R.id.progressBar);
 
         optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,15 +53,15 @@ public class TasksActivity extends AppCompatActivity {
         AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
-                TaskDialog taskDialog = new TaskDialog(TasksActivity.this, (Task) tasksList.getAdapter().getItem(position));
+                Territorie territorie = (Territorie) getIntent().getSerializableExtra("territorie");
+
+                TaskDialog taskDialog = new TaskDialog(TasksActivity.this, (Task) tasksList.getAdapter().getItem(position), territorie);
                 taskDialog.setCancelable(true);
                 taskDialog.show();
             }
         };
-
         tasksList.setOnItemClickListener(listener);
 
-        progressBar = findViewById(R.id.progressBar);
         refreshList();
     }
 
@@ -74,10 +76,10 @@ public class TasksActivity extends AppCompatActivity {
             String code = preferences.getString("CodigoCargo", "");
 
             Intent intent = getIntent();
-            String idProject = intent.getStringExtra("idProject");
+            Task territorie = (Task) intent.getSerializableExtra("territorie");
+            String idProject = territorie.getProcessID();
 
             connectionHTTP.getTasks(idProject, code, token);
-            String Nombres = preferences.getString("Nombres", "");
 
             // Create a Handler instance on the main thread
             final Handler handler = new Handler();
@@ -92,20 +94,20 @@ public class TasksActivity extends AppCompatActivity {
                             try {
                                 Thread.sleep(100);
                             } catch (InterruptedException e) {
-                                Toast.makeText(TasksActivity.this, "Se ha superado el tiempo de espera", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), getString(R.string.try_later), Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (Exception e) {
-                        // Just catch the InterruptedException
+                        Toast.makeText(getApplicationContext(), getString(R.string.error_waiting), Toast.LENGTH_LONG).show();
                     }
                     // Now we use the Handler to post back to the main thread
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
                             if (time >= connectionHTTP.WAIT) {
-                                Toast.makeText(TasksActivity.this, "Se ha superado el tiempo de espera", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), getString(R.string.time_passed), Toast.LENGTH_SHORT).show();
                             } else if (connectionHTTP.getStatusResponse() >= 300) {
-                                Toast.makeText(TasksActivity.this, "Error de conexión 300", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), getString(R.string.error_connetion), Toast.LENGTH_SHORT).show();
                             } else if (connectionHTTP.getStatusResponse() == 200) {
                                 ArrayList<Task> tasks = new ArrayList<>();
                                 try {
@@ -129,7 +131,7 @@ public class TasksActivity extends AppCompatActivity {
                                         tasks.add(new Task(taskID, taskType, processID, process, subprocess, taskName, status, expirationDate));
                                     }
                                 } catch (JSONException e) {
-                                    e.printStackTrace();
+                                    Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
                                 }
                                 TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasks);
                                 tasksList.setAdapter(taskAdapter);
@@ -142,7 +144,7 @@ public class TasksActivity extends AppCompatActivity {
                 }
             }).start();
         } else {
-            Toast.makeText(TasksActivity.this, "Error de conexión, not network available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -176,20 +178,20 @@ public class TasksActivity extends AppCompatActivity {
                                     try {
                                         Thread.sleep(100);
                                     } catch (InterruptedException e) {
-                                        Toast.makeText(TasksActivity.this, "Se ha superado el tiempo de espera", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), getString(R.string.try_later), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             } catch (Exception e) {
-                                // Just catch the InterruptedException
+                                Toast.makeText(getApplicationContext(), getString(R.string.error_waiting), Toast.LENGTH_LONG).show();
                             }
                             // Now we use the Handler to post back to the main thread
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     if (time >= connectionHTTP.WAIT) {
-                                        Toast.makeText(TasksActivity.this, "Se ha superado el tiempo de espera", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), getString(R.string.time_passed), Toast.LENGTH_SHORT).show();
                                     } else if (connectionHTTP.getStatusResponse() >= 300) {
-                                        Toast.makeText(TasksActivity.this, "Error de conexión 300", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), getString(R.string.error_connetion), Toast.LENGTH_SHORT).show();
                                     } else if (connectionHTTP.getStatusResponse() == 200) {
                                         finish();
                                         startActivity(new Intent(TasksActivity.this, LoginActivity.class));
@@ -201,11 +203,12 @@ public class TasksActivity extends AppCompatActivity {
                             });
                         }
                     }).start();
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
                 }
                 return true;
             }
         });
         popup.show();
     }
-
 }

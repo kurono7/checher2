@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.checker.model.Task;
+import com.example.checker.model.Territorie;
 import com.example.checker.utils.ConnectionHTTP;
 
 import org.json.JSONArray;
@@ -33,10 +34,12 @@ public class TaskDialog extends Dialog {
     private TextView expirationDate;
     private Task task;
     private Button reportTaskBtn;
+    private Territorie territorie;
 
-    public TaskDialog(Context context, Task task) {
+    public TaskDialog(Context context, Task task, Territorie territorie) {
         super(context);
         this.task = task;
+        this.territorie = territorie;
     }
 
     @Override
@@ -73,8 +76,9 @@ public class TaskDialog extends Dialog {
         if (connectionHTTP.isNetworkAvailable(getContext())) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-            //TODO
-            connectionHTTP.updateTaskState("e8386888-9006-463b-a3b2-448d0a2b1fa5", "", "");
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            String token = preferences.getString("token", "");
+            connectionHTTP.updateTaskState(territorie.getProjectID(), territorie.getTerritorieID(), task.getTaskID(), token);
 
             // Create a Handler instance on the main thread
             final Handler handler = new Handler();
@@ -89,47 +93,29 @@ public class TaskDialog extends Dialog {
                             try {
                                 Thread.sleep(100);
                             } catch (InterruptedException e) {
-                                Toast.makeText(getContext(), "Se ha superado el tiempo de espera", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getContext().getString(R.string.try_later), Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (Exception e) {
-                        // Just catch the InterruptedException
+                        Toast.makeText(getContext().getApplicationContext(), getContext().getString(R.string.error_waiting), Toast.LENGTH_LONG).show();
                     }
                     // Now we use the Handler to post back to the main thread
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (time >= connectionHTTP.WAIT) {
-                                Toast.makeText(getContext(), "Se ha superado el tiempo de espera", Toast.LENGTH_SHORT).show();
+                            if (time >= ConnectionHTTP.WAIT) {
+                                Toast.makeText(getContext(), getContext().getString(R.string.time_passed), Toast.LENGTH_SHORT).show();
                             } else if (connectionHTTP.getStatusResponse() >= 300) {
-                                Toast.makeText(getContext(), "Error de conexión 300", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getContext().getString(R.string.error_connetion), Toast.LENGTH_SHORT).show();
                             } else if (connectionHTTP.getStatusResponse() == 200) {
                                 ArrayList<Task> tasks = new ArrayList<>();
                                 try {
                                     JSONObject respuesta = new JSONObject(connectionHTTP.getResponse());
-                                    JSONArray array = respuesta.getJSONArray("data");
-                                    for (int i = 0; i < array.length(); i++) {
-                                        JSONObject task = array.getJSONObject(i);
-                                        String taskID = task.getString("IdTarea");
-                                        int taskType = task.getInt("TipoTarea");
-                                        String processID = task.getString("IdProceso");
-                                        String taskName = task.getString("NombreHito");
-                                        String status = task.getString("TipoLocalizacion");
-                                        String expirationDate = task.getString("FechaVencimiento");
-                                        String process = task.getString("Proceso");
-                                        String subprocess = task.getString("SubProceso");
 
-                                        Date data = new Date();
-                                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                        expirationDate = sdf.format(data);
 
-                                        tasks.add(new Task(taskID, taskType, processID, process, subprocess, taskName, status, expirationDate));
-                                    }
                                 } catch (JSONException e) {
-                                    e.printStackTrace();
+                                    Toast.makeText(getContext(), getContext().getString(R.string.error_json), Toast.LENGTH_LONG).show();
                                 }
-                                //TaskAdapter taskAdapter = new TaskAdapter(getContext(), tasks);
-                                //projectsList.setAdapter(taskAdapter);
                             }
                             // Set the View's visibility back on the main UI Thread
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -138,7 +124,7 @@ public class TaskDialog extends Dialog {
                 }
             }).start();
         } else {
-            Toast.makeText(getContext(), "Error de conexión, not network available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getContext().getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
         }
     }
 }

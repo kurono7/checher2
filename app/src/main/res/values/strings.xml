@@ -1,31 +1,41 @@
 <resources>
+
+    <!--GENERAL  -->
     <string name="app_name">Checker</string>
+    <!-- L4b1nn0v4*19 -->
 
     <!--SHARED PREFERENCES -->
     <string name="shared_username">username</string>
 
-    <!--MAIN ACTIVITY-->
+    <!--CONNETION_HTTP-->
+    <string name="failed_connection">Fallo la conexión</string>
+    <string name="error_waiting">Error esperando la respuesta</string>
+    <string name="try_later">Inténtalo más tarde</string>
+    <string name="time_passed">Se ha superado el tiempo de espera</string>
+    <string name="error_connetion">Error de conexión</string>
+    <string name="error_json">Error cargando datos</string>
+
+    <!--LOGIN ACTIVITY-->
     <string name="usernameTxt">Usuario</string>
     <string name="passwordTxt">Contraseña</string>
     <string name="loginTxt">Ingresar</string>
     <string name="logoutTxt">Cerrar sesión</string>
-    <string-array name="deliverableOptionsTxt">
-        <item>Opción 1</item>
-        <item>Opción 2</item>
-        <item>Opción 3</item>
-        <item>Opción 4</item>
-    </string-array>
+
+    <!--TASK ACTIVITY-->
     <string name="tasksAndDeliverableTitleTxt">Tareas / Entregables</string>
+
+    <!--PROJECT ACTIVITY-->
     <string name="projectsTitleTxt">Proyectos</string>
+
+    <!--TERRITORIE ACTIVITY-->
     <string name="territoriesTitleTxt">Territorios</string>
+
+    <!--TASK ITEM ACTIVITY-->
     <string name="locationTitleTxt">Localización:</string>
     <string name="statusTitleTxt">Estado:</string>
     <string name="expirationDateTitleTxt">Fecha de vencimiento:</string>
-    <string name="toReportTxt">POR REPORTAR</string>
-    <string name="reportedTxt">REPORTADO</string>
-    <string name="rejectedTxt">RECHAZADO</string>
-    <string name="approvedTxt">APROBADO</string>
-    <string name="reportTaskTxt">Reportar tarea</string>
 
+    <!--TASK DIALOG-->
+    <string name="reportTaskTxt">Reportar tarea</string>
 
 </resources>

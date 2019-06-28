@@ -16,18 +16,12 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.example.checker.model.Project;
-import com.example.checker.model.Task;
 import com.example.checker.utils.ConnectionHTTP;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ProjectsActivity extends AppCompatActivity {
     private ImageView optionsMenu;
@@ -59,8 +53,6 @@ public class ProjectsActivity extends AppCompatActivity {
 
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String token = preferences.getString("token", "");
-            String code = preferences.getString("CodigoCargo", "");
-            String Nombres = preferences.getString("Nombres", "");
             String IdUsuario = preferences.getString("IdUsuario", "");
             String IdPerfil = preferences.getString("IdPerfil", "");
             connectionHTTP.getproyects(IdPerfil, IdUsuario, token);
@@ -78,29 +70,32 @@ public class ProjectsActivity extends AppCompatActivity {
                             try {
                                 Thread.sleep(100);
                             } catch (InterruptedException e) {
-                                Toast.makeText(ProjectsActivity.this, "Se ha superado el tiempo de espera", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), getString(R.string.try_later), Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (Exception e) {
-                        // Just catch the InterruptedException
+                        Toast.makeText(getApplicationContext(), getString(R.string.error_waiting),Toast.LENGTH_LONG).show();
                     }
                     // Now we use the Handler to post back to the main thread
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (time >= connectionHTTP.WAIT) {
-                                Toast.makeText(ProjectsActivity.this, "Se ha superado el tiempo de espera", Toast.LENGTH_SHORT).show();
+                            if (time >= ConnectionHTTP.WAIT) {
+                                Toast.makeText(getApplicationContext(), getString(R.string.time_passed), Toast.LENGTH_SHORT).show();
                             } else if (connectionHTTP.getStatusResponse() >= 300) {
-                                Toast.makeText(ProjectsActivity.this, "Error de conexión 300", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), getString(R.string.error_connetion), Toast.LENGTH_SHORT).show();
                             } else if (connectionHTTP.getStatusResponse() == 200) {
                                 ArrayList<Project> projects = new ArrayList<>();
                                 try {
                                     JSONObject respuesta = new JSONObject(connectionHTTP.getResponse());
                                     JSONObject proyectos = respuesta.getJSONObject("proyectos");
+                                    JSONObject territorios = respuesta.getJSONObject("territorios");
 
                                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                    JSONObject territorios = respuesta.getJSONObject("territorios");
-                                    preferences.edit().putString("territorios", territorios.toString()).apply();
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putString("territorios", territorios.toString());
+                                    editor.putString("proyectos", proyectos.toString());
+                                    editor.apply();
 
                                     JSONArray array = proyectos.getJSONArray("data");
 
@@ -113,7 +108,7 @@ public class ProjectsActivity extends AppCompatActivity {
                                         projects.add(p);
                                     }
                                 } catch (JSONException e) {
-                                    e.printStackTrace();
+                                    Toast.makeText(getApplicationContext(),getString(R.string.error_json),Toast.LENGTH_LONG).show();
                                 }
                                 ProjectAdapter pAdapter = new ProjectAdapter(getApplicationContext(), projects);
                                 projectsList.setAdapter(pAdapter);
@@ -126,87 +121,7 @@ public class ProjectsActivity extends AppCompatActivity {
                 }
             }).start();
         } else {
-            Toast.makeText(ProjectsActivity.this, "Error de conexión, not network available", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    public void refreshList() {
-        final ConnectionHTTP connectionHTTP = new ConnectionHTTP();
-        if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
-            progressBar.setVisibility(View.VISIBLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            String token = preferences.getString("token", "");
-            String code = preferences.getString("CodigoCargo", "");
-            connectionHTTP.getTasks("e8386888-9006-463b-a3b2-448d0a2b1fa5", code, token);
-            String Nombres = preferences.getString("Nombres", "");
-
-            // Create a Handler instance on the main thread
-            final Handler handler = new Handler();
-
-            // Create and start a new Thread
-            new Thread(new Runnable() {
-                int time;
-
-                public void run() {
-                    try {
-                        for (time = 0; time < ConnectionHTTP.WAIT && !connectionHTTP.isFinishProcess(); time += 100) {
-                            try {
-                                Thread.sleep(100);
-                            } catch (InterruptedException e) {
-                                Toast.makeText(ProjectsActivity.this, "Se ha superado el tiempo de espera", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    } catch (Exception e) {
-                        // Just catch the InterruptedException
-                    }
-                    // Now we use the Handler to post back to the main thread
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (time >= connectionHTTP.WAIT) {
-                                Toast.makeText(ProjectsActivity.this, "Se ha superado el tiempo de espera", Toast.LENGTH_SHORT).show();
-                            } else if (connectionHTTP.getStatusResponse() >= 300) {
-                                Toast.makeText(ProjectsActivity.this, "Error de conexión 300", Toast.LENGTH_SHORT).show();
-                            } else if (connectionHTTP.getStatusResponse() == 200) {
-                                ArrayList<Task> tasks = new ArrayList<>();
-                                try {
-                                    JSONObject respuesta = new JSONObject(connectionHTTP.getResponse());
-                                    JSONArray array = respuesta.getJSONArray("data");
-                                    for (int i = 0; i < array.length(); i++) {
-                                        JSONObject task = array.getJSONObject(i);
-                                        String taskID = task.getString("IdTarea");
-                                        int taskType = task.getInt("TipoTarea");
-                                        String processID = task.getString("IdProceso");
-                                        String taskName = task.getString("NombreHito");
-                                        String status = task.getString("TipoLocalizacion");
-                                        String expirationDate = task.getString("FechaVencimiento");
-                                        String process = task.getString("Proceso");
-                                        String subprocess = task.getString("SubProceso");
-
-                                        Date data = new Date();
-                                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                        expirationDate = sdf.format(data);
-
-                                        tasks.add(new Task(taskID, taskType, processID, process, subprocess, taskName, status, expirationDate));
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasks);
-                                projectsList.setAdapter(taskAdapter);
-                            }
-                            // Set the View's visibility back on the main UI Thread
-                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    });
-                }
-            }).start();
-        } else {
-            Toast.makeText(ProjectsActivity.this, "Error de conexión, not network available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.failed_connection),Toast.LENGTH_LONG).show();
         }
     }
 
@@ -240,20 +155,20 @@ public class ProjectsActivity extends AppCompatActivity {
                                     try {
                                         Thread.sleep(100);
                                     } catch (InterruptedException e) {
-                                        Toast.makeText(ProjectsActivity.this, "Se ha superado el tiempo de espera", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), getString(R.string.try_later), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             } catch (Exception e) {
-                                // Just catch the InterruptedException
+                                Toast.makeText(getApplicationContext(), getString(R.string.error_waiting),Toast.LENGTH_LONG).show();
                             }
                             // Now we use the Handler to post back to the main thread
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (time >= connectionHTTP.WAIT) {
-                                        Toast.makeText(ProjectsActivity.this, "Se ha superado el tiempo de espera", Toast.LENGTH_SHORT).show();
+                                    if (time >= ConnectionHTTP.WAIT) {
+                                        Toast.makeText(getApplicationContext(), getString(R.string.time_passed), Toast.LENGTH_SHORT).show();
                                     } else if (connectionHTTP.getStatusResponse() >= 300) {
-                                        Toast.makeText(ProjectsActivity.this, "Error de conexión 300", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), getString(R.string.error_connetion), Toast.LENGTH_SHORT).show();
                                     } else if (connectionHTTP.getStatusResponse() == 200) {
                                         finish();
                                         startActivity(new Intent(ProjectsActivity.this, LoginActivity.class));
@@ -265,6 +180,8 @@ public class ProjectsActivity extends AppCompatActivity {
                             });
                         }
                     }).start();
+                }else{
+                    Toast.makeText(getApplicationContext(), getString(R.string.failed_connection),Toast.LENGTH_LONG).show();
                 }
                 return true;
             }

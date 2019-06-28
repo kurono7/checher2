@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.example.checker.model.Project;
 
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class ProjectAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, TerritoriesActivity.class);
-                intent.putExtra("IdProyecto", project.getProjectID());
+                intent.putExtra("project", project);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
@@ -57,3 +56,4 @@ public class ProjectAdapter extends BaseAdapter {
         return convertView;
     }
 }
+

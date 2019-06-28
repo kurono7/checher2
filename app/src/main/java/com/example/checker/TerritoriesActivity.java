@@ -39,7 +39,6 @@ public class TerritoriesActivity extends AppCompatActivity {
         optionsMenu = findViewById(R.id.optionsMenu);
         territoriesList = findViewById(R.id.territoriesList);
         progressBar = findViewById(R.id.progressBar);
-
         optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,10 +47,11 @@ public class TerritoriesActivity extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        String IdProyecto = intent.getStringExtra("IdProyecto");
+        Project project = (Project) intent.getSerializableExtra("project");
+        String IdProyecto = project.getProjectID();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String territorios = preferences.getString("territorios", "");
+        String territorios = preferences.getString("territorios", "{}");
 
         ArrayList<Territorie> territories = new ArrayList<>();
         try {
@@ -62,20 +62,19 @@ public class TerritoriesActivity extends AppCompatActivity {
                 JSONObject territorie = array.getJSONObject(i);
                 String NombreLocalizacion = territorie.getString("NombreLocalizacion");
                 String IdTerritorio = territorie.getString("IdTerritorio");
-                String IdProyect = territorie.getString("IdProyecto");
+                String IdProyect_territorie = territorie.getString("IdProyecto");
 
-                Territorie p = new Territorie(NombreLocalizacion, IdTerritorio, IdProyect);
+                Territorie object = new Territorie(NombreLocalizacion, IdTerritorio, IdProyect_territorie);
 
-                if (IdProyect.equals(IdProyecto)) {
-                    territories.add(p);
+                if (IdProyect_territorie.equals(IdProyecto)) {
+                    territories.add(object);
                 }
             }
             TerritorieAdapter pAdapter = new TerritorieAdapter(getApplicationContext(), territories);
             territoriesList.setAdapter(pAdapter);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
         }
-
     }
 
     public void showPopup(View v) {
@@ -108,20 +107,20 @@ public class TerritoriesActivity extends AppCompatActivity {
                                     try {
                                         Thread.sleep(100);
                                     } catch (InterruptedException e) {
-                                        Toast.makeText(TerritoriesActivity.this, "Se ha superado el tiempo de espera", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), getString(R.string.try_later), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             } catch (Exception e) {
-                                // Just catch the InterruptedException
+                                Toast.makeText(getApplicationContext(), getString(R.string.error_waiting), Toast.LENGTH_LONG).show();
                             }
                             // Now we use the Handler to post back to the main thread
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     if (time >= connectionHTTP.WAIT) {
-                                        Toast.makeText(TerritoriesActivity.this, "Se ha superado el tiempo de espera", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), getString(R.string.time_passed), Toast.LENGTH_SHORT).show();
                                     } else if (connectionHTTP.getStatusResponse() >= 300) {
-                                        Toast.makeText(TerritoriesActivity.this, "Error de conexión 300", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), getString(R.string.error_connetion), Toast.LENGTH_SHORT).show();
                                     } else if (connectionHTTP.getStatusResponse() == 200) {
                                         finish();
                                         startActivity(new Intent(TerritoriesActivity.this, LoginActivity.class));
@@ -133,6 +132,8 @@ public class TerritoriesActivity extends AppCompatActivity {
                             });
                         }
                     }).start();
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
                 }
                 return true;
             }

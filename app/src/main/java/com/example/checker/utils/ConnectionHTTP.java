@@ -49,17 +49,16 @@ public class ConnectionHTTP {
         return finishProcess;
     }
 
-    public void updateTaskState(String IdProyecto, String IdTerritorio, String IdTarea) {
+    public void updateTaskState(String IdProyecto, String IdTerritorio, String IdTarea, String token) {
         JSONObject post = new JSONObject();
         try {
             post.put("idProyecto", IdProyecto);
             post.put("idTerritorio", IdTerritorio);
             post.put("idTarea", IdTarea);
-            new SendDeviceDetailsPOST().execute(UPDATETASKSTATE, post.toString());
+            new SendDeviceDetailsPOST().execute(UPDATETASKSTATE, post.toString(), token);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     public void sendAutentification(String idUsuario, String nombreUsuario, String claveUsuario, String captcha, String pdata) {
@@ -80,8 +79,8 @@ public class ConnectionHTTP {
         new SendDeviceDetailsGET().execute(GETTASKS, projectID, responsable, token);
     }
 
-    public void getproyects(String responsable, String idUsuario, String token) {
-        new SendDeviceDetailsGET().execute(GETPROYECTS, idUsuario, responsable, token);
+    public void getproyects(String IdPerfil, String idUsuario, String token) {
+        new SendDeviceDetailsGET().execute(GETPROYECTS, idUsuario, IdPerfil, token);
     }
 
     public void logout(String IdUsuario, String token) {
@@ -99,6 +98,10 @@ public class ConnectionHTTP {
                 httpURLConnection.setRequestProperty("Content-Type", "application/json");
                 httpURLConnection.setRequestProperty("Accept", "application/json");
                 httpURLConnection.setDoOutput(true);
+
+                if (params[0].equals(UPDATETASKSTATE)) {
+                    httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[2]);
+                }
 
                 DataOutputStream wr = new DataOutputStream(httpURLConnection.getOutputStream());
                 wr.writeBytes(params[1]);
