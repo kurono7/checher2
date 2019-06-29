@@ -32,11 +32,16 @@ public class ProjectsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_projects);
+
+        // Initialize variables
         optionsMenu = findViewById(R.id.optionsMenu);
         projectsList = findViewById(R.id.projectsList);
         progressBar = findViewById(R.id.progressBar);
+
+        // Get the projects
         refreshProjects();
 
+        // Option to logout
         optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,16 +50,23 @@ public class ProjectsActivity extends AppCompatActivity {
         });
     }
 
+    // Get the projects
     public void refreshProjects() {
         final ConnectionHTTP connectionHTTP = new ConnectionHTTP();
+
+        // Ask if is there connection
         if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
+            // Block windows and show the progressbar
             progressBar.setVisibility(View.VISIBLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
+            // Call the data stored in preferences
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String token = preferences.getString("token", "");
             String IdUsuario = preferences.getString("IdUsuario", "");
             String IdPerfil = preferences.getString("IdPerfil", "");
+
+            // Send the request to get projects
             connectionHTTP.getproyects(IdPerfil, IdUsuario, token);
 
             // Create a Handler instance on the main thread
@@ -66,6 +78,7 @@ public class ProjectsActivity extends AppCompatActivity {
 
                 public void run() {
                     try {
+                        // Wait for the answer
                         for (time = 0; time < ConnectionHTTP.WAIT && !connectionHTTP.isFinishProcess(); time += 100) {
                             try {
                                 Thread.sleep(100);
@@ -76,7 +89,7 @@ public class ProjectsActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(), getString(R.string.error_waiting),Toast.LENGTH_LONG).show();
                     }
-                    // Now we use the Handler to post back to the main thread
+                    // Use the Handler to post back to the main thread
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -85,6 +98,7 @@ public class ProjectsActivity extends AppCompatActivity {
                             } else if (connectionHTTP.getStatusResponse() >= 300) {
                                 Toast.makeText(getApplicationContext(), getString(R.string.error_connetion), Toast.LENGTH_SHORT).show();
                             } else if (connectionHTTP.getStatusResponse() == 200) {
+                                // If all look perfect so load projects
                                 ArrayList<Project> projects = new ArrayList<>();
                                 try {
                                     JSONObject respuesta = new JSONObject(connectionHTTP.getResponse());
@@ -110,6 +124,7 @@ public class ProjectsActivity extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     Toast.makeText(getApplicationContext(),getString(R.string.error_json),Toast.LENGTH_LONG).show();
                                 }
+                                // Load the list with projects
                                 ProjectAdapter pAdapter = new ProjectAdapter(getApplicationContext(), projects);
                                 projectsList.setAdapter(pAdapter);
                             }
@@ -125,6 +140,7 @@ public class ProjectsActivity extends AppCompatActivity {
         }
     }
 
+    // Option to logout
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
@@ -133,13 +149,19 @@ public class ProjectsActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 final ConnectionHTTP connectionHTTP = new ConnectionHTTP();
+
+                // Ask if is there connection
                 if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
+                    // Block windows and show the progressbar
                     progressBar.setVisibility(View.VISIBLE);
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
+                    // Call the data stored in preferences
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     String token = preferences.getString("token", "");
                     String IdUsuario = preferences.getString("IdUsuario", "");
+
+                    // Send the request to logout
                     connectionHTTP.logout(IdUsuario, token);
 
                     // Create a Handler instance on the main thread
@@ -148,8 +170,8 @@ public class ProjectsActivity extends AppCompatActivity {
                     // Create and start a new Thread
                     new Thread(new Runnable() {
                         int time;
-
                         public void run() {
+                            // Wait for the answer
                             try {
                                 for (time = 0; time < ConnectionHTTP.WAIT && !connectionHTTP.isFinishProcess(); time += 100) {
                                     try {
@@ -170,6 +192,7 @@ public class ProjectsActivity extends AppCompatActivity {
                                     } else if (connectionHTTP.getStatusResponse() >= 300) {
                                         Toast.makeText(getApplicationContext(), getString(R.string.error_connetion), Toast.LENGTH_SHORT).show();
                                     } else if (connectionHTTP.getStatusResponse() == 200) {
+                                        // Launch the login activity if all look perfect
                                         finish();
                                         startActivity(new Intent(ProjectsActivity.this, LoginActivity.class));
                                     }

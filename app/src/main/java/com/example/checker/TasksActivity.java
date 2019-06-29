@@ -87,7 +87,6 @@ public class TasksActivity extends AppCompatActivity {
             // Create and start a new Thread
             new Thread(new Runnable() {
                 int time;
-
                 public void run() {
                     try {
                         for (time = 0; time < ConnectionHTTP.WAIT && !connectionHTTP.isFinishProcess(); time += 100) {
@@ -98,7 +97,7 @@ public class TasksActivity extends AppCompatActivity {
                             }
                         }
                     } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.error_waiting), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.error_waiting),Toast.LENGTH_LONG).show();
                     }
                     // Now we use the Handler to post back to the main thread
                     handler.post(new Runnable() {
@@ -131,7 +130,7 @@ public class TasksActivity extends AppCompatActivity {
                                         tasks.add(new Task(taskID, taskType, processID, process, subprocess, taskName, status, expirationDate));
                                     }
                                 } catch (JSONException e) {
-                                    Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(),getString(R.string.error_json),Toast.LENGTH_LONG).show();
                                 }
                                 TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasks);
                                 tasksList.setAdapter(taskAdapter);
@@ -144,10 +143,11 @@ public class TasksActivity extends AppCompatActivity {
                 }
             }).start();
         } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.failed_connection),Toast.LENGTH_LONG).show();
         }
     }
 
+    //  Option to logout
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
@@ -156,13 +156,19 @@ public class TasksActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 final ConnectionHTTP connectionHTTP = new ConnectionHTTP();
+
+                // Ask if is there connection
                 if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
+                    // Block windows and show the progressbar
                     progressBar.setVisibility(View.VISIBLE);
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
+                    // Call the data stored in preferences
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     String token = preferences.getString("token", "");
                     String IdUsuario = preferences.getString("IdUsuario", "");
+
+                    // Send the request to logout
                     connectionHTTP.logout(IdUsuario, token);
 
                     // Create a Handler instance on the main thread
@@ -174,6 +180,7 @@ public class TasksActivity extends AppCompatActivity {
 
                         public void run() {
                             try {
+                                // Wait for the answer
                                 for (time = 0; time < ConnectionHTTP.WAIT && !connectionHTTP.isFinishProcess(); time += 100) {
                                     try {
                                         Thread.sleep(100);
@@ -182,7 +189,7 @@ public class TasksActivity extends AppCompatActivity {
                                     }
                                 }
                             } catch (Exception e) {
-                                Toast.makeText(getApplicationContext(), getString(R.string.error_waiting), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), getString(R.string.error_waiting),Toast.LENGTH_LONG).show();
                             }
                             // Now we use the Handler to post back to the main thread
                             handler.post(new Runnable() {
@@ -193,6 +200,8 @@ public class TasksActivity extends AppCompatActivity {
                                     } else if (connectionHTTP.getStatusResponse() >= 300) {
                                         Toast.makeText(getApplicationContext(), getString(R.string.error_connetion), Toast.LENGTH_SHORT).show();
                                     } else if (connectionHTTP.getStatusResponse() == 200) {
+
+                                        // Launch the login activity if all look perfect
                                         finish();
                                         startActivity(new Intent(TasksActivity.this, LoginActivity.class));
                                     }
@@ -203,8 +212,8 @@ public class TasksActivity extends AppCompatActivity {
                             });
                         }
                     }).start();
-                } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(getApplicationContext(), getString(R.string.failed_connection),Toast.LENGTH_LONG).show();
                 }
                 return true;
             }

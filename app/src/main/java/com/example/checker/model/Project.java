@@ -15,15 +15,7 @@ public class Project implements Serializable {
         return projectName;
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
     public String getProjectID() {
         return projectID;
-    }
-
-    public void setProjectID(String projectID) {
-        this.projectID = projectID;
     }
 }

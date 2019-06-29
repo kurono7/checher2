@@ -16,15 +16,12 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.example.checker.model.Project;
 import com.example.checker.model.Territorie;
 import com.example.checker.utils.ConnectionHTTP;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 public class TerritoriesActivity extends AppCompatActivity {
@@ -36,6 +33,8 @@ public class TerritoriesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_territories);
+
+        // Initialize variables
         optionsMenu = findViewById(R.id.optionsMenu);
         territoriesList = findViewById(R.id.territoriesList);
         progressBar = findViewById(R.id.progressBar);
@@ -46,13 +45,16 @@ public class TerritoriesActivity extends AppCompatActivity {
             }
         });
 
+        // Get the project that was select in list
         Intent intent = getIntent();
         Project project = (Project) intent.getSerializableExtra("project");
         String IdProyecto = project.getProjectID();
 
+        // Load the data of preference
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String territorios = preferences.getString("territorios", "{}");
 
+        // Load the list with territories in the project selected
         ArrayList<Territorie> territories = new ArrayList<>();
         try {
             JSONObject t = new JSONObject(territorios);
@@ -70,13 +72,15 @@ public class TerritoriesActivity extends AppCompatActivity {
                     territories.add(object);
                 }
             }
+            // Load the list
             TerritorieAdapter pAdapter = new TerritorieAdapter(getApplicationContext(), territories);
             territoriesList.setAdapter(pAdapter);
         } catch (JSONException e) {
-            Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),getString(R.string.error_json),Toast.LENGTH_LONG).show();
         }
     }
 
+    // Option to logout
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
@@ -85,13 +89,19 @@ public class TerritoriesActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 final ConnectionHTTP connectionHTTP = new ConnectionHTTP();
+
+                // Ask if is there connection
                 if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
+                    // Block windows and show the progressbar
                     progressBar.setVisibility(View.VISIBLE);
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
+                    // Call the data stored in preferences
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     String token = preferences.getString("token", "");
                     String IdUsuario = preferences.getString("IdUsuario", "");
+
+                    // Send the request to logout
                     connectionHTTP.logout(IdUsuario, token);
 
                     // Create a Handler instance on the main thread
@@ -103,6 +113,7 @@ public class TerritoriesActivity extends AppCompatActivity {
 
                         public void run() {
                             try {
+                                // Wait for the answer
                                 for (time = 0; time < ConnectionHTTP.WAIT && !connectionHTTP.isFinishProcess(); time += 100) {
                                     try {
                                         Thread.sleep(100);
@@ -111,7 +122,7 @@ public class TerritoriesActivity extends AppCompatActivity {
                                     }
                                 }
                             } catch (Exception e) {
-                                Toast.makeText(getApplicationContext(), getString(R.string.error_waiting), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), getString(R.string.error_waiting),Toast.LENGTH_LONG).show();
                             }
                             // Now we use the Handler to post back to the main thread
                             handler.post(new Runnable() {
@@ -132,8 +143,8 @@ public class TerritoriesActivity extends AppCompatActivity {
                             });
                         }
                     }).start();
-                } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(getApplicationContext(), getString(R.string.failed_connection),Toast.LENGTH_LONG).show();
                 }
                 return true;
             }

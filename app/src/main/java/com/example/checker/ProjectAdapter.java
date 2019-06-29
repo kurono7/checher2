@@ -39,19 +39,25 @@ public class ProjectAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         convertView = LayoutInflater.from(context).inflate(R.layout.item_project, null);
+
+        // Get the project selected
         final Project project = projectsList.get(position);
 
+        // Catch object selected
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                // Launch the Territorie activity with the project selected
                 Intent intent = new Intent(context, TerritoriesActivity.class);
                 intent.putExtra("project", project);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });
-        TextView projectName = convertView.findViewById(R.id.projectName);
 
+        // Set its name
+        TextView projectName = convertView.findViewById(R.id.projectName);
         projectName.setText(project.getProjectName());
         return convertView;
     }

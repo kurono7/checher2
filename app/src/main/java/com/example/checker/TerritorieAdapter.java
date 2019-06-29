@@ -7,9 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.example.checker.model.Territorie;
-
 import java.util.ArrayList;
 
 public class TerritorieAdapter extends BaseAdapter {
@@ -40,17 +38,25 @@ public class TerritorieAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         convertView = LayoutInflater.from(context).inflate(R.layout.item_territorie, null);
+
+        // Get the territorie selected
+        final Territorie territorie = territoriesList.get(position);
+
+
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                // Launch the Task activity with the territorie selected
                 Intent intent = new Intent(context, TasksActivity.class);
-                intent.putExtra("territorie", territoriesList.get(position));
+                intent.putExtra("territorie", territorie);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });
+
+        // Set its name
         TextView territorieName = convertView.findViewById(R.id.territorieName);
-        Territorie territorie = territoriesList.get(position);
         territorieName.setText(territorie.getTerritorieName());
         return convertView;
     }

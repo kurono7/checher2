@@ -78,7 +78,7 @@ public class TaskDialog extends Dialog {
 
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             String token = preferences.getString("token", "");
-            connectionHTTP.updateTaskState(territorie.getProjectID(), territorie.getTerritorieID(), task.getTaskID(), token);
+            connectionHTTP.updateTaskState(territorie.getProjectID(), territorie.getTerritorieID(), task.getTaskID(),token);
 
             // Create a Handler instance on the main thread
             final Handler handler = new Handler();
@@ -97,7 +97,7 @@ public class TaskDialog extends Dialog {
                             }
                         }
                     } catch (Exception e) {
-                        Toast.makeText(getContext().getApplicationContext(), getContext().getString(R.string.error_waiting), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext().getApplicationContext(), getContext().getString(R.string.error_waiting),Toast.LENGTH_LONG).show();
                     }
                     // Now we use the Handler to post back to the main thread
                     handler.post(new Runnable() {
@@ -106,15 +106,17 @@ public class TaskDialog extends Dialog {
                             if (time >= ConnectionHTTP.WAIT) {
                                 Toast.makeText(getContext(), getContext().getString(R.string.time_passed), Toast.LENGTH_SHORT).show();
                             } else if (connectionHTTP.getStatusResponse() >= 300) {
-                                Toast.makeText(getContext(), getContext().getString(R.string.error_connetion), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(),getContext(). getString(R.string.error_connetion), Toast.LENGTH_SHORT).show();
                             } else if (connectionHTTP.getStatusResponse() == 200) {
                                 ArrayList<Task> tasks = new ArrayList<>();
                                 try {
                                     JSONObject respuesta = new JSONObject(connectionHTTP.getResponse());
 
 
+
+
                                 } catch (JSONException e) {
-                                    Toast.makeText(getContext(), getContext().getString(R.string.error_json), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext(), getContext().getString(R.string.error_json),Toast.LENGTH_LONG).show();
                                 }
                             }
                             // Set the View's visibility back on the main UI Thread
@@ -124,7 +126,7 @@ public class TaskDialog extends Dialog {
                 }
             }).start();
         } else {
-            Toast.makeText(getContext(), getContext().getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getContext().getString(R.string.failed_connection),Toast.LENGTH_LONG).show();
         }
     }
 }

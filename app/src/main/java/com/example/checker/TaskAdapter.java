@@ -41,16 +41,21 @@ public class TaskAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         convertView = LayoutInflater.from(context).inflate(R.layout.item_task, null);
 
+        // Get the task selected
+        Task task = tasksList.get(position);
+
+        // Set its name
         TextView taskName = convertView.findViewById(R.id.taskName);
         TextView location = convertView.findViewById(R.id.location);
         TextView taskExpirationDate = convertView.findViewById(R.id.taskExpirationDate);
         //TextView status = convertView.findViewById(R.id.status);
         ImageView statusIcon = convertView.findViewById(R.id.statusIcon);
         ImageView attachIcon = convertView.findViewById(R.id.attachIcon);
-        Task task = tasksList.get(position);
         taskName.setText(task.getTaskName());
         taskExpirationDate.setText(task.getExpirationDate());
         //status.setText(task.getStatus());
+
+        // Ask if the task is a task or entregable
         if (task.getTaskType() == 0) {
             statusIcon.setVisibility(View.VISIBLE);
         } else {

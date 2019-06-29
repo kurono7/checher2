@@ -18,23 +18,11 @@ public class Territorie implements Serializable {
         return territorieName;
     }
 
-    public void setTerritorieName(String territorieName) {
-        this.territorieName = territorieName;
-    }
-
     public String getTerritorieID() {
         return territorieID;
     }
 
-    public void setTerritorieID(String territorieID) {
-        this.territorieID = territorieID;
-    }
-
     public String getProjectID() {
         return projectID;
-    }
-
-    public void setProjectID(String projectID) {
-        this.projectID = projectID;
     }
 }
