@@ -62,4 +62,3 @@ public class ProjectAdapter extends BaseAdapter {
         return convertView;
     }
 }
-

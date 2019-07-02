@@ -8,7 +8,7 @@
     <string name="shared_username">username</string>
 
     <!--CONNETION_HTTP-->
-    <string name="failed_connection">Fallo la conexión</string>
+    <string name="failed_connection">Falló la conexión</string>
     <string name="error_waiting">Error esperando la respuesta</string>
     <string name="try_later">Inténtalo más tarde</string>
     <string name="time_passed">Se ha superado el tiempo de espera</string>
