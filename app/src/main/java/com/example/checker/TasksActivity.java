@@ -76,8 +76,8 @@ public class TasksActivity extends AppCompatActivity {
             String code = preferences.getString("CodigoCargo", "");
 
             Intent intent = getIntent();
-            Task territorie = (Task) intent.getSerializableExtra("territorie");
-            String idProject = territorie.getProcessID();
+            Territorie territorie = (Territorie) intent.getSerializableExtra("territorie");
+            String idProject = territorie.getProjectID();
 
             connectionHTTP.getTasks(idProject, code, token);
 
@@ -111,23 +111,28 @@ public class TasksActivity extends AppCompatActivity {
                                 ArrayList<Task> tasks = new ArrayList<>();
                                 try {
                                     JSONObject respuesta = new JSONObject(connectionHTTP.getResponse());
-                                    JSONArray array = respuesta.getJSONArray("data");
-                                    for (int i = 0; i < array.length(); i++) {
-                                        JSONObject task = array.getJSONObject(i);
-                                        String taskID = task.getString("IdTarea");
-                                        int taskType = task.getInt("TipoTarea");
-                                        String processID = task.getString("IdProceso");
-                                        String taskName = task.getString("NombreHito");
-                                        String status = task.getString("TipoLocalizacion");
-                                        String expirationDate = task.getString("FechaVencimiento");
-                                        String process = task.getString("Proceso");
-                                        String subprocess = task.getString("SubProceso");
+                                    boolean exito = respuesta.getBoolean("exito");
+                                    if(exito) {
+                                        JSONArray array = respuesta.getJSONArray("data");
+                                        for (int i = 0; i < array.length(); i++) {
+                                            JSONObject task = array.getJSONObject(i);
+                                            String taskID = task.getString("IdTarea");
+                                            int taskType = task.getInt("TipoTarea");
+                                            String processID = task.getString("IdProceso");
+                                            String taskName = task.getString("NombreHito");
+                                            String status = task.getString("TipoLocalizacion");
+                                            String expirationDate = task.getString("FechaVencimiento");
+                                            String process = task.getString("Proceso");
+                                            String subprocess = task.getString("SubProceso");
 
-                                        Date data = new Date();
-                                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                        expirationDate = sdf.format(data);
+                                            Date data = new Date();
+                                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                            expirationDate = sdf.format(data);
 
-                                        tasks.add(new Task(taskID, taskType, processID, process, subprocess, taskName, status, expirationDate));
+                                            tasks.add(new Task(taskID, taskType, processID, process, subprocess, taskName, status, expirationDate));
+                                        }
+                                    }else{
+                                        Toast.makeText(getApplicationContext(),respuesta.getString("message"),Toast.LENGTH_LONG).show();
                                     }
                                 } catch (JSONException e) {
                                     Toast.makeText(getApplicationContext(),getString(R.string.error_json),Toast.LENGTH_LONG).show();

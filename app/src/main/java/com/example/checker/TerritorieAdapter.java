@@ -42,11 +42,9 @@ public class TerritorieAdapter extends BaseAdapter {
         // Get the territorie selected
         final Territorie territorie = territoriesList.get(position);
 
-
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 // Launch the Task activity with the territorie selected
                 Intent intent = new Intent(context, TasksActivity.class);
                 intent.putExtra("territorie", territorie);
