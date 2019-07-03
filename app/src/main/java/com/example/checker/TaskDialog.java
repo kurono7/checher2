@@ -6,10 +6,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +38,8 @@ public class TaskDialog extends Dialog {
     private Task task;
     private Button reportTaskBtn;
     private Territorie territorie;
+    private ImageButton closeBtn;
+    private ProgressBar progressBar;
 
     public TaskDialog(Context context, Task task, Territorie territorie) {
         super(context);
@@ -47,6 +52,8 @@ public class TaskDialog extends Dialog {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_task);
+
+        // Initialized variables
         reportTaskBtn = findViewById(R.id.reportTaskBtn);
         reportTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,11 +76,22 @@ public class TaskDialog extends Dialog {
         subprocess.setText(task.getSubprocess());
         //status.setText(task.getStatus());
         expirationDate.setText(task.getExpirationDate());
+        progressBar = findViewById(R.id.progressBar);
+
+        closeBtn = findViewById(R.id.closeBtn);
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
     }
 
+    // Method to update the state of a task
     public void updateTaskState() {
         final ConnectionHTTP connectionHTTP = new ConnectionHTTP();
         if (connectionHTTP.isNetworkAvailable(getContext())) {
+            progressBar.setVisibility(View.VISIBLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -86,7 +104,6 @@ public class TaskDialog extends Dialog {
             // Create and start a new Thread
             new Thread(new Runnable() {
                 int time;
-
                 public void run() {
                     try {
                         for (time = 0; time < ConnectionHTTP.WAIT && !connectionHTTP.isFinishProcess(); time += 100) {
@@ -111,16 +128,18 @@ public class TaskDialog extends Dialog {
                                 ArrayList<Task> tasks = new ArrayList<>();
                                 try {
                                     JSONObject respuesta = new JSONObject(connectionHTTP.getResponse());
-
-
-
-
+                                    boolean exito = respuesta.getBoolean("exito");
+                                    if(exito){
+                                        Toast.makeText(getContext(), respuesta.getString("message"), Toast.LENGTH_SHORT).show();
+                                        dismiss();
+                                    }
                                 } catch (JSONException e) {
                                     Toast.makeText(getContext(), getContext().getString(R.string.error_json),Toast.LENGTH_LONG).show();
                                 }
                             }
                             // Set the View's visibility back on the main UI Thread
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            progressBar.setVisibility(View.GONE);
                         }
                     });
                 }

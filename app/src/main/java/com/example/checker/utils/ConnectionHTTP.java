@@ -55,7 +55,8 @@ public class ConnectionHTTP {
             post.put("idProyecto", IdProyecto);
             post.put("idTerritorio", IdTerritorio);
             post.put("idTarea", IdTarea);
-            new SendDeviceDetailsPOST().execute(UPDATETASKSTATE, post.toString(), token);
+            Log.e("SEND", post.toString());
+            new SendDeviceDetailsPOST().execute(UPDATETASKSTATE, post.toString(), token, IdProyecto);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -93,14 +94,21 @@ public class ConnectionHTTP {
             String data = "";
             HttpURLConnection httpURLConnection = null;
             try {
-                httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]).openConnection();
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setRequestProperty("Content-Type", "application/json");
-                httpURLConnection.setRequestProperty("Accept", "application/json");
-                httpURLConnection.setDoOutput(true);
+
 
                 if (params[0].equals(UPDATETASKSTATE)) {
+                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[3]).openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setRequestProperty("Content-Type", "application/json");
+                    httpURLConnection.setRequestProperty("Accept", "application/json");
+                    httpURLConnection.setDoOutput(true);
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[2]);
+                }else{
+                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]).openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setRequestProperty("Content-Type", "application/json");
+                    httpURLConnection.setRequestProperty("Accept", "application/json");
+                    httpURLConnection.setDoOutput(true);
                 }
 
                 DataOutputStream wr = new DataOutputStream(httpURLConnection.getOutputStream());
