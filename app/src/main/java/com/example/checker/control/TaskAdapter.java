@@ -1,4 +1,4 @@
-package com.example.checker;
+package com.example.checker.control;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.checker.R;
 import com.example.checker.model.Task;
 
 import java.util.ArrayList;

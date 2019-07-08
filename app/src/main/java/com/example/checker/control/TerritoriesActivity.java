@@ -1,4 +1,4 @@
-package com.example.checker;
+package com.example.checker.control;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,15 +16,21 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.example.checker.R;
 import com.example.checker.model.Project;
+import com.example.checker.model.Task;
 import com.example.checker.model.Territorie;
 import com.example.checker.utils.ConnectionHTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.util.ArrayList;
 
-public class TerritoriesActivity extends AppCompatActivity {
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+public class TerritoriesActivity extends AppCompatActivity implements  ConnectionHTTP.ConnetionCallback{
     private ImageView optionsMenu;
     private ListView territoriesList;
     private ProgressBar progressBar;
@@ -88,8 +94,7 @@ public class TerritoriesActivity extends AppCompatActivity {
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                final ConnectionHTTP connectionHTTP = new ConnectionHTTP();
-
+                final ConnectionHTTP connectionHTTP = new ConnectionHTTP(TerritoriesActivity.this);
                 // Ask if is there connection
                 if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
                     // Block windows and show the progressbar
@@ -103,46 +108,6 @@ public class TerritoriesActivity extends AppCompatActivity {
 
                     // Send the request to logout
                     connectionHTTP.logout(IdUsuario, token);
-
-                    // Create a Handler instance on the main thread
-                    final Handler handler = new Handler();
-
-                    // Create and start a new Thread
-                    new Thread(new Runnable() {
-                        int time;
-
-                        public void run() {
-                            try {
-                                // Wait for the answer
-                                for (time = 0; time < ConnectionHTTP.WAIT && !connectionHTTP.isFinishProcess(); time += 100) {
-                                    try {
-                                        Thread.sleep(100);
-                                    } catch (InterruptedException e) {
-                                        Toast.makeText(getApplicationContext(), getString(R.string.try_later), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            } catch (Exception e) {
-                                Toast.makeText(getApplicationContext(), getString(R.string.error_waiting),Toast.LENGTH_LONG).show();
-                            }
-                            // Now we use the Handler to post back to the main thread
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (time >= connectionHTTP.WAIT) {
-                                        Toast.makeText(getApplicationContext(), getString(R.string.time_passed), Toast.LENGTH_SHORT).show();
-                                    } else if (connectionHTTP.getStatusResponse() >= 300) {
-                                        Toast.makeText(getApplicationContext(), getString(R.string.error_connetion), Toast.LENGTH_SHORT).show();
-                                    } else if (connectionHTTP.getStatusResponse() == 200) {
-                                        finish();
-                                        startActivity(new Intent(TerritoriesActivity.this, LoginActivity.class));
-                                    }
-                                    // Set the View's visibility back on the main UI Thread
-                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                    progressBar.setVisibility(View.GONE);
-                                }
-                            });
-                        }
-                    }).start();
                 }else{
                     Toast.makeText(getApplicationContext(), getString(R.string.failed_connection),Toast.LENGTH_LONG).show();
                 }
@@ -150,5 +115,25 @@ public class TerritoriesActivity extends AppCompatActivity {
             }
         });
         popup.show();
+    }
+
+    @Override
+    public void onResultReceived(String result, String service) {
+            try{
+                // Launch the login activity if all look perfect
+                JSONObject object = new JSONObject(result);
+                boolean exito = object.getBoolean("exito");
+                String message = object.getString("message");
+                Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
+                if(exito){
+                    finish();
+                    startActivity(new Intent(TerritoriesActivity.this, LoginActivity.class));
+                }
+            } catch (JSONException e) {
+                Toast.makeText(getApplicationContext(),getString(R.string.error_json),Toast.LENGTH_LONG).show();
+            }
+        // Set the View's visibility back on the main UI Thread
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        progressBar.setVisibility(View.GONE);
     }
 }

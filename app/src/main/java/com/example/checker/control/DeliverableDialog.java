@@ -1,4 +1,4 @@
-package com.example.checker;
+package com.example.checker.control;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.widget.TextView;
 
+import com.example.checker.R;
 import com.example.checker.model.Task;
 
 public class DeliverableDialog extends Dialog {

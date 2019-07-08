@@ -16,16 +16,16 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".TasksActivity"
+            android:name=".control.TasksActivity"
             android:theme="@style/BlueStatusbarTheme" />
         <activity
-            android:name=".TerritoriesActivity"
+            android:name=".control.TerritoriesActivity"
             android:theme="@style/BlueStatusbarTheme" />
         <activity
-            android:name=".ProjectsActivity"
+            android:name=".control.ProjectsActivity"
             android:theme="@style/BlueStatusbarTheme" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".control.LoginActivity"
             android:theme="@style/BlueStatusbarTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

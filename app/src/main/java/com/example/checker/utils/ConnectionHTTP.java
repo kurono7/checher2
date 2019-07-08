@@ -17,13 +17,13 @@ import java.net.URL;
 
 public class ConnectionHTTP {
 
-    private String response;
     private int statusResponse;
-    private boolean finishProcess;
+    private String service;
+
+    private ConnetionCallback listener;
 
     //SERVER
     public final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8080";
-    //public final static String SERVER = "http://172.19.15.49:8000";
     public final static int WAIT = 30000;
 
     // URL API'S
@@ -33,20 +33,13 @@ public class ConnectionHTTP {
     public final static String GETPROYECTS = "/api/v1/general/autenticacion/mobile/";
     public final static String UPDATETASKSTATE = "/api/v1/tareasProyecto/procesar-tarea/";
 
-    public ConnectionHTTP() {
-        finishProcess = false;
-    }
 
-    public String getResponse() {
-        return response;
+    public ConnectionHTTP(ConnetionCallback listener) {
+        this.listener = listener;
     }
 
     public int getStatusResponse() {
         return statusResponse;
-    }
-
-    public boolean isFinishProcess() {
-        return finishProcess;
     }
 
     public void updateTaskState(String IdProyecto, String IdTerritorio, String IdTarea, String token) {
@@ -55,7 +48,6 @@ public class ConnectionHTTP {
             post.put("idProyecto", IdProyecto);
             post.put("idTerritorio", IdTerritorio);
             post.put("idTarea", IdTarea);
-            Log.e("SEND", post.toString());
             new SendDeviceDetailsPOST().execute(UPDATETASKSTATE, post.toString(), token, IdProyecto);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -88,28 +80,28 @@ public class ConnectionHTTP {
         new SendDeviceDetailsGET().execute(SIGNOUT, IdUsuario, token);
     }
 
+    public interface ConnetionCallback {
+        void onResultReceived(String result, String service);
+    }
+
     private class SendDeviceDetailsPOST extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
+            service = params[0];
             String data = "";
             HttpURLConnection httpURLConnection = null;
             try {
-
-
                 if (params[0].equals(UPDATETASKSTATE)) {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[3]).openConnection();
-                    httpURLConnection.setRequestMethod("POST");
-                    httpURLConnection.setRequestProperty("Content-Type", "application/json");
-                    httpURLConnection.setRequestProperty("Accept", "application/json");
-                    httpURLConnection.setDoOutput(true);
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[2]);
                 }else{
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]).openConnection();
-                    httpURLConnection.setRequestMethod("POST");
-                    httpURLConnection.setRequestProperty("Content-Type", "application/json");
-                    httpURLConnection.setRequestProperty("Accept", "application/json");
-                    httpURLConnection.setDoOutput(true);
                 }
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setRequestProperty("Content-Type", "application/json");
+                httpURLConnection.setRequestProperty("Accept", "application/json");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setConnectTimeout(WAIT);
 
                 DataOutputStream wr = new DataOutputStream(httpURLConnection.getOutputStream());
                 wr.writeBytes(params[1]);
@@ -131,26 +123,23 @@ public class ConnectionHTTP {
                     inputStreamData = inputStreamReader.read();
                     data += current;
                 }
-                response = data;
-                finishProcess = true;
-
             } catch (Exception e) {
                 e.printStackTrace();
-                response = "Error al conectar";
                 statusResponse = 400;
-                finishProcess = true;
             } finally {
                 if (httpURLConnection != null) {
                     httpURLConnection.disconnect();
                 }
             }
-
             return data;
         }
 
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            if(listener!=null){
+                listener.onResultReceived(result, service);
+            }
             Log.e("TAG", result); // this is expecting a response code to be sent from your server upon receiving the POST data
         }
     }
@@ -159,23 +148,22 @@ public class ConnectionHTTP {
 
         @Override
         protected String doInBackground(String... params) {
-
+            service = params[0];
             String data = "";
             HttpURLConnection httpURLConnection = null;
             try {
                 if (params[0].equals(SIGNOUT)) {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[1]).openConnection();
-                    httpURLConnection.setRequestMethod("GET");
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[2]);
                 } else if (params[0].equals(GETPROYECTS)) {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[2] + "/" + params[1]).openConnection();
-                    httpURLConnection.setRequestMethod("GET");
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[3]);
                 } else {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[1] + "?responsable=" + params[2]).openConnection();
-                    httpURLConnection.setRequestMethod("GET");
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[3]);
                 }
+                httpURLConnection.setRequestMethod("GET");
+                httpURLConnection.setConnectTimeout(WAIT);
 
                 InputStream in = httpURLConnection.getInputStream();
                 InputStreamReader inputStreamReader = new InputStreamReader(in);
@@ -186,15 +174,10 @@ public class ConnectionHTTP {
                     inputStreamData = inputStreamReader.read();
                     data += current;
                 }
-
-                response = data;
                 statusResponse = httpURLConnection.getResponseCode();
-                finishProcess = true;
 
             } catch (Exception e) {
-                response = "Error al conectar";
                 statusResponse = 400;
-                finishProcess = true;
             } finally {
                 if (httpURLConnection != null) {
                     httpURLConnection.disconnect();
@@ -206,15 +189,17 @@ public class ConnectionHTTP {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            if(listener!=null){
+                listener.onResultReceived(result, service);
+            }
             Log.e("TAG", result); // this is expecting a response code to be sent from your server upon receiving the POST data
         }
     }
 
     private class SendDeviceDetailsDELETE extends AsyncTask<String, Void, String> {
-
         @Override
         protected String doInBackground(String... params) {
-
+            service = params[0];
             String data = "";
             HttpURLConnection httpURLConnection = null;
             try {
@@ -223,6 +208,7 @@ public class ConnectionHTTP {
                 httpURLConnection.setRequestProperty("Content-Type", "application/json");
                 httpURLConnection.setRequestProperty("Accept", "application/json");
                 httpURLConnection.setDoOutput(true);
+                httpURLConnection.setConnectTimeout(WAIT);
 
                 DataOutputStream wr = new DataOutputStream(httpURLConnection.getOutputStream());
                 wr.writeBytes(params[1]);
@@ -244,14 +230,10 @@ public class ConnectionHTTP {
                     inputStreamData = inputStreamReader.read();
                     data += current;
                 }
-                response = data;
-                finishProcess = true;
 
             } catch (Exception e) {
                 e.printStackTrace();
-                response = "Error al conectar";
                 statusResponse = 400;
-                finishProcess = true;
             } finally {
                 if (httpURLConnection != null) {
                     httpURLConnection.disconnect();
@@ -260,10 +242,12 @@ public class ConnectionHTTP {
 
             return data;
         }
-
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            if(listener!=null){
+                listener.onResultReceived(result, service);
+            }
             Log.e("TAG", result); // this is expecting a response code to be sent from your server upon receiving the POST data
         }
     }

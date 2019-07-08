@@ -1,4 +1,4 @@
-package com.example.checker;
+package com.example.checker.control;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.checker.R;
 import com.example.checker.model.Task;
 import com.example.checker.model.Territorie;
 import com.example.checker.utils.ConnectionHTTP;
@@ -28,7 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class TaskDialog extends Dialog {
+public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallback {
     private TextView taskName;
     private TextView taskID;
     private TextView process;
@@ -89,63 +90,39 @@ public class TaskDialog extends Dialog {
 
     // Method to update the state of a task
     public void updateTaskState() {
-        final ConnectionHTTP connectionHTTP = new ConnectionHTTP();
+        final ConnectionHTTP connectionHTTP = new ConnectionHTTP(this);
+        // Ask if is there connection
         if (connectionHTTP.isNetworkAvailable(getContext())) {
+            // Block windows and show the progressbar
             progressBar.setVisibility(View.VISIBLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
+            // Call the data stored in preferences
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             String token = preferences.getString("token", "");
+
+            // Send the request to update task
             connectionHTTP.updateTaskState(territorie.getProjectID(), territorie.getTerritorieID(), task.getTaskID(),token);
-
-            // Create a Handler instance on the main thread
-            final Handler handler = new Handler();
-
-            // Create and start a new Thread
-            new Thread(new Runnable() {
-                int time;
-                public void run() {
-                    try {
-                        for (time = 0; time < ConnectionHTTP.WAIT && !connectionHTTP.isFinishProcess(); time += 100) {
-                            try {
-                                Thread.sleep(100);
-                            } catch (InterruptedException e) {
-                                Toast.makeText(getContext(), getContext().getString(R.string.try_later), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    } catch (Exception e) {
-                        Toast.makeText(getContext().getApplicationContext(), getContext().getString(R.string.error_waiting),Toast.LENGTH_LONG).show();
-                    }
-                    // Now we use the Handler to post back to the main thread
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (time >= ConnectionHTTP.WAIT) {
-                                Toast.makeText(getContext(), getContext().getString(R.string.time_passed), Toast.LENGTH_SHORT).show();
-                            } else if (connectionHTTP.getStatusResponse() >= 300) {
-                                Toast.makeText(getContext(),getContext(). getString(R.string.error_connetion), Toast.LENGTH_SHORT).show();
-                            } else if (connectionHTTP.getStatusResponse() == 200) {
-                                ArrayList<Task> tasks = new ArrayList<>();
-                                try {
-                                    JSONObject respuesta = new JSONObject(connectionHTTP.getResponse());
-                                    boolean exito = respuesta.getBoolean("exito");
-                                    if(exito){
-                                        Toast.makeText(getContext(), respuesta.getString("message"), Toast.LENGTH_SHORT).show();
-                                        dismiss();
-                                    }
-                                } catch (JSONException e) {
-                                    Toast.makeText(getContext(), getContext().getString(R.string.error_json),Toast.LENGTH_LONG).show();
-                                }
-                            }
-                            // Set the View's visibility back on the main UI Thread
-                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    });
-                }
-            }).start();
         } else {
             Toast.makeText(getContext(), getContext().getString(R.string.failed_connection),Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onResultReceived(String result, String service) {
+            try {
+                JSONObject respuesta = new JSONObject(result);
+                boolean exito = respuesta.getBoolean("exito");
+                if(exito){
+                    Toast.makeText(getContext(), respuesta.getString("message"), Toast.LENGTH_SHORT).show();
+                    dismiss();
+                }
+            } catch (JSONException e) {
+                Toast.makeText(getContext(), getContext().getString(R.string.error_json),Toast.LENGTH_LONG).show();
+            }
+
+        // Set the View's visibility back on the main UI Thread
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        progressBar.setVisibility(View.GONE);
     }
 }
