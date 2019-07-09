@@ -1,5 +1,6 @@
 package com.example.checker.control;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -55,15 +56,10 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
         setContentView(R.layout.dialog_task);
 
         // Initialized variables
-        reportTaskBtn = findViewById(R.id.reportTaskBtn);
-        reportTaskBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reportTaskBtn.setEnabled(false);
-                updateTaskState();
-            }
-        });
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        preferences.edit().putBoolean("update",false).apply();
 
+        reportTaskBtn = findViewById(R.id.reportTaskBtn);
         taskName = findViewById(R.id.taskName);
         taskID = findViewById(R.id.taskID);
         process = findViewById(R.id.process);
@@ -84,6 +80,20 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
             @Override
             public void onClick(View view) {
                 dismiss();
+            }
+        });
+
+        if(task.getStatus().equals("1")){
+            reportTaskBtn.setEnabled(false);
+            reportTaskBtn.setBackgroundDrawable(getContext().getDrawable(R.drawable.rounded_button_shape_dissable));
+            Toast.makeText(getContext(), "La tarea esta reportada", Toast.LENGTH_LONG).show();
+        }
+
+        reportTaskBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reportTaskBtn.setEnabled(false);
+                updateTaskState();
             }
         });
     }
@@ -117,6 +127,8 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
                     Toast.makeText(getContext(), respuesta.getString("message"), Toast.LENGTH_SHORT).show();
                     dismiss();
                 }
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                preferences.edit().putBoolean("update",true).apply();
             } catch (JSONException e) {
                 Toast.makeText(getContext(), getContext().getString(R.string.error_json),Toast.LENGTH_LONG).show();
             }

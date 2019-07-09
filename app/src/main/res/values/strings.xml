@@ -6,6 +6,7 @@
 
     <!--SHARED PREFERENCES -->
     <string name="shared_username">username</string>
+    <string name="shared_taskID">taskId_selected</string>
 
     <!--CONNETION_HTTP-->
     <string name="failed_connection">Falló la conexión</string>
@@ -14,6 +15,9 @@
     <string name="time_passed">Se ha superado el tiempo de espera</string>
     <string name="error_connetion">Error de conexión</string>
     <string name="error_json">Error cargando datos</string>
+
+    <!--PICKER ACTIVITY-->
+    <string name="not_file">Archivo cancelado</string>
 
     <!--LOGIN ACTIVITY-->
     <string name="usernameTxt">Usuario</string>

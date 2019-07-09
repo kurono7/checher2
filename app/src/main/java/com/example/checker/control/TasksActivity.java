@@ -3,12 +3,19 @@ package com.example.checker.control;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +37,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,7 +71,11 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
                 taskDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
-                        refreshList();
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        boolean update = preferences.getBoolean("update", false);
+                        if(update){
+                            refreshList();
+                        }
                     }
                 });
                 taskDialog.setCancelable(true);
@@ -71,18 +83,6 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
             }
         });
 
-        refreshList();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        refreshList();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
         refreshList();
     }
 
@@ -190,5 +190,37 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
         // Set the View's visibility back on the main UI Thread
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         progressBar.setVisibility(View.GONE);
+    }
+
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        if(resultCode == RESULT_OK && requestCode == TaskAdapter.PICK_IMAGE_CAMERA){
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream .toByteArray();
+            String encodedBase64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            Log.e("BASE64", encodedBase64);
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String taskID = preferences.getString(getString(R.string.shared_taskID),"");
+            Log.e("TASK: ", taskID);
+
+            Toast.makeText(getApplicationContext(),"Proximamente",Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(getApplicationContext(),getString(R.string.not_file),Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == TaskAdapter.MY_CAMERA_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, TaskAdapter.PICK_IMAGE_CAMERA);
+            } else {
+                Toast.makeText(this, "Permiso de camara denegado", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
