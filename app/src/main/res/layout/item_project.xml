@@ -12,8 +12,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/fab_margin"
-        android:fontFamily="sans-serif-black"
+        android:fontFamily="@font/montserrat_bold"
         android:text="Nombre del proyecto"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="@dimen/text_size"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

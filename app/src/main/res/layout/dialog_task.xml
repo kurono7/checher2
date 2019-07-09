@@ -8,49 +8,43 @@
         android:id="@+id/closeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/normal_margin"
-        android:layout_marginRight="@dimen/normal_margin"
         android:src="@drawable/ic_vector_close_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/taskNameTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/fab_margin"
-        android:text="Nombre de la tarea:"
-        android:textSize="@dimen/text_size"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/closeBtn" />
-
-    <TextView
         android:id="@+id/taskName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/min_margin"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:fontFamily="@font/montserrat_bold"
         android:text="taskName"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="@dimen/text_size"
-        app:layout_constraintBottom_toBottomOf="@id/taskNameTitle"
-        app:layout_constraintStart_toEndOf="@id/taskNameTitle"
-        app:layout_constraintTop_toTopOf="@id/taskNameTitle" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/taskIDTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_margin"
-        android:text="ID de la tarea:"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="@string/taskIDTitleTxt"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="@dimen/text_size"
-        app:layout_constraintStart_toStartOf="@id/taskNameTitle"
-        app:layout_constraintTop_toBottomOf="@id/taskNameTitle" />
+        app:layout_constraintStart_toStartOf="@id/taskName"
+        app:layout_constraintTop_toBottomOf="@id/taskName" />
 
     <TextView
         android:id="@+id/taskID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/min_margin"
+        android:fontFamily="@font/montserrat_regular"
         android:text="taskID"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="@dimen/text_size"
         app:layout_constraintBottom_toBottomOf="@id/taskIDTitle"
         app:layout_constraintStart_toEndOf="@id/taskIDTitle"
@@ -61,7 +55,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_margin"
-        android:text="Proceso:"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="@string/processTitleTxt"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="@dimen/text_size"
         app:layout_constraintStart_toStartOf="@id/taskIDTitle"
         app:layout_constraintTop_toBottomOf="@id/taskIDTitle" />
@@ -71,7 +67,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/min_margin"
+        android:fontFamily="@font/montserrat_regular"
         android:text="processName"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="@dimen/text_size"
         app:layout_constraintBottom_toBottomOf="@id/processTitle"
         app:layout_constraintStart_toEndOf="@id/processTitle"
@@ -82,9 +80,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_margin"
-        android:text="Subproceso:"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="@string/subprocessTitleTxt"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="@dimen/text_size"
-        app:layout_constraintStart_toStartOf="@id/taskNameTitle"
+        app:layout_constraintStart_toStartOf="@id/taskName"
         app:layout_constraintTop_toBottomOf="@id/processTitle" />
 
     <TextView
@@ -92,7 +92,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/min_margin"
+        android:fontFamily="@font/montserrat_regular"
         android:text="subprocessName"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="@dimen/text_size"
         app:layout_constraintBottom_toBottomOf="@id/subprocessTitle"
         app:layout_constraintStart_toEndOf="@id/subprocessTitle"
@@ -103,9 +105,11 @@
         android:layout_width="wrap_content"
         android:layout_height="19dp"
         android:layout_marginTop="@dimen/normal_margin"
-        android:text="Estado:"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="@string/statusTitleTxt"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="@dimen/text_size"
-        app:layout_constraintStart_toStartOf="@id/taskNameTitle"
+        app:layout_constraintStart_toStartOf="@id/taskName"
         app:layout_constraintTop_toBottomOf="@id/subprocessTitle" />
 
     <TextView
@@ -113,7 +117,9 @@
         android:layout_width="wrap_content"
         android:layout_height="19dp"
         android:layout_marginLeft="@dimen/min_margin"
+        android:fontFamily="@font/montserrat_regular"
         android:text="POR ENTREGAR"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="@dimen/text_size"
         app:layout_constraintBottom_toBottomOf="@id/statusTitle"
         app:layout_constraintStart_toEndOf="@id/statusTitle"
@@ -125,9 +131,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_margin"
-        android:text="Fecha de vencimiento:"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="@string/expirationDateTitleTxt"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="@dimen/text_size"
-        app:layout_constraintStart_toStartOf="@id/statusTitle"
+        app:layout_constraintStart_toStartOf="@id/taskName"
         app:layout_constraintTop_toBottomOf="@id/statusTitle" />
 
     <TextView
@@ -135,7 +143,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/min_margin"
+        android:fontFamily="@font/montserrat_regular"
         android:text="expirationDate"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="@dimen/text_size"
         app:layout_constraintBottom_toBottomOf="@id/expirationDateTitle"
         app:layout_constraintStart_toEndOf="@id/expirationDateTitle"
@@ -143,10 +153,13 @@
 
     <Button
         android:id="@+id/reportTaskBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_margin"
+        android:background="@drawable/rounded_button_shape"
+        android:fontFamily="@font/montserrat_semibold"
         android:text="@string/reportTaskTxt"
+        android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/expirationDateTitle" />

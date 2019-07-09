@@ -22,16 +22,20 @@
     <string name="logoutTxt">Cerrar sesión</string>
 
     <!--TASK ACTIVITY-->
-    <string name="tasksAndDeliverableTitleTxt">Tareas / Entregables</string>
+    <string name="tasksAndDeliverableTitleTxt">TAREAS / ENTREGABLES</string>
 
     <!--PROJECT ACTIVITY-->
-    <string name="projectsTitleTxt">Proyectos</string>
+    <string name="projectsTitleTxt">PROYECTOS</string>
 
     <!--TERRITORIE ACTIVITY-->
-    <string name="territoriesTitleTxt">Territorios</string>
+    <string name="territoriesTitleTxt">TERRITORIOS</string>
 
     <!--TASK ITEM ACTIVITY-->
+    locationTitleTxt
     <string name="locationTitleTxt">Localización:</string>
+    <string name="taskIDTitleTxt">ID tarea:</string>
+    <string name="processTitleTxt">Proceso:</string>
+    <string name="subprocessTitleTxt">Subproceso:</string>
     <string name="statusTitleTxt">Estado:</string>
     <string name="expirationDateTitleTxt">Fecha de vencimiento:</string>
 
