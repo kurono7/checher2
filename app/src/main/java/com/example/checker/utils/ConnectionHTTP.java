@@ -28,7 +28,7 @@ public class ConnectionHTTP {
 
     // URL API'S
     public final static String AUTENTIFICATION = "/auth/autenticar/mobile";
-    public final static String GETTASKS = "/api/v1/tareas/busqueda/tareas-usuario/";
+    public final static String GETTASKS = "/api/v1/tareas/";
     public final static String SIGNOUT = "/api/v1/usuarios/cerrar-sesion/";
     public final static String GETPROYECTS = "/api/v1/general/autenticacion/mobile/";
     public final static String UPDATETASKSTATE = "/api/v1/tareasProyecto/procesar-tarea/";
@@ -68,8 +68,8 @@ public class ConnectionHTTP {
         }
     }
 
-    public void getTasks(String projectID, String responsable, String token) {
-        new SendDeviceDetailsGET().execute(GETTASKS, projectID, responsable, token);
+    public void getTasks(String projectID, String territorieID, String responsable, String token) {
+        new SendDeviceDetailsGET().execute(GETTASKS, projectID, territorieID, responsable, token);
     }
 
     public void getproyects(String IdPerfil, String idUsuario, String token) {
@@ -159,8 +159,8 @@ public class ConnectionHTTP {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[2] + "/" + params[1]).openConnection();
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[3]);
                 } else {
-                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[1] + "?responsable=" + params[2]).openConnection();
-                    httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[3]);
+                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[1] +"/territorio/"+ params[2]+ "?responsable=" + params[3]).openConnection();
+                    httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[4]);
                 }
                 httpURLConnection.setRequestMethod("GET");
                 httpURLConnection.setConnectTimeout(WAIT);

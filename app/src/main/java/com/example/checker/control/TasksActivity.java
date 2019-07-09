@@ -1,7 +1,9 @@
 package com.example.checker.control;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -40,6 +43,7 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasks);
+
         tasksList = findViewById(R.id.tasksList);
         optionsMenu = findViewById(R.id.optionsMenu);
         progressBar = findViewById(R.id.progressBar);
@@ -51,17 +55,34 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
             }
         });
 
-        AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
+        tasksList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Territorie territorie = (Territorie) getIntent().getSerializableExtra("territorie");
                 TaskDialog taskDialog = new TaskDialog(TasksActivity.this, (Task) tasksList.getAdapter().getItem(position), territorie);
+                taskDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        refreshList();
+                    }
+                });
                 taskDialog.setCancelable(true);
                 taskDialog.show();
             }
-        };
-        tasksList.setOnItemClickListener(listener);
+        });
 
+        refreshList();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshList();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
         refreshList();
     }
 
@@ -78,8 +99,9 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
             Intent intent = getIntent();
             Territorie territorie = (Territorie) intent.getSerializableExtra("territorie");
             String idProject = territorie.getProjectID();
+            String idTerritore = territorie.getTerritorieID();
 
-            connectionHTTP.getTasks(idProject, code, token);
+            connectionHTTP.getTasks(idProject, idTerritore, code, token);
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.failed_connection),Toast.LENGTH_LONG).show();
         }
@@ -131,7 +153,7 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
                         int taskType = task.getInt("TipoTarea");
                         String processID = task.getString("IdProceso");
                         String taskName = task.getString("NombreHito");
-                        String status = task.getString("TipoLocalizacion");
+                        String status = task.getString("Estado");
                         String expirationDate = task.getString("FechaVencimiento");
                         String process = task.getString("Proceso");
                         String subprocess = task.getString("SubProceso");

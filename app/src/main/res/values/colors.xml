@@ -6,5 +6,6 @@
     <color name="colorUndelivered">#a5a5a5</color>
     <color name="colorPending">#ff8f00</color>
     <color name="colorDelivered">#64dd17</color>
+    <color name="colorGreen">#00FF00</color>
 
 </resources>

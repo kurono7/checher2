@@ -68,14 +68,14 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
         taskID = findViewById(R.id.taskID);
         process = findViewById(R.id.process);
         subprocess = findViewById(R.id.subprocess);
-        //status = findViewById(R.id.status);
+        status = findViewById(R.id.status);
         expirationDate = findViewById(R.id.expirationDate);
 
         taskName.setText(task.getTaskName());
         taskID.setText(task.getTaskID());
         process.setText(task.getProcess());
         subprocess.setText(task.getSubprocess());
-        //status.setText(task.getStatus());
+        status.setText(task.getStatus());
         expirationDate.setText(task.getExpirationDate());
         progressBar = findViewById(R.id.progressBar);
 

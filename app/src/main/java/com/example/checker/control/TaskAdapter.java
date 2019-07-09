@@ -1,6 +1,8 @@
 package com.example.checker.control;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.FileUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,12 +51,16 @@ public class TaskAdapter extends BaseAdapter {
         TextView taskName = convertView.findViewById(R.id.taskName);
         TextView location = convertView.findViewById(R.id.location);
         TextView taskExpirationDate = convertView.findViewById(R.id.taskExpirationDate);
-        //TextView status = convertView.findViewById(R.id.status);
+        TextView status = convertView.findViewById(R.id.status);
         ImageView statusIcon = convertView.findViewById(R.id.statusIcon);
         ImageView attachIcon = convertView.findViewById(R.id.attachIcon);
         taskName.setText(task.getTaskName());
         taskExpirationDate.setText(task.getExpirationDate());
-        //status.setText(task.getStatus());
+
+        if(task.getStatus().equals("1")){
+            status.setText("REPORTADO");
+            statusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_vector_status_point_icon_green));
+        }
 
         // Ask if the task is a task or entregable
         if (task.getTaskType() == 0) {
