@@ -3,118 +3,137 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/fab_margin"
-    android:paddingBottom="@dimen/fab_margin">
+    android:paddingTop="@dimen/min_margin"
+    android:paddingBottom="@dimen/min_margin">
 
-    <TextView
-        android:id="@+id/taskName"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/intern_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/fab_margin"
-        android:fontFamily="@font/montserrat_bold"
-        android:textColor="@color/colorPrimaryDark"
-        android:text="Nombre del hito"
-        android:textSize="@dimen/text_size"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin"
+        android:background="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/locationTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/normal_margin"
-        android:fontFamily="@font/montserrat_semibold"
-        android:textColor="@color/colorPrimaryDark"
-        android:text="@string/locationTitleTxt"
-        android:textSize="@dimen/text_size"
-        app:layout_constraintStart_toStartOf="@id/taskName"
-        app:layout_constraintTop_toBottomOf="@id/taskName" />
+        <TextView
+            android:id="@+id/taskName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:layout_marginTop="@dimen/normal_margin"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Nombre del hito"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/normal_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/min_margin"
-        android:fontFamily="@font/montserrat_regular"
-        android:textColor="@color/colorPrimaryDark"
-        android:text="Puesto"
-        android:textSize="@dimen/text_size"
-        app:layout_constraintBottom_toBottomOf="@id/locationTitle"
-        app:layout_constraintStart_toEndOf="@id/locationTitle"
-        app:layout_constraintTop_toTopOf="@id/locationTitle" />
+        <TextView
+            android:id="@+id/statusTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/normal_margin"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="@string/statusTitleTxt"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/normal_text"
+            app:layout_constraintStart_toStartOf="@id/taskName"
+            app:layout_constraintTop_toBottomOf="@id/taskName" />
 
-    <TextView
-        android:id="@+id/statusTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/normal_margin"
-        android:fontFamily="@font/montserrat_semibold"
-        android:textColor="@color/colorPrimaryDark"
-        android:text="@string/statusTitleTxt"
-        android:textSize="@dimen/text_size"
-        app:layout_constraintStart_toStartOf="@id/taskName"
-        app:layout_constraintTop_toBottomOf="@id/locationTitle" />
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/min_margin"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="POR REPORTAR"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/normal_text"
+            app:layout_constraintBottom_toBottomOf="@id/statusTitle"
+            app:layout_constraintStart_toEndOf="@id/statusTitle"
+            app:layout_constraintTop_toTopOf="@id/statusTitle" />
 
-    <TextView
-        android:id="@+id/status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/min_margin"
-        android:fontFamily="@font/montserrat_regular"
-        android:textColor="@color/colorPrimaryDark"
-        android:text="POR REPORTAR"
-        android:textSize="@dimen/text_size"
-        app:layout_constraintBottom_toBottomOf="@id/statusTitle"
-        app:layout_constraintStart_toEndOf="@id/statusTitle"
-        app:layout_constraintTop_toTopOf="@id/statusTitle" />
+        <ImageView
+            android:id="@+id/taskExpirationDateTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/normal_margin"
+            android:src="@drawable/ic_vector_calendar_icon"
+            app:layout_constraintStart_toStartOf="@id/taskName"
+            app:layout_constraintTop_toBottomOf="@id/statusTitle" />
 
-    <TextView
-        android:id="@+id/taskExpirationDateTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/normal_margin"
-        android:fontFamily="@font/montserrat_semibold"
-        android:textColor="@color/colorPrimaryDark"
-        android:text="@string/expirationDateTitleTxt"
-        android:textSize="@dimen/text_size"
-        app:layout_constraintStart_toStartOf="@id/taskName"
-        app:layout_constraintTop_toBottomOf="@id/statusTitle" />
+        <TextView
+            android:id="@+id/taskExpirationDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/min_margin"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="25/06/2019"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/normal_text"
+            app:layout_constraintBottom_toBottomOf="@id/taskExpirationDateTitle"
+            app:layout_constraintStart_toEndOf="@id/taskExpirationDateTitle"
+            app:layout_constraintTop_toTopOf="@id/taskExpirationDateTitle" />
 
 
-    <TextView
-        android:id="@+id/taskExpirationDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/min_margin"
-        android:fontFamily="@font/montserrat_regular"
-        android:textColor="@color/colorPrimaryDark"
-        android:text="25/06/2019"
-        android:textSize="@dimen/text_size"
-        app:layout_constraintBottom_toBottomOf="@id/taskExpirationDateTitle"
-        app:layout_constraintStart_toEndOf="@id/taskExpirationDateTitle"
-        app:layout_constraintTop_toTopOf="@id/taskExpirationDateTitle" />
+        <ImageView
+            android:id="@+id/locationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/normal_margin"
+            android:src="@drawable/ic_vector_location_icon"
+            app:layout_constraintStart_toStartOf="@id/taskName"
+            app:layout_constraintTop_toBottomOf="@id/taskExpirationDateTitle" />
 
-    <ImageView
-        android:id="@+id/statusIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:src="@drawable/ic_vector_status_point_icon"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/min_margin"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="Puesto"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/normal_text"
+            app:layout_constraintBottom_toBottomOf="@id/locationTitle"
+            app:layout_constraintStart_toEndOf="@id/locationTitle"
+            app:layout_constraintTop_toTopOf="@id/locationTitle" />
+
+        <ImageView
+            android:id="@+id/corner_colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_vector_corner_not_reported"
+            app:layout_constraintBottom_toBottomOf="@id/locationTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-    <ImageView
-        android:id="@+id/attachIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:src="@drawable/ic_vector_attach_icon"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/statusIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_vector_check_icon"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/corner_colored"
+            app:layout_constraintStart_toStartOf="@id/corner_colored"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/attachIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_vector_attach_icon"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/corner_colored"
+            app:layout_constraintStart_toStartOf="@id/corner_colored"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

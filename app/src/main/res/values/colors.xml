@@ -3,10 +3,10 @@
     <color name="colorPrimary">#1a0a7a</color>
     <color name="colorPrimaryDark">#1a0a7a</color>
     <color name="colorAccent">#39b54a</color>
-    <color name="colorUndelivered">#a5a5a5</color>
-    <color name="colorPending">#ff8f00</color>
-    <color name="colorDelivered">#64dd17</color>
-    <color name="colorGreen">#00FF00</color>
+    <color name="colorUndelivered">#CCCCCC</color>
+    <color name="colorAccepted">#39B54A</color>
+    <color name="colorReported">#CCB33A</color>
+    <color name="colorRejected">#B23939</color>
     <color name="colorWhite">#ffffff</color>
-
+    <color name="colorGrayBackground">#ECEDF2</color>
 </resources>

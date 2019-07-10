@@ -16,12 +16,12 @@
         android:id="@+id/taskName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/fab_margin"
         android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_margin"
         android:fontFamily="@font/montserrat_bold"
         android:text="taskName"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,7 +33,7 @@
         android:fontFamily="@font/montserrat_semibold"
         android:text="@string/taskIDTitleTxt"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="@id/taskName"
         app:layout_constraintTop_toBottomOf="@id/taskName" />
 
@@ -45,7 +45,7 @@
         android:fontFamily="@font/montserrat_regular"
         android:text="taskID"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toBottomOf="@id/taskIDTitle"
         app:layout_constraintStart_toEndOf="@id/taskIDTitle"
         app:layout_constraintTop_toTopOf="@id/taskIDTitle" />
@@ -58,7 +58,7 @@
         android:fontFamily="@font/montserrat_semibold"
         android:text="@string/processTitleTxt"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="@id/taskIDTitle"
         app:layout_constraintTop_toBottomOf="@id/taskIDTitle" />
 
@@ -70,7 +70,7 @@
         android:fontFamily="@font/montserrat_regular"
         android:text="processName"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toBottomOf="@id/processTitle"
         app:layout_constraintStart_toEndOf="@id/processTitle"
         app:layout_constraintTop_toTopOf="@id/processTitle" />
@@ -83,7 +83,7 @@
         android:fontFamily="@font/montserrat_semibold"
         android:text="@string/subprocessTitleTxt"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="@id/taskName"
         app:layout_constraintTop_toBottomOf="@id/processTitle" />
 
@@ -95,7 +95,7 @@
         android:fontFamily="@font/montserrat_regular"
         android:text="subprocessName"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toBottomOf="@id/subprocessTitle"
         app:layout_constraintStart_toEndOf="@id/subprocessTitle"
         app:layout_constraintTop_toTopOf="@id/subprocessTitle" />
@@ -108,7 +108,7 @@
         android:fontFamily="@font/montserrat_semibold"
         android:text="@string/statusTitleTxt"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="@id/taskName"
         app:layout_constraintTop_toBottomOf="@id/subprocessTitle" />
 
@@ -120,7 +120,7 @@
         android:fontFamily="@font/montserrat_regular"
         android:text="POR ENTREGAR"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toBottomOf="@id/statusTitle"
         app:layout_constraintStart_toEndOf="@id/statusTitle"
         app:layout_constraintTop_toTopOf="@id/statusTitle"
@@ -134,7 +134,7 @@
         android:fontFamily="@font/montserrat_semibold"
         android:text="@string/expirationDateTitleTxt"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="@id/taskName"
         app:layout_constraintTop_toBottomOf="@id/statusTitle" />
 
@@ -146,7 +146,7 @@
         android:fontFamily="@font/montserrat_regular"
         android:text="expirationDate"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toBottomOf="@id/expirationDateTitle"
         app:layout_constraintStart_toEndOf="@id/expirationDateTitle"
         app:layout_constraintTop_toTopOf="@id/expirationDateTitle" />
@@ -155,8 +155,10 @@
         android:id="@+id/reportTaskBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/normal_margin"
         android:layout_marginTop="@dimen/normal_margin"
-        android:background="@drawable/rounded_button_shape"
+        android:layout_marginEnd="@dimen/normal_margin"
+        android:background="@drawable/rounded_green_button_shape"
         android:fontFamily="@font/montserrat_semibold"
         android:text="@string/reportTaskTxt"
         android:textColor="@color/colorWhite"

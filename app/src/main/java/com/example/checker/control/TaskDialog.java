@@ -1,13 +1,10 @@
 package com.example.checker.control;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -22,13 +19,8 @@ import com.example.checker.model.Task;
 import com.example.checker.model.Territorie;
 import com.example.checker.utils.ConnectionHTTP;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 
 public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallback {
     private TextView taskName;
@@ -85,7 +77,7 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
 
         if(task.getStatus().equals("1")){
             reportTaskBtn.setEnabled(false);
-            reportTaskBtn.setBackgroundDrawable(getContext().getDrawable(R.drawable.rounded_button_shape_dissable));
+            reportTaskBtn.setBackgroundDrawable(getContext().getDrawable(R.drawable.rounded_green_button_shape_dissabled));
             Toast.makeText(getContext(), "La tarea esta reportada", Toast.LENGTH_LONG).show();
         }
 

@@ -23,7 +23,7 @@
         android:fontFamily="@font/montserrat_semibold"
         android:text="ID del entregable:"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/closeBtn" />
 
@@ -35,7 +35,7 @@
         android:fontFamily="@font/montserrat_regular"
         android:text="taskID"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toBottomOf="@id/taskIDTitle"
         app:layout_constraintStart_toEndOf="@id/taskIDTitle"
         app:layout_constraintTop_toTopOf="@id/taskIDTitle" />
@@ -48,7 +48,7 @@
         android:fontFamily="@font/montserrat_semibold"
         android:text="ID del proceso"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="@id/taskIDTitle"
         app:layout_constraintTop_toBottomOf="@id/taskIDTitle" />
 
@@ -60,7 +60,7 @@
         android:fontFamily="@font/montserrat_regular"
         android:text="processID"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toBottomOf="@id/processIDTitle"
         app:layout_constraintStart_toEndOf="@id/processIDTitle"
         app:layout_constraintTop_toTopOf="@id/processIDTitle" />
@@ -73,7 +73,7 @@
         android:fontFamily="@font/montserrat_semibold"
         android:text="Nombre de la tarea:"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="@id/processIDTitle"
         app:layout_constraintTop_toBottomOf="@id/processIDTitle" />
 
@@ -85,7 +85,7 @@
         android:fontFamily="@font/montserrat_regular"
         android:text="taskName"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toBottomOf="@id/taskNameTitle"
         app:layout_constraintStart_toEndOf="@id/taskNameTitle"
         app:layout_constraintTop_toTopOf="@id/taskNameTitle" />
@@ -98,7 +98,7 @@
         android:fontFamily="@font/montserrat_semibold"
         android:text="Estado:"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="@id/taskNameTitle"
         app:layout_constraintTop_toBottomOf="@id/taskNameTitle" />
 
@@ -110,7 +110,7 @@
         android:fontFamily="@font/montserrat_regular"
         android:text="POR ENTREGAR"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toBottomOf="@id/statusTitle"
         app:layout_constraintStart_toEndOf="@id/statusTitle"
         app:layout_constraintTop_toTopOf="@id/statusTitle"
@@ -124,7 +124,7 @@
         android:fontFamily="@font/montserrat_semibold"
         android:text="Fecha de vencimiento:"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="@id/statusTitle"
         app:layout_constraintTop_toBottomOf="@id/statusTitle" />
 
@@ -136,7 +136,7 @@
         android:fontFamily="@font/montserrat_regular"
         android:text="expirationDate"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toBottomOf="@id/expirationDateTitle"
         app:layout_constraintStart_toEndOf="@id/expirationDateTitle"
         app:layout_constraintTop_toTopOf="@id/expirationDateTitle" />
@@ -146,7 +146,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_margin"
-        android:src="@drawable/ic_vector_to_report"
+        android:src="@drawable/ic_vector_bar_not_reported"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/expirationDateTitle" />

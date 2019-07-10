@@ -20,6 +20,7 @@
     <string name="not_file">Archivo cancelado</string>
 
     <!--LOGIN ACTIVITY-->
+    <string name="loginTitleTxt">Iniciar sesión</string>
     <string name="usernameTxt">Usuario</string>
     <string name="passwordTxt">Contraseña</string>
     <string name="loginTxt">Ingresar</string>

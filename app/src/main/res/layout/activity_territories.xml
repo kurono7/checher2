@@ -15,7 +15,7 @@
         android:fontFamily="@font/montserrat_bold"
         android:text="@string/territoriesTitleTxt"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toTopOf="@id/territoriesList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
