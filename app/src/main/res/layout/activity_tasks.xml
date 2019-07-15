@@ -7,6 +7,32 @@
     tools:context=".control.TasksActivity">
 
     <TextView
+        android:id="@+id/projectName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:text="Nombre proyecto"
+        android:fontFamily="@font/montserrat_bold"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/normal_text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/territorieName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:text="Nombre territorio"
+        android:fontFamily="@font/montserrat_bold"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/normal_text"
+        app:layout_constraintTop_toBottomOf="@id/projectName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
         android:id="@+id/tasksAndDeliverableTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,7 +45,7 @@
         app:layout_constraintBottom_toTopOf="@id/tasksList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/territorieName" />
 
     <ImageView
         android:id="@+id/optionsMenu"
