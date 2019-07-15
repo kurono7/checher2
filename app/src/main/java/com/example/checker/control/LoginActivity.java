@@ -15,14 +15,25 @@ import android.widget.Toast;
 
 import com.example.checker.R;
 import com.example.checker.utils.ConnectionHTTP;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.ConnetionCallback {
+
+
+
     private EditText loginUsername;
     private EditText loginPassword;
     private Button loginBtn;
     private ProgressBar progressBar;
+
+
+
+    /**
+     * Initialize variables UI. <br>
+     * <b>post: </b> Variables are initialized. <br>
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +55,16 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
         });
     }
 
-    // Do the process of login
-    private void login(){
-        if(checkData()) {
+
+
+    /**
+     * Send server the authentification of user. <br>
+     * <b>pre: </b> progressBar != null. <br>
+     * <b>post: </b> The authentification is sended to server. <br>
+     */
+
+    private void login() {
+        if (checkData()) {
             final ConnectionHTTP connectionHTTP = new ConnectionHTTP(this);
             // Ask if is there connection
             if (connectionHTTP.isNetworkAvailable(LoginActivity.this)) {
@@ -61,6 +79,17 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
         }
     }
 
+
+
+    /**
+     * Receive the response of authentification from server. <br>
+     * <b>pre: </b> progressBar != null. <br>
+     * @param result Response of authentification from server. result != null && result != "".
+     * @param service Service sended to server. service != null && service != "".
+     * @throws JSONException <br>
+     *         1. If format json is misused. <br>
+     */
+
     @Override
     public void onResultReceived(String result, String service) {
         try {
@@ -69,45 +98,53 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
             JSONObject respuesta = respon.getJSONObject("respuesta");
             String mensaje = respuesta.getString("message");
             boolean exito = respuesta.getBoolean("exito");
-            if(exito){
+            if (exito) {
                 JSONObject data = respuesta.getJSONObject("data");
                 String code = data.getString("CodigoCargo");
                 String token = respon.getString("token");
                 String IdUsuario = data.getString("IdUsuario");
                 String Nombres = data.getString("Nombres");
-                String IdPerfil= data.getString("IdPerfil");
+                String IdPerfil = data.getString("IdPerfil");
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("token", token);
-                editor.putString("CodigoCargo",code);
-                editor.putString("IdUsuario",IdUsuario);
-                editor.putString("IdPerfil",IdPerfil);
-                editor.putString("Nombres",Nombres);
+                editor.putString("CodigoCargo", code);
+                editor.putString("IdUsuario", IdUsuario);
+                editor.putString("IdPerfil", IdPerfil);
+                editor.putString("Nombres", Nombres);
                 editor.apply();
 
                 // Launch the other activity
                 startActivity(new Intent(LoginActivity.this, ProjectsActivity.class));
-            }else{
-                Toast.makeText(getApplicationContext(),mensaje,Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_LONG).show();
             }
         } catch (JSONException e) {
-            Toast.makeText(getApplicationContext(),getString(R.string.error_json),Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
         }
         // Set the View's visibility back on the main UI Thread
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         progressBar.setVisibility(View.GONE);
     }
 
-    private boolean checkData(){
+
+
+    /**
+     * Check user name and password are completed.
+     * <b>pre:</b> loginUsername != null && loginPassword != null.<br>
+     * <b>post:</b> User name and password are checked.<br>
+     */
+
+    private boolean checkData() {
         boolean complete = false;
-        if(loginUsername.getText().toString().isEmpty() && loginPassword.getText().toString().isEmpty()){
+        if (loginUsername.getText().toString().isEmpty() && loginPassword.getText().toString().isEmpty()) {
             loginUsername.setError(getString(R.string.error_user_name));
             loginPassword.setError(getString(R.string.error_user_password));
-        }else if(loginUsername.getText().toString().isEmpty()){
+        } else if (loginUsername.getText().toString().isEmpty()) {
             loginUsername.setError(getString(R.string.error_user_name));
-        }else if(loginPassword.getText().toString().isEmpty()) {
+        } else if (loginPassword.getText().toString().isEmpty()) {
             loginPassword.setError(getString(R.string.error_user_password));
-        }else {
+        } else {
             complete = true;
         }
         return complete;

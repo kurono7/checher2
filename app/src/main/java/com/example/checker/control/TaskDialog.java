@@ -23,6 +23,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallback {
+
+
+
     private TextView taskName;
     private TextView taskID;
     private TextView process;
@@ -35,11 +38,27 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
     private ImageButton closeBtn;
     private ProgressBar progressBar;
 
+
+
+    /**
+     * Create a Task Dialog. <br>
+     * <b>pre: </b> context != null && task != null && territorie != null. <br>
+     * <b>post: </b> Task Dialog was created. <br>
+     */
+
     public TaskDialog(Context context, Task task, Territorie territorie) {
         super(context);
         this.task = task;
         this.territorie = territorie;
     }
+
+
+
+    /**
+     * Initialize variables UI. <br>
+     * <b>pre: </b> context != null && task != null && territorie != null. <br>
+     * <b>post: </b> Variables are initialized. <br>
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +111,14 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
         });
     }
 
-    // Method to update the state of a task
+
+
+    /**
+     * Send server the report state of task. <br>
+     * <b>pre: </b> progressbar != null. <br>
+     * <b>post: </b> The task was report. <br>
+     */
+
     public void updateTaskState() {
         final ConnectionHTTP connectionHTTP = new ConnectionHTTP(this);
         // Ask if is there connection
@@ -111,6 +137,17 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
             Toast.makeText(getContext(), getContext().getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
         }
     }
+
+
+
+    /**
+     * Receive the response of state changed from server. <br>
+     * <b>pre: </b> progressBar != null. <br>
+     * @param result Response of request report task from server. result != null && result != "".
+     * @param service Service sended to server. service != null && service != "".
+     * @throws JSONException <br>
+     *         1. If format json is misused. <br>
+     */
 
     @Override
     public void onResultReceived(String result, String service) {

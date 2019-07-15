@@ -44,11 +44,21 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.ConnetionCallback{
+
+
+
     private ImageView optionsMenu;
     private ListView tasksList;
     private ProgressBar progressBar;
     private TextView projectName;
     private TextView territorieName;
+
+
+
+    /**
+     * Initialize variables UI. <br>
+     * <b>post: </b> Variables are initialized. <br>
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +105,14 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
         refreshList();
     }
 
+
+
+    /**
+     * Send server the get task of user. <br>
+     * <b>pre: </b> progressbar != null. <br>
+     * <b>post: </b> The task of user are obtained. <br>
+     */
+
     public void refreshList() {
         final ConnectionHTTP connectionHTTP = new ConnectionHTTP(this);
         if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
@@ -116,7 +134,15 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
         }
     }
 
-    //  Option to logout
+
+
+    /**
+     * Initialize . <br>
+     * <b>pre: </b> Send server the close session of user. <br>
+     * <b>post: </b> The session of user is closed. <br>
+     * @param v View of context. v != null && v != "".
+     */
+
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
@@ -146,6 +172,17 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
         });
         popup.show();
     }
+
+
+
+    /**
+     * Receive the response of get tasks and close session from server. <br>
+     * <b>pre: </b> progressBar != null. <br>
+     * @param result Response of request tasks and close session from server. result != null && result != "".
+     * @param service Service sended to server. service != null && service != "".
+     * @throws JSONException <br>
+     *         1. If format json is misused. <br>
+     */
 
     @Override
     public void onResultReceived(String result, String service) {
@@ -201,6 +238,15 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
         progressBar.setVisibility(View.GONE);
     }
 
+
+
+    /**
+     * Receive the image that was captured by camera. <br>
+     * @param requestCode Request code from activity. requestCode != null && requestCode != "".
+     * @param resultCode Result code from activity sended to server. resultCode != null && resultCode != "".
+     * @param data Data sended from activity. data != null && data != "".
+     */
+
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if(resultCode == RESULT_OK && requestCode == TaskAdapter.PICK_IMAGE_CAMERA){
             Bundle extras = data.getExtras();
@@ -220,6 +266,15 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
             Toast.makeText(getApplicationContext(),getString(R.string.not_file),Toast.LENGTH_LONG).show();
         }
     }
+
+
+
+    /**
+     * Receive the permissions that was requered by camera. <br>
+     * @param requestCode Request code from activity. requestCode != null && requestCode != "".
+     * @param permissions Permissions that are requered by camera. permissions != null && permissions != "".
+     * @param grantResults Permissions given. grantResults != null && grantResults != "".
+     */
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions,int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

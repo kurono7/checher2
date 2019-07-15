@@ -31,9 +31,18 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class TerritoriesActivity extends AppCompatActivity implements  ConnectionHTTP.ConnetionCallback{
+
+
+
     private ImageView optionsMenu;
     private ListView territoriesList;
     private ProgressBar progressBar;
+
+
+    /**
+     * Initialize variables UI. <br>
+     * <b>post: </b> Variables are initialized. <br>
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +95,15 @@ public class TerritoriesActivity extends AppCompatActivity implements  Connectio
         }
     }
 
+
+
+    /**
+     * Initialize . <br>
+     * <b>pre: </b> Send server the close session of user. <br>
+     * <b>post: </b> The session of user is closed. <br>
+     * @param v View of context. v != null && v != "".
+     */
+
     // Option to logout
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
@@ -116,6 +134,17 @@ public class TerritoriesActivity extends AppCompatActivity implements  Connectio
         });
         popup.show();
     }
+
+
+
+    /**
+     * Receive the response of close session from server. <br>
+     * <b>pre: </b> progressBar != null. <br>
+     * @param result Response of close session from server. result != null && result != "".
+     * @param service Service sended to server. service != null && service != "".
+     * @throws JSONException <br>
+     *         1. If format json is misused. <br>
+     */
 
     @Override
     public void onResultReceived(String result, String service) {

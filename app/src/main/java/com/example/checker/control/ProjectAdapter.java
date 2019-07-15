@@ -7,10 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.example.checker.R;
 import com.example.checker.model.Project;
-
 import java.util.ArrayList;
 
 public class ProjectAdapter extends BaseAdapter {

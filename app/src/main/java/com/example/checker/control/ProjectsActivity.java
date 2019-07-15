@@ -26,9 +26,19 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class ProjectsActivity extends AppCompatActivity implements ConnectionHTTP.ConnetionCallback {
+
+
+
     private ImageView optionsMenu;
     private ListView projectsList;
     private ProgressBar progressBar;
+
+
+
+    /**
+     * Initialize variables UI. <br>
+     * <b>post: </b> Variables are initialized. <br>
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +50,6 @@ public class ProjectsActivity extends AppCompatActivity implements ConnectionHTT
         projectsList = findViewById(R.id.projectsList);
         progressBar = findViewById(R.id.progressBar);
 
-        // Get the projects
-        refreshProjects();
-
         // Option to logout
         optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,9 +57,19 @@ public class ProjectsActivity extends AppCompatActivity implements ConnectionHTT
                 showPopup(view);
             }
         });
+
+        // Get the projects
+        refreshProjects();
     }
 
-    // Get the projects
+
+
+    /**
+     * Send server the get projects of user. <br>
+     * <b>pre: </b> progressBar != null. <br>
+     * <b>post: </b> The projects of user are obtained. <br>
+     */
+
     public void refreshProjects() {
         final ConnectionHTTP connectionHTTP = new ConnectionHTTP(this);
         // Ask if is there connection
@@ -74,7 +91,15 @@ public class ProjectsActivity extends AppCompatActivity implements ConnectionHTT
         }
     }
 
-    // Option to logout
+
+
+    /**
+     * Initialize . <br>
+     * <b>pre: </b> Send server the close session of user. <br>
+     * <b>post: </b> The session of user is closed. <br>
+     * @param v View of context. v != null && v != "".
+     */
+
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
@@ -105,6 +130,17 @@ public class ProjectsActivity extends AppCompatActivity implements ConnectionHTT
         });
         popup.show();
     }
+
+
+
+    /**
+     * Receive the response of get projects and close session from server. <br>
+     * <b>pre: </b> progressBar != null. <br>
+     * @param result Response of request projects and close session from server. result != null && result != "".
+     * @param service Service sended to server. service != null && service != "".
+     * @throws JSONException <br>
+     *         1. If format json is misused. <br>
+     */
 
     @Override
     public void onResultReceived(String result, String service) {
