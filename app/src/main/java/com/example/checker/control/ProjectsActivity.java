@@ -55,7 +55,6 @@ public class ProjectsActivity extends AppCompatActivity implements ConnectionHTT
     // Get the projects
     public void refreshProjects() {
         final ConnectionHTTP connectionHTTP = new ConnectionHTTP(this);
-
         // Ask if is there connection
         if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
             // Block windows and show the progressbar

@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.checker.R;
@@ -46,6 +47,8 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
     private ImageView optionsMenu;
     private ListView tasksList;
     private ProgressBar progressBar;
+    private TextView projectName;
+    private TextView territorieName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,12 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
         tasksList = findViewById(R.id.tasksList);
         optionsMenu = findViewById(R.id.optionsMenu);
         progressBar = findViewById(R.id.progressBar);
+        projectName = findViewById(R.id.projectName);
+        territorieName = findViewById(R.id.territorieName);
+
+        Territorie territorie = (Territorie) getIntent().getSerializableExtra("territorie");
+        projectName.setText(territorie.getProjectName());
+        territorieName.setText(territorie.getTerritorieName());
 
         optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -72,7 +72,7 @@ public class TerritoriesActivity extends AppCompatActivity implements  Connectio
                 String IdTerritorio = territorie.getString("IdTerritorio");
                 String IdProyect_territorie = territorie.getString("IdProyecto");
 
-                Territorie object = new Territorie(NombreLocalizacion, IdTerritorio, IdProyect_territorie);
+                Territorie object = new Territorie(NombreLocalizacion, IdTerritorio, project.getProjectName(), IdProyect_territorie);
 
                 if (IdProyect_territorie.equals(IdProyecto)) {
                     territories.add(object);
