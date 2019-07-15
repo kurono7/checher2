@@ -109,29 +109,27 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <ImageView
-            android:id="@+id/statusIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_vector_check_icon"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/corner_colored"
-            app:layout_constraintStart_toStartOf="@id/corner_colored"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
         <ImageView
             android:id="@+id/attachIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_vector_attach_icon"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/corner_colored"
             app:layout_constraintEnd_toEndOf="@id/corner_colored"
             app:layout_constraintStart_toStartOf="@id/corner_colored"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/corner_colored" />
+
+        <ImageView
+            android:id="@+id/checkIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_vector_check_icon"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/corner_colored"
+            app:layout_constraintEnd_toEndOf="@id/corner_colored"
+            app:layout_constraintStart_toStartOf="@id/corner_colored"
+            app:layout_constraintTop_toTopOf="@id/corner_colored" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

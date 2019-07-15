@@ -70,19 +70,20 @@ public class TaskAdapter extends BaseAdapter {
         TextView location = convertView.findViewById(R.id.location);
         TextView taskExpirationDate = convertView.findViewById(R.id.taskExpirationDate);
         TextView status = convertView.findViewById(R.id.status);
-        ImageView statusIcon = convertView.findViewById(R.id.statusIcon);
+        ImageView checkIcon = convertView.findViewById(R.id.checkIcon);
+        ImageView corner_colored = convertView.findViewById(R.id.corner_colored);
         ImageView attachIcon = convertView.findViewById(R.id.attachIcon);
         taskName.setText(task.getTaskName());
         taskExpirationDate.setText(task.getExpirationDate());
 
-        if(task.getStatus().equals("1")){
+        if (task.getStatus().equals("1")) {
             status.setText("REPORTADO");
-            statusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_vector_status_point_icon_green));
+            corner_colored.setImageResource(R.drawable.ic_vector_corner_accepted);
+            checkIcon.setVisibility(View.VISIBLE);
         }
 
         // Ask if the task is a task or entregable
         if (task.getTaskType() == 0) {
-            statusIcon.setVisibility(View.VISIBLE);
         } else {
             attachIcon.setVisibility(View.VISIBLE);
             attachIcon.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +105,7 @@ public class TaskAdapter extends BaseAdapter {
         if (mContext.checkSelfPermission(Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             ((Activity) mContext).requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE}, MY_CAMERA_REQUEST_CODE);
-        }else{
+        } else {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             ((Activity) mContext).startActivityForResult(intent, PICK_IMAGE_CAMERA);
         }

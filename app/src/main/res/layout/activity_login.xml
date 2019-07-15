@@ -50,6 +50,7 @@
             android:layout_marginEnd="@dimen/normal_margin"
             android:background="@drawable/rounded_white_edit_text_shape"
             android:drawableLeft="@drawable/ic_vector_user_icon"
+            android:drawablePadding="@dimen/min_margin"
             android:fontFamily="@font/montserrat_regular"
             android:hint="@string/usernameTxt"
             android:paddingLeft="@dimen/normal_margin"
@@ -66,6 +67,8 @@
             android:layout_marginEnd="@dimen/normal_margin"
             android:background="@drawable/rounded_white_edit_text_shape"
             android:drawableLeft="@drawable/ic_vector_password_icon"
+            android:drawablePadding="@dimen/min_margin"
+
             android:fontFamily="@font/montserrat_regular"
             android:hint="@string/passwordTxt"
             android:inputType="textPassword"
