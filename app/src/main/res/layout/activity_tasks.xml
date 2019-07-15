@@ -6,36 +6,60 @@
     android:layout_height="match_parent"
     tools:context=".control.TasksActivity">
 
-    <TextView
-        android:id="@+id/projectName"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintTitle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:text="Nombre proyecto"
-        android:fontFamily="@font/montserrat_bold"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/normal_text"
-        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="@dimen/fab_margin"
+        android:paddingBottom="@dimen/fab_margin"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/territorieName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:text="Nombre territorio"
-        android:fontFamily="@font/montserrat_bold"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/normal_text"
-        app:layout_constraintTop_toBottomOf="@id/projectName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <TextView
+            android:id="@+id/projectName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="NOMBRE PROYECTO"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/normal_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/territorieName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="NOMBRE TERRITORIO"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/normal_text"
+            app:layout_constraintStart_toStartOf="@id/projectName"
+            app:layout_constraintTop_toBottomOf="@id/projectName" />
+
+        <ImageView
+            android:id="@+id/optionsMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/min_margin"
+            android:paddingBottom="@dimen/min_margin"
+            android:paddingLeft="@dimen/fab_margin"
+            android:paddingRight="@dimen/fab_margin"
+            android:src="@drawable/ic_vector_options_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/tasksAndDeliverableTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/fab_margin"
         android:layout_marginTop="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
         android:fontFamily="@font/montserrat_bold"
@@ -43,22 +67,8 @@
         android:textColor="@color/colorPrimaryDark"
         android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toTopOf="@id/tasksList"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/territorieName" />
-
-    <ImageView
-        android:id="@+id/optionsMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/fab_margin"
-        android:paddingTop="@dimen/fab_margin"
-        android:paddingRight="@dimen/fab_margin"
-        android:paddingBottom="@dimen/fab_margin"
-        android:src="@drawable/ic_vector_options_icon"
-        app:layout_constraintBottom_toBottomOf="@id/tasksAndDeliverableTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tasksAndDeliverableTitle" />
+        app:layout_constraintTop_toBottomOf="@id/constraintTitle" />
 
     <ListView
         android:id="@+id/tasksList"

@@ -49,7 +49,7 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
 
         // Initialized variables
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        preferences.edit().putBoolean("update",false).apply();
+        preferences.edit().putBoolean("update", false).apply();
 
         reportTaskBtn = findViewById(R.id.reportTaskBtn);
         taskName = findViewById(R.id.taskName);
@@ -75,8 +75,9 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
             }
         });
 
-        if(task.getStatus().equals("1")){
+        if (task.getStatus().equals("1")) {
             reportTaskBtn.setEnabled(false);
+            reportTaskBtn.setText("Reportada");
             reportTaskBtn.setBackgroundDrawable(getContext().getDrawable(R.drawable.rounded_green_button_shape_dissabled));
             Toast.makeText(getContext(), "La tarea esta reportada", Toast.LENGTH_LONG).show();
         }
@@ -85,6 +86,7 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
             @Override
             public void onClick(View view) {
                 reportTaskBtn.setEnabled(false);
+                reportTaskBtn.setText("Reportada");
                 updateTaskState();
             }
         });
@@ -104,26 +106,26 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
             String token = preferences.getString("token", "");
 
             // Send the request to update task
-            connectionHTTP.updateTaskState(territorie.getProjectID(), territorie.getTerritorieID(), task.getTaskID(),token);
+            connectionHTTP.updateTaskState(territorie.getProjectID(), territorie.getTerritorieID(), task.getTaskID(), token);
         } else {
-            Toast.makeText(getContext(), getContext().getString(R.string.failed_connection),Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getContext().getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void onResultReceived(String result, String service) {
-            try {
-                JSONObject respuesta = new JSONObject(result);
-                boolean exito = respuesta.getBoolean("exito");
-                if(exito){
-                    Toast.makeText(getContext(), respuesta.getString("message"), Toast.LENGTH_SHORT).show();
-                    dismiss();
-                }
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                preferences.edit().putBoolean("update",true).apply();
-            } catch (JSONException e) {
-                Toast.makeText(getContext(), getContext().getString(R.string.error_json),Toast.LENGTH_LONG).show();
+        try {
+            JSONObject respuesta = new JSONObject(result);
+            boolean exito = respuesta.getBoolean("exito");
+            if (exito) {
+                Toast.makeText(getContext(), respuesta.getString("message"), Toast.LENGTH_SHORT).show();
+                dismiss();
             }
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            preferences.edit().putBoolean("update", true).apply();
+        } catch (JSONException e) {
+            Toast.makeText(getContext(), getContext().getString(R.string.error_json), Toast.LENGTH_LONG).show();
+        }
 
         // Set the View's visibility back on the main UI Thread
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);

@@ -113,6 +113,7 @@
             android:id="@+id/attachIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="@dimen/fab_margin"
             android:src="@drawable/ic_vector_attach_icon"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@id/corner_colored"
