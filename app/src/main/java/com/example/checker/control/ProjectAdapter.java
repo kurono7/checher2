@@ -49,7 +49,6 @@ public class ProjectAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 // Launch the Territorie activity with the project selected
                 Intent intent = new Intent(context, TerritoriesActivity.class);
                 intent.putExtra("project", project);

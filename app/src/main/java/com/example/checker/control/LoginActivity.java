@@ -19,7 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.ConnetionCallback {
-    private EditText loginMail;
+    private EditText loginUsername;
     private EditText loginPassword;
     private Button loginBtn;
     private ProgressBar progressBar;
@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
         setContentView(R.layout.activity_login);
 
         // Initialize variables
-        loginMail = findViewById(R.id.loginUsername);
+        loginUsername = findViewById(R.id.loginUsername);
         loginPassword = findViewById(R.id.loginPassword);
         loginBtn = findViewById(R.id.loginBtn);
         progressBar = findViewById(R.id.progressBar);
@@ -46,16 +46,18 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
 
     // Do the process of login
     private void login(){
-        final ConnectionHTTP connectionHTTP = new ConnectionHTTP(this);
-        // Ask if is there connection
-        if (connectionHTTP.isNetworkAvailable(LoginActivity.this)) {
-            // Block windows and show the progressbar
-            progressBar.setVisibility(View.VISIBLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            // Send the request to authentification
-            connectionHTTP.sendAutentification("", loginMail.getText().toString(), loginPassword.getText().toString(), "", "");
-        }else{
-            Toast.makeText(getApplicationContext(), getString(R.string.failed_connection),Toast.LENGTH_LONG).show();
+        if(checkData()) {
+            final ConnectionHTTP connectionHTTP = new ConnectionHTTP(this);
+            // Ask if is there connection
+            if (connectionHTTP.isNetworkAvailable(LoginActivity.this)) {
+                // Block windows and show the progressbar
+                progressBar.setVisibility(View.VISIBLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                // Send the request to authentification
+                connectionHTTP.sendAutentification("", loginUsername.getText().toString(), loginPassword.getText().toString(), "", "");
+            } else {
+                Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -94,5 +96,20 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
         // Set the View's visibility back on the main UI Thread
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         progressBar.setVisibility(View.GONE);
+    }
+
+    private boolean checkData(){
+        boolean complete = false;
+        if(loginUsername.getText().toString().isEmpty() && loginPassword.getText().toString().isEmpty()){
+            loginUsername.setError(getString(R.string.error_user_name));
+            loginPassword.setError(getString(R.string.error_user_password));
+        }else if(loginUsername.getText().toString().isEmpty()){
+            loginUsername.setError(getString(R.string.error_user_name));
+        }else if(loginPassword.getText().toString().isEmpty()) {
+            loginPassword.setError(getString(R.string.error_user_password));
+        }else {
+            complete = true;
+        }
+        return complete;
     }
 }
