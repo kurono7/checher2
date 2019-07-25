@@ -17,7 +17,7 @@ public class TerritorieAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<Territorie> territoriesList;
 
-    public TerritorieAdapter(Context context, ArrayList<Territorie> territoriesList) {
+    TerritorieAdapter(Context context, ArrayList<Territorie> territoriesList) {
         this.context = context;
         this.territoriesList = territoriesList;
     }
@@ -39,7 +39,8 @@ public class TerritorieAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(context).inflate(R.layout.item_territorie, null);
+        if(convertView==null)
+        convertView = LayoutInflater.from(context).inflate(R.layout.item_territorie, parent,false);
 
         // Get the territorie selected
         final Territorie territorie = territoriesList.get(position);

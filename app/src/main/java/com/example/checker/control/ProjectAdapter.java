@@ -16,7 +16,7 @@ public class ProjectAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<Project> projectsList;
 
-    public ProjectAdapter(Context context, ArrayList<Project> projectsList) {
+    ProjectAdapter(Context context, ArrayList<Project> projectsList) {
         this.context = context;
         this.projectsList = projectsList;
     }
@@ -38,7 +38,9 @@ public class ProjectAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(context).inflate(R.layout.item_project, null);
+        if(convertView==null){
+        convertView = LayoutInflater.from(context).inflate(R.layout.item_project, parent, false);
+        }
 
         // Get the project selected
         final Project project = projectsList.get(position);

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -25,7 +24,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
 
     private EditText loginUsername;
     private EditText loginPassword;
-    private Button loginBtn;
     private ProgressBar progressBar;
 
 
@@ -43,11 +41,10 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
         // Initialize variables
         loginUsername = findViewById(R.id.loginUsername);
         loginPassword = findViewById(R.id.loginPassword);
-        loginBtn = findViewById(R.id.loginBtn);
         progressBar = findViewById(R.id.progressBar);
 
         // Button to login
-        loginBtn.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.loginBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 login();
@@ -86,8 +83,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
      * <b>pre: </b> progressBar != null. <br>
      * @param result Response of authentification from server. result != null && result != "".
      * @param service Service sended to server. service != null && service != "".
-     * @throws JSONException <br>
-     *         1. If format json is misused. <br>
      */
 
     @Override

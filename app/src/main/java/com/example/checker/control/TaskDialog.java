@@ -22,20 +22,14 @@ import com.example.checker.utils.ConnectionHTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallback {
 
 
-
-    private TextView taskName;
-    private TextView taskID;
-    private TextView process;
-    private TextView subprocess;
-    private TextView status;
-    private TextView expirationDate;
     private Task task;
     private Button reportTaskBtn;
     private Territorie territorie;
-    private ImageButton closeBtn;
     private ProgressBar progressBar;
 
 
@@ -46,7 +40,7 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
      * <b>post: </b> Task Dialog was created. <br>
      */
 
-    public TaskDialog(Context context, Task task, Territorie territorie) {
+    TaskDialog(Context context, Task task, Territorie territorie) {
         super(context);
         this.task = task;
         this.territorie = territorie;
@@ -71,12 +65,12 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
         preferences.edit().putBoolean("update", false).apply();
 
         reportTaskBtn = findViewById(R.id.reportTaskBtn);
-        taskName = findViewById(R.id.taskName);
-        taskID = findViewById(R.id.taskID);
-        process = findViewById(R.id.process);
-        subprocess = findViewById(R.id.subprocess);
-        status = findViewById(R.id.status);
-        expirationDate = findViewById(R.id.expirationDate);
+        TextView taskName = findViewById(R.id.taskName);
+        TextView taskID = findViewById(R.id.taskID);
+        TextView process = findViewById(R.id.process);
+        TextView subprocess = findViewById(R.id.subprocess);
+        TextView status = findViewById(R.id.status);
+        TextView expirationDate = findViewById(R.id.expirationDate);
 
         taskName.setText(task.getTaskName());
         taskID.setText(task.getTaskID());
@@ -86,7 +80,7 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
         expirationDate.setText(task.getExpirationDate());
         progressBar = findViewById(R.id.progressBar);
 
-        closeBtn = findViewById(R.id.closeBtn);
+        ImageButton closeBtn = findViewById(R.id.closeBtn);
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,8 +90,8 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
 
         if (task.getStatus().equals("1")) {
             reportTaskBtn.setEnabled(false);
-            reportTaskBtn.setText("Reportada");
-            reportTaskBtn.setBackgroundDrawable(getContext().getDrawable(R.drawable.rounded_green_button_shape_dissabled));
+            reportTaskBtn.setText(getContext().getString(R.string.reportedTxT));
+            reportTaskBtn.setBackground(getContext().getDrawable(R.drawable.rounded_green_button_shape_dissabled));
             Toast.makeText(getContext(), "La tarea esta reportada", Toast.LENGTH_LONG).show();
         }
 
@@ -105,7 +99,7 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
             @Override
             public void onClick(View view) {
                 reportTaskBtn.setEnabled(false);
-                reportTaskBtn.setText("Reportada");
+                reportTaskBtn.setText(getContext().getString(R.string.reportedTxT));
                 updateTaskState();
             }
         });
@@ -119,13 +113,13 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
      * <b>post: </b> The task was report. <br>
      */
 
-    public void updateTaskState() {
+    private void updateTaskState() {
         final ConnectionHTTP connectionHTTP = new ConnectionHTTP(this);
         // Ask if is there connection
         if (connectionHTTP.isNetworkAvailable(getContext())) {
             // Block windows and show the progressbar
             progressBar.setVisibility(View.VISIBLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            Objects.requireNonNull(getWindow()).setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
             // Call the data stored in preferences
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -145,8 +139,6 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
      * <b>pre: </b> progressBar != null. <br>
      * @param result Response of request report task from server. result != null && result != "".
      * @param service Service sended to server. service != null && service != "".
-     * @throws JSONException <br>
-     *         1. If format json is misused. <br>
      */
 
     @Override
@@ -165,7 +157,7 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
         }
 
         // Set the View's visibility back on the main UI Thread
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        Objects.requireNonNull(getWindow()).clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         progressBar.setVisibility(View.GONE);
     }
 }

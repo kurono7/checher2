@@ -5,18 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.example.checker.R;
 import com.example.checker.model.Project;
 import com.example.checker.utils.ConnectionHTTP;
@@ -28,12 +25,8 @@ import java.util.ArrayList;
 public class ProjectsActivity extends AppCompatActivity implements ConnectionHTTP.ConnetionCallback {
 
 
-
-    private ImageView optionsMenu;
     private ListView projectsList;
     private ProgressBar progressBar;
-
-
 
     /**
      * Initialize variables UI. <br>
@@ -46,12 +39,11 @@ public class ProjectsActivity extends AppCompatActivity implements ConnectionHTT
         setContentView(R.layout.activity_projects);
 
         // Initialize variables
-        optionsMenu = findViewById(R.id.optionsMenu);
         projectsList = findViewById(R.id.projectsList);
         progressBar = findViewById(R.id.progressBar);
 
         // Option to logout
-        optionsMenu.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.optionsMenu).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showPopup(view);
@@ -138,8 +130,6 @@ public class ProjectsActivity extends AppCompatActivity implements ConnectionHTT
      * <b>pre: </b> progressBar != null. <br>
      * @param result Response of request projects and close session from server. result != null && result != "".
      * @param service Service sended to server. service != null && service != "".
-     * @throws JSONException <br>
-     *         1. If format json is misused. <br>
      */
 
     @Override

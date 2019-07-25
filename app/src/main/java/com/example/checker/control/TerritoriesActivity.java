@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,26 +15,17 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.example.checker.R;
 import com.example.checker.model.Project;
-import com.example.checker.model.Task;
 import com.example.checker.model.Territorie;
 import com.example.checker.utils.ConnectionHTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-
 public class TerritoriesActivity extends AppCompatActivity implements  ConnectionHTTP.ConnetionCallback{
 
 
-
-    private ImageView optionsMenu;
-    private ListView territoriesList;
     private ProgressBar progressBar;
 
 
@@ -50,8 +40,8 @@ public class TerritoriesActivity extends AppCompatActivity implements  Connectio
         setContentView(R.layout.activity_territories);
 
         // Initialize variables
-        optionsMenu = findViewById(R.id.optionsMenu);
-        territoriesList = findViewById(R.id.territoriesList);
+        ImageView optionsMenu = findViewById(R.id.optionsMenu);
+        ListView territoriesList = findViewById(R.id.territoriesList);
         progressBar = findViewById(R.id.progressBar);
         optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +53,7 @@ public class TerritoriesActivity extends AppCompatActivity implements  Connectio
         // Get the project that was select in list
         Intent intent = getIntent();
         Project project = (Project) intent.getSerializableExtra("project");
-        String IdProyecto = project.getProjectID();
+        String IdProyecto = project != null ? project.getProjectID() : null;
 
         // Load the data of preference
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -81,7 +71,7 @@ public class TerritoriesActivity extends AppCompatActivity implements  Connectio
                 String IdTerritorio = territorie.getString("IdTerritorio");
                 String IdProyect_territorie = territorie.getString("IdProyecto");
 
-                Territorie object = new Territorie(NombreLocalizacion, IdTerritorio, project.getProjectName(), IdProyect_territorie);
+                Territorie object = new Territorie(NombreLocalizacion, IdTerritorio, project != null ? project.getProjectName() : null, IdProyect_territorie);
 
                 if (IdProyect_territorie.equals(IdProyecto)) {
                     territories.add(object);
@@ -142,8 +132,6 @@ public class TerritoriesActivity extends AppCompatActivity implements  Connectio
      * <b>pre: </b> progressBar != null. <br>
      * @param result Response of close session from server. result != null && result != "".
      * @param service Service sended to server. service != null && service != "".
-     * @throws JSONException <br>
-     *         1. If format json is misused. <br>
      */
 
     @Override

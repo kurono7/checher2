@@ -16,25 +16,7 @@ public class Territorie implements Serializable {
         this.projectID = projectID;
     }
 
-    public void setTerritorieName(String territorieName) {
-        this.territorieName = territorieName;
-    }
-
-    public void setTerritorieID(String territorieID) {
-        this.territorieID = territorieID;
-    }
-
-    public void setProjectID(String projectID) {
-        this.projectID = projectID;
-    }
-
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
+    public String getProjectName() { return projectName; }
 
     public String getTerritorieName() {
         return territorieName;

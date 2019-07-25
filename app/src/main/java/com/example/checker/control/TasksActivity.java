@@ -1,17 +1,13 @@
 package com.example.checker.control;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -21,38 +17,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.checker.R;
 import com.example.checker.model.Task;
 import com.example.checker.model.Territorie;
 import com.example.checker.utils.ConnectionHTTP;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Objects;
 
 public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.ConnetionCallback{
 
 
-
-    private ImageView optionsMenu;
     private ListView tasksList;
     private ProgressBar progressBar;
-    private TextView projectName;
-    private TextView territorieName;
-
 
 
     /**
@@ -66,14 +52,14 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
         setContentView(R.layout.activity_tasks);
 
         tasksList = findViewById(R.id.tasksList);
-        optionsMenu = findViewById(R.id.optionsMenu);
+        ImageView optionsMenu = findViewById(R.id.optionsMenu);
         progressBar = findViewById(R.id.progressBar);
-        projectName = findViewById(R.id.projectName);
-        territorieName = findViewById(R.id.territorieName);
+        TextView projectName = findViewById(R.id.projectName);
+        TextView territorieName = findViewById(R.id.territorieName);
 
         Territorie territorie = (Territorie) getIntent().getSerializableExtra("territorie");
-        projectName.setText(territorie.getProjectName());
-        territorieName.setText(territorie.getTerritorieName());
+        projectName.setText(territorie != null ? territorie.getProjectName() : null);
+        territorieName.setText(territorie != null ? territorie.getTerritorieName() : null);
 
         optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,8 +111,8 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
 
             Intent intent = getIntent();
             Territorie territorie = (Territorie) intent.getSerializableExtra("territorie");
-            String idProject = territorie.getProjectID();
-            String idTerritore = territorie.getTerritorieID();
+            String idProject = territorie != null ? territorie.getProjectID() : null;
+            String idTerritore = territorie != null ? territorie.getTerritorieID() : null;
 
             connectionHTTP.getTasks(idProject, idTerritore, code, token);
         } else {
@@ -180,8 +166,6 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
      * <b>pre: </b> progressBar != null. <br>
      * @param result Response of request tasks and close session from server. result != null && result != "".
      * @param service Service sended to server. service != null && service != "".
-     * @throws JSONException <br>
-     *         1. If format json is misused. <br>
      */
 
     @Override
@@ -204,9 +188,8 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
                         String process = task.getString("Proceso");
                         String subprocess = task.getString("SubProceso");
 
-                        Date data = new Date();
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                        expirationDate = sdf.format(data);
+                        //@SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        //expirationDate = sdf.format(expirationDate);
 
                         tasks.add(new Task(taskID, taskType, processID, process, subprocess, taskName, status, expirationDate));
                     }
@@ -250,9 +233,9 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if(resultCode == RESULT_OK && requestCode == TaskAdapter.PICK_IMAGE_CAMERA){
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            Bitmap imageBitmap = (Bitmap) (extras != null ? extras.get("data") : null);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            Objects.requireNonNull(imageBitmap).compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream .toByteArray();
             String encodedBase64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
             Log.e("BASE64", encodedBase64);
@@ -276,7 +259,7 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
      * @param grantResults Permissions given. grantResults != null && grantResults != "".
      */
 
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == TaskAdapter.MY_CAMERA_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {

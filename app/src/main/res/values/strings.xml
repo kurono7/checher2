@@ -44,6 +44,9 @@
     <string name="subprocessTitleTxt">Subproceso:</string>
     <string name="statusTitleTxt">Estado:</string>
     <string name="expirationDateTitleTxt">Fecha de vencimiento:</string>
+    <string name="acceptedTxT">ACEPTADO!</string>
+    <string name="reportedTxT">REPORTADO!</string>
+    <string name="not_reportedTxT">NO REPORTADO!</string>
 
     <!--TASK DIALOG-->
     <string name="reportTaskTxt">Reportar tarea</string>

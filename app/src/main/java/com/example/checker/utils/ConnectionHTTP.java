@@ -1,14 +1,13 @@
 package com.example.checker.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,23 +22,19 @@ public class ConnectionHTTP {
     private ConnetionCallback listener;
 
     //SERVER
-    public final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8080";
-    public final static int WAIT = 30000;
+    private final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8080";
+    private final static int WAIT = 30000;
 
     // URL API'S
-    public final static String AUTENTIFICATION = "/auth/autenticar/mobile";
+    private final static String AUTENTIFICATION = "/auth/autenticar/mobile";
     public final static String GETTASKS = "/api/v1/tareas/";
-    public final static String SIGNOUT = "/api/v1/usuarios/cerrar-sesion/";
+    private final static String SIGNOUT = "/api/v1/usuarios/cerrar-sesion/";
     public final static String GETPROYECTS = "/api/v1/general/autenticacion/mobile/";
-    public final static String UPDATETASKSTATE = "/api/v1/tareasProyecto/procesar-tarea/";
+    private final static String UPDATETASKSTATE = "/api/v1/tareasProyecto/procesar-tarea/";
 
 
     public ConnectionHTTP(ConnetionCallback listener) {
         this.listener = listener;
-    }
-
-    public int getStatusResponse() {
-        return statusResponse;
     }
 
     public void updateTaskState(String IdProyecto, String IdTerritorio, String IdTarea, String token) {
@@ -84,11 +79,12 @@ public class ConnectionHTTP {
         void onResultReceived(String result, String service);
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class SendDeviceDetailsPOST extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
             service = params[0];
-            String data = "";
+            StringBuilder data = new StringBuilder();
             HttpURLConnection httpURLConnection = null;
             try {
                 if (params[0].equals(UPDATETASKSTATE)) {
@@ -110,7 +106,7 @@ public class ConnectionHTTP {
 
                 statusResponse = httpURLConnection.getResponseCode();
 
-                InputStreamReader inputStreamReader = null;
+                InputStreamReader inputStreamReader;
                 if (statusResponse >= 300) {
                     inputStreamReader = new InputStreamReader(httpURLConnection.getErrorStream());
                 } else {
@@ -121,7 +117,7 @@ public class ConnectionHTTP {
                 while (inputStreamData != -1) {
                     char current = (char) inputStreamData;
                     inputStreamData = inputStreamReader.read();
-                    data += current;
+                    data.append(current);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -131,7 +127,7 @@ public class ConnectionHTTP {
                     httpURLConnection.disconnect();
                 }
             }
-            return data;
+            return data.toString();
         }
 
         @Override
@@ -144,12 +140,13 @@ public class ConnectionHTTP {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class SendDeviceDetailsGET extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {
             service = params[0];
-            String data = "";
+            StringBuilder data = new StringBuilder();
             HttpURLConnection httpURLConnection = null;
             try {
                 if (params[0].equals(SIGNOUT)) {
@@ -172,7 +169,7 @@ public class ConnectionHTTP {
                 while (inputStreamData != -1) {
                     char current = (char) inputStreamData;
                     inputStreamData = inputStreamReader.read();
-                    data += current;
+                    data.append(current);
                 }
                 statusResponse = httpURLConnection.getResponseCode();
 
@@ -183,65 +180,9 @@ public class ConnectionHTTP {
                     httpURLConnection.disconnect();
                 }
             }
-            return data;
+            return data.toString();
         }
 
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            if(listener!=null){
-                listener.onResultReceived(result, service);
-            }
-            Log.e("TAG", result); // this is expecting a response code to be sent from your server upon receiving the POST data
-        }
-    }
-
-    private class SendDeviceDetailsDELETE extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            service = params[0];
-            String data = "";
-            HttpURLConnection httpURLConnection = null;
-            try {
-                httpURLConnection = (HttpURLConnection) new URL(params[0]).openConnection();
-                httpURLConnection.setRequestMethod("DELETE");
-                httpURLConnection.setRequestProperty("Content-Type", "application/json");
-                httpURLConnection.setRequestProperty("Accept", "application/json");
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setConnectTimeout(WAIT);
-
-                DataOutputStream wr = new DataOutputStream(httpURLConnection.getOutputStream());
-                wr.writeBytes(params[1]);
-                wr.flush();
-                wr.close();
-
-                statusResponse = httpURLConnection.getResponseCode();
-
-                InputStreamReader inputStreamReader = null;
-                if (statusResponse >= 300) {
-                    inputStreamReader = new InputStreamReader(httpURLConnection.getErrorStream());
-                } else {
-                    inputStreamReader = new InputStreamReader(httpURLConnection.getInputStream());
-                }
-
-                int inputStreamData = inputStreamReader.read();
-                while (inputStreamData != -1) {
-                    char current = (char) inputStreamData;
-                    inputStreamData = inputStreamReader.read();
-                    data += current;
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                statusResponse = 400;
-            } finally {
-                if (httpURLConnection != null) {
-                    httpURLConnection.disconnect();
-                }
-            }
-
-            return data;
-        }
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
@@ -254,7 +195,7 @@ public class ConnectionHTTP {
 
     public boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        NetworkInfo activeNetworkInfo = connectivityManager != null ? connectivityManager.getActiveNetworkInfo() : null;
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
