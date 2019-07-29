@@ -2,6 +2,8 @@ package com.example.checker.control;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,18 +29,21 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.checker.R;
 import com.example.checker.model.Task;
 import com.example.checker.model.Territorie;
 import com.example.checker.utils.ConnectionHTTP;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.ConnetionCallback{
+public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.ConnetionCallback {
 
 
     private ListView tasksList;
@@ -62,7 +67,8 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
         TextView territorieName = findViewById(R.id.territorieName);
         final ImageButton button_filter = findViewById(R.id.button_filter);
 
-        final LinearLayout relativeLayout = findViewById(R.id.filter_layout);
+        final ConstraintLayout filterLayout = findViewById(R.id.filter_layout);
+        filterLayout.setVisibility(View.INVISIBLE);
 
         Territorie territorie = (Territorie) getIntent().getSerializableExtra("territorie");
         projectName.setText(territorie != null ? territorie.getProjectName() : null);
@@ -78,10 +84,10 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
         button_filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!relativeLayout.isShown())
-                    relativeLayout.setVisibility(View.VISIBLE);
+                if (!filterLayout.isShown())
+                    filterLayout.setVisibility(View.VISIBLE);
                 else
-                    relativeLayout.setVisibility(View.INVISIBLE);
+                    filterLayout.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -96,7 +102,7 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
                     public void onDismiss(DialogInterface dialogInterface) {
                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         boolean update = preferences.getBoolean("update", false);
-                        if(update){
+                        if (update) {
                             refreshList();
                         }
                     }
@@ -108,7 +114,6 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
 
         refreshList();
     }
-
 
 
     /**
@@ -134,16 +139,16 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
 
             connectionHTTP.getTasks(idProject, idTerritore, code, token);
         } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.failed_connection),Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
         }
     }
-
 
 
     /**
      * Initialize . <br>
      * <b>pre: </b> Send server the close session of user. <br>
      * <b>post: </b> The session of user is closed. <br>
+     *
      * @param v View of context. v != null && v != "".
      */
 
@@ -168,8 +173,8 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
 
                     // Send the request to logout
                     connectionHTTP.logout(IdUsuario, token);
-                }else{
-                    Toast.makeText(getApplicationContext(), getString(R.string.failed_connection),Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
                 }
                 return true;
             }
@@ -178,22 +183,22 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
     }
 
 
-
     /**
      * Receive the response of get tasks and close session from server. <br>
      * <b>pre: </b> progressBar != null. <br>
-     * @param result Response of request tasks and close session from server. result != null && result != "".
+     *
+     * @param result  Response of request tasks and close session from server. result != null && result != "".
      * @param service Service sended to server. service != null && service != "".
      */
 
     @Override
     public void onResultReceived(String result, String service) {
-        if(service.equals(ConnectionHTTP.GETTASKS)){
+        if (service.equals(ConnectionHTTP.GETTASKS)) {
             ArrayList<Task> tasks = new ArrayList<>();
             try {
                 JSONObject respuesta = new JSONObject(result);
                 boolean exito = respuesta.getBoolean("exito");
-                if(exito) {
+                if (exito) {
                     JSONArray array = respuesta.getJSONArray("data");
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject task = array.getJSONObject(i);
@@ -211,27 +216,27 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
 
                         tasks.add(new Task(taskID, taskType, processID, process, subprocess, taskName, status, expirationDate));
                     }
-                }else{
-                    Toast.makeText(getApplicationContext(),respuesta.getString("message"),Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), respuesta.getString("message"), Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {
-                Toast.makeText(getApplicationContext(),getString(R.string.error_json),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
             }
             TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasks);
             tasksList.setAdapter(taskAdapter);
-        }else{
-            try{
+        } else {
+            try {
                 // Launch the login activity if all look perfect
                 JSONObject object = new JSONObject(result);
                 boolean exito = object.getBoolean("exito");
                 String message = object.getString("message");
-                Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
-                if(exito){
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                if (exito) {
                     finish();
                     startActivity(new Intent(TasksActivity.this, LoginActivity.class));
                 }
             } catch (JSONException e) {
-                Toast.makeText(getApplicationContext(),getString(R.string.error_json),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
             }
         }
         // Set the View's visibility back on the main UI Thread
@@ -240,40 +245,40 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
     }
 
 
-
     /**
      * Receive the image that was captured by camera. <br>
+     *
      * @param requestCode Request code from activity. requestCode != null && requestCode != "".
-     * @param resultCode Result code from activity sended to server. resultCode != null && resultCode != "".
-     * @param data Data sended from activity. data != null && data != "".
+     * @param resultCode  Result code from activity sended to server. resultCode != null && resultCode != "".
+     * @param data        Data sended from activity. data != null && data != "".
      */
 
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        if(resultCode == RESULT_OK && requestCode == TaskAdapter.PICK_IMAGE_CAMERA){
+        if (resultCode == RESULT_OK && requestCode == TaskAdapter.PICK_IMAGE_CAMERA) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) (extras != null ? extras.get("data") : null);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             Objects.requireNonNull(imageBitmap).compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            byte[] byteArray = byteArrayOutputStream .toByteArray();
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
             String encodedBase64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
             Log.e("BASE64", encodedBase64);
 
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            String taskID = preferences.getString(getString(R.string.shared_taskID),"");
+            String taskID = preferences.getString(getString(R.string.shared_taskID), "");
             Log.e("TASK: ", taskID);
 
-            Toast.makeText(getApplicationContext(),"Proximamente",Toast.LENGTH_LONG).show();
-        }else{
-            Toast.makeText(getApplicationContext(),getString(R.string.not_file),Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Proximamente", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.not_file), Toast.LENGTH_LONG).show();
         }
     }
 
 
-
     /**
      * Receive the permissions that was requered by camera. <br>
-     * @param requestCode Request code from activity. requestCode != null && requestCode != "".
-     * @param permissions Permissions that are requered by camera. permissions != null && permissions != "".
+     *
+     * @param requestCode  Request code from activity. requestCode != null && requestCode != "".
+     * @param permissions  Permissions that are requered by camera. permissions != null && permissions != "".
      * @param grantResults Permissions given. grantResults != null && grantResults != "".
      */
 

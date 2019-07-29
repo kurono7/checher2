@@ -1,68 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="wrap_content"
-    android:background="@color/colorWhite"
-    android:layout_height="wrap_content">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/white_background_layer_list"
+    android:padding="@dimen/fab_margin">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <CheckBox
+        android:id="@+id/filter_not_reported"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:text="Por reportar"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/normal_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <CheckBox
-            android:id="@+id/filter_not_reported"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="Por reportar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <CheckBox
+        android:id="@+id/filter_reported"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reportado"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/normal_text"
+        app:layout_constraintStart_toStartOf="@id/filter_not_reported"
+        app:layout_constraintTop_toBottomOf="@id/filter_not_reported" />
 
-        <CheckBox
-            android:id="@+id/filter_reported"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Reportado"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/filter_not_reported" />
+    <CheckBox
+        android:id="@+id/filter_approved"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aprobado"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/normal_text"
+        app:layout_constraintStart_toStartOf="@id/filter_not_reported"
+        app:layout_constraintTop_toBottomOf="@id/filter_reported" />
 
-        <CheckBox
-            android:id="@+id/filter_approved"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Aprovado"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/filter_reported" />
+    <CheckBox
+        android:id="@+id/filter_not_approved"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rechazado"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/normal_text"
+        app:layout_constraintStart_toStartOf="@id/filter_not_reported"
+        app:layout_constraintTop_toBottomOf="@id/filter_approved" />
 
-        <CheckBox
-            android:id="@+id/filter_not_approved"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Rechazado"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/filter_approved" />
+    <Button
+        android:id="@+id/filter_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:background="@drawable/rounded_blue_button_shape"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="Limpiar"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/normal_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filter_not_approved" />
 
-        <Button
-            android:id="@+id/filter_clear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Limpiar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/filter_not_approved" />
+    <Button
+        android:id="@+id/filter_find"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:background="@drawable/rounded_green_button_shape"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="Buscar"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/normal_text"
+        app:layout_constraintBottom_toBottomOf="@id/filter_clear"
+        app:layout_constraintStart_toEndOf="@id/filter_clear"
+        app:layout_constraintTop_toTopOf="@id/filter_clear" />
 
-        <Button
-            android:id="@+id/filter_find"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="Buscar"
-            app:layout_constraintStart_toEndOf="@+id/filter_clear"
-            app:layout_constraintTop_toBottomOf="@+id/filter_not_approved" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

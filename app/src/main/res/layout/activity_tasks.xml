@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".control.TasksActivity">
 
+    <include
+        android:id="@+id/topBar"
+        layout="@layout/element_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintTitle"
         android:layout_width="match_parent"
@@ -15,7 +22,7 @@
         android:paddingBottom="@dimen/fab_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/topBar">
 
         <TextView
             android:id="@+id/projectName"
@@ -55,28 +62,13 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/tasksAndDeliverableTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:fontFamily="@font/montserrat_bold"
-        android:text="@string/tasksAndDeliverableTitleTxt"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/normal_text"
-        app:layout_constraintBottom_toTopOf="@id/tasksList"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/constraintTitle" />
 
     <ImageButton
         android:id="@+id/button_filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/fab_margin"
-        android:src="@drawable/ic_vector_filter_icon"
-        app:layout_constraintBottom_toTopOf="@id/tasksList"
+        android:src="@drawable/ic_vector_filter_legacy_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/constraintTitle" />
 
@@ -89,7 +81,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tasksAndDeliverableTitle" />
+        app:layout_constraintTop_toBottomOf="@id/button_filter" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -109,9 +101,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_filter">
-
-
-    </include>
+        app:layout_constraintTop_toBottomOf="@+id/button_filter"></include>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
