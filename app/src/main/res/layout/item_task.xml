@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/fab_margin"
             android:layout_marginTop="@dimen/normal_margin"
-            android:fontFamily="@font/montserrat_semibold"
+            android:fontFamily="@font/montserrat_bold"
             android:text="Nombre del hito"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="@dimen/big_text"
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/min_margin"
-            android:fontFamily="@font/montserrat_bold"
+            android:fontFamily="@font/montserrat_semibold"
             android:text="POR REPORTAR"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="@dimen/normal_text"
@@ -113,13 +113,11 @@
             android:id="@+id/attachIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/fab_margin"
-            android:src="@drawable/ic_vector_attach_legacy_icon"
+            android:padding="@dimen/min_margin"
+            android:src="@drawable/ic_vector_attach_icon"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@id/corner_colored"
-            app:layout_constraintEnd_toEndOf="@id/corner_colored"
-            app:layout_constraintStart_toStartOf="@id/corner_colored"
-            app:layout_constraintTop_toTopOf="@id/corner_colored" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

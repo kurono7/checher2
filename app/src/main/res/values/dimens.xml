@@ -11,7 +11,7 @@
 
     <!--TEXT SIZE-->
     <dimen name="normal_text">14dp</dimen>
-    <dimen name="big_text">18dp</dimen>
+    <dimen name="big_text">16dp</dimen>
 
 
 </resources>

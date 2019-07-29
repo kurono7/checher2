@@ -62,9 +62,9 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         tasksList = findViewById(R.id.tasksList);
         ImageView optionsMenu = findViewById(R.id.optionsMenu);
         progressBar = findViewById(R.id.progressBar);
-        TextView projectName = findViewById(R.id.projectName);
-        TextView territorieName = findViewById(R.id.territorieName);
-        final ImageButton button_filter = findViewById(R.id.button_filter);
+        TextView projectName = findViewById(R.id.titleOne);
+        TextView territorieName = findViewById(R.id.titleTwo);
+        final ImageView button_filter = findViewById(R.id.button_filter);
 
         final ConstraintLayout filterLayout = findViewById(R.id.filter_layout);
         filterLayout.setVisibility(View.INVISIBLE);

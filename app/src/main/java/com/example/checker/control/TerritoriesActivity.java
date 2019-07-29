@@ -14,16 +14,21 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.checker.R;
 import com.example.checker.model.Project;
 import com.example.checker.model.Territorie;
 import com.example.checker.utils.ConnectionHTTP;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
-public class TerritoriesActivity extends BaseTop implements  ConnectionHTTP.ConnetionCallback{
+
+public class TerritoriesActivity extends BaseTop implements ConnectionHTTP.ConnetionCallback {
 
 
     private ProgressBar progressBar;
@@ -58,6 +63,12 @@ public class TerritoriesActivity extends BaseTop implements  ConnectionHTTP.Conn
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String territorios = preferences.getString("territorios", "{}");
 
+        //Load Titles
+        TextView territoriesTitle = findViewById(R.id.titleTwo);
+        territoriesTitle.setText(R.string.territoriesTitleTxt);
+        TextView projectTitle = findViewById(R.id.titleOne);
+        projectTitle.setText(project.getProjectName());
+
         // Load the list with territories in the project selected
         ArrayList<Territorie> territories = new ArrayList<>();
         try {
@@ -80,16 +91,16 @@ public class TerritoriesActivity extends BaseTop implements  ConnectionHTTP.Conn
             TerritorieAdapter pAdapter = new TerritorieAdapter(getApplicationContext(), territories);
             territoriesList.setAdapter(pAdapter);
         } catch (JSONException e) {
-            Toast.makeText(getApplicationContext(),getString(R.string.error_json),Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
         }
     }
-
 
 
     /**
      * Initialize . <br>
      * <b>pre: </b> Send server the close session of user. <br>
      * <b>post: </b> The session of user is closed. <br>
+     *
      * @param v View of context. v != null && v != "".
      */
 
@@ -115,8 +126,8 @@ public class TerritoriesActivity extends BaseTop implements  ConnectionHTTP.Conn
 
                     // Send the request to logout
                     connectionHTTP.logout(IdUsuario, token);
-                }else{
-                    Toast.makeText(getApplicationContext(), getString(R.string.failed_connection),Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
                 }
                 return true;
             }
@@ -125,29 +136,29 @@ public class TerritoriesActivity extends BaseTop implements  ConnectionHTTP.Conn
     }
 
 
-
     /**
      * Receive the response of close session from server. <br>
      * <b>pre: </b> progressBar != null. <br>
-     * @param result Response of close session from server. result != null && result != "".
+     *
+     * @param result  Response of close session from server. result != null && result != "".
      * @param service Service sended to server. service != null && service != "".
      */
 
     @Override
     public void onResultReceived(String result, String service) {
-            try{
-                // Launch the login activity if all look perfect
-                JSONObject object = new JSONObject(result);
-                boolean exito = object.getBoolean("exito");
-                String message = object.getString("message");
-                Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
-                if(exito){
-                    finish();
-                    startActivity(new Intent(TerritoriesActivity.this, LoginActivity.class));
-                }
-            } catch (JSONException e) {
-                Toast.makeText(getApplicationContext(),getString(R.string.error_json),Toast.LENGTH_LONG).show();
+        try {
+            // Launch the login activity if all look perfect
+            JSONObject object = new JSONObject(result);
+            boolean exito = object.getBoolean("exito");
+            String message = object.getString("message");
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            if (exito) {
+                finish();
+                startActivity(new Intent(TerritoriesActivity.this, LoginActivity.class));
             }
+        } catch (JSONException e) {
+            Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
+        }
         // Set the View's visibility back on the main UI Thread
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         progressBar.setVisibility(View.GONE);

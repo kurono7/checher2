@@ -11,13 +11,17 @@ import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.checker.R;
 import com.example.checker.model.Project;
 import com.example.checker.utils.ConnectionHTTP;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class ProjectsActivity extends BaseTop implements ConnectionHTTP.ConnetionCallback {
@@ -47,10 +51,16 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
             }
         });
 
+        //Load titles
+        TextView titleOne = findViewById(R.id.titleOne);
+        titleOne.setText("");
+        TextView titleTwo = findViewById(R.id.titleTwo);
+        titleTwo.setText(R.string.projectsTitleTxt);
+
+
         // Get the projects
         refreshProjects();
     }
-
 
 
     /**
@@ -76,16 +86,16 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
             // Send the request to get projects
             connectionHTTP.getproyects(IdPerfil, IdUsuario, token);
         } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.failed_connection),Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
         }
     }
-
 
 
     /**
      * Initialize . <br>
      * <b>pre: </b> Send server the close session of user. <br>
      * <b>post: </b> The session of user is closed. <br>
+     *
      * @param v View of context. v != null && v != "".
      */
 
@@ -111,8 +121,8 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
 
                     // Send the request to logout
                     connectionHTTP.logout(IdUsuario, token);
-                }else{
-                    Toast.makeText(getApplicationContext(), getString(R.string.failed_connection),Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
                 }
                 return true;
             }
@@ -121,17 +131,17 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
     }
 
 
-
     /**
      * Receive the response of get projects and close session from server. <br>
      * <b>pre: </b> progressBar != null. <br>
-     * @param result Response of request projects and close session from server. result != null && result != "".
+     *
+     * @param result  Response of request projects and close session from server. result != null && result != "".
      * @param service Service sended to server. service != null && service != "".
      */
 
     @Override
     public void onResultReceived(String result, String service) {
-        if(service.equals(ConnectionHTTP.GETPROYECTS)){
+        if (service.equals(ConnectionHTTP.GETPROYECTS)) {
             // If all look perfect so load projects
             ArrayList<Project> projects = new ArrayList<>();
             try {
@@ -156,24 +166,24 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
                     projects.add(p);
                 }
             } catch (JSONException e) {
-                Toast.makeText(getApplicationContext(),getString(R.string.error_json),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
             }
             // Load the list with projects
             ProjectAdapter pAdapter = new ProjectAdapter(getApplicationContext(), projects);
             projectsList.setAdapter(pAdapter);
-        }else{
-            try{
+        } else {
+            try {
                 // Launch the login activity if all look perfect
                 JSONObject object = new JSONObject(result);
                 boolean exito = object.getBoolean("exito");
                 String message = object.getString("message");
-                Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
-                if(exito){
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                if (exito) {
                     finish();
                     startActivity(new Intent(ProjectsActivity.this, LoginActivity.class));
                 }
             } catch (JSONException e) {
-                Toast.makeText(getApplicationContext(),getString(R.string.error_json),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
             }
         }
         // Set the View's visibility back on the main UI Thread
