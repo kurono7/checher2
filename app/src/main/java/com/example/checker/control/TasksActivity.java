@@ -17,10 +17,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.checker.R;
@@ -56,6 +60,9 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
         progressBar = findViewById(R.id.progressBar);
         TextView projectName = findViewById(R.id.projectName);
         TextView territorieName = findViewById(R.id.territorieName);
+        final ImageButton button_filter = findViewById(R.id.button_filter);
+
+        final LinearLayout relativeLayout = findViewById(R.id.filter_layout);
 
         Territorie territorie = (Territorie) getIntent().getSerializableExtra("territorie");
         projectName.setText(territorie != null ? territorie.getProjectName() : null);
@@ -67,6 +74,17 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
                 showPopup(view);
             }
         });
+
+        button_filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!relativeLayout.isShown())
+                    relativeLayout.setVisibility(View.VISIBLE);
+                else
+                    relativeLayout.setVisibility(View.INVISIBLE);
+            }
+        });
+
 
         tasksList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
