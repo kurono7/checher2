@@ -2,7 +2,9 @@ package com.example.checker.control;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -27,6 +29,7 @@ public class TaskAdapter extends BaseAdapter {
 
     final static int MY_CAMERA_REQUEST_CODE = 1;
     final static int PICK_IMAGE_CAMERA = 2;
+    final static int PICK_IMAGE_GALLERY = 3;
 
     TaskAdapter(Context context, ArrayList<Task> tasksList) {
         this.context = context;
@@ -94,18 +97,36 @@ public class TaskAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void openImageChooser(Context mContext, Task task) {
+    private void openImageChooser(final Context mContext, Task task) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(context.getString(R.string.shared_taskID), task.getTaskID());
         editor.apply();
 
         if (mContext.checkSelfPermission(Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED || mContext.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ((Activity) mContext).requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE}, MY_CAMERA_REQUEST_CODE);
         } else {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            ((Activity) mContext).startActivityForResult(intent, PICK_IMAGE_CAMERA);
+            final CharSequence[] items = { "Tomar foto", "Seleccionar archivo",
+                    "Cancelar" };
+            AlertDialog.Builder builder = new AlertDialog.Builder(((Activity) mContext));
+            builder.setItems(items, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int item) {
+                    if (items[item].equals("Tomar foto")) {
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        ((Activity) mContext).startActivityForResult(intent, PICK_IMAGE_CAMERA);
+                    } else if (items[item].equals("Seleccionar archivo")) {
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.setType("file/*");
+                        ((Activity) mContext).startActivityForResult(intent,PICK_IMAGE_GALLERY);
+                    } else if (items[item].equals("Cancelar")) {
+                        dialog.dismiss();
+                    }
+                }
+            });
+            builder.show();
         }
     }
 

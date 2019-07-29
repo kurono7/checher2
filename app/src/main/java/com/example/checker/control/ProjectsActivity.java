@@ -1,7 +1,5 @@
 package com.example.checker.control;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,7 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 
-public class ProjectsActivity extends AppCompatActivity implements ConnectionHTTP.ConnetionCallback {
+public class ProjectsActivity extends BaseTop implements ConnectionHTTP.ConnetionCallback {
 
 
     private ListView projectsList;
@@ -36,7 +34,6 @@ public class ProjectsActivity extends AppCompatActivity implements ConnectionHTT
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_projects);
 
         // Initialize variables
         projectsList = findViewById(R.id.projectsList);
@@ -182,5 +179,10 @@ public class ProjectsActivity extends AppCompatActivity implements ConnectionHTT
         // Set the View's visibility back on the main UI Thread
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    int getContentViewId() {
+        return R.layout.activity_projects;
     }
 }

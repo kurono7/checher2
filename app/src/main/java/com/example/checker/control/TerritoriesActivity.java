@@ -23,7 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
-public class TerritoriesActivity extends AppCompatActivity implements  ConnectionHTTP.ConnetionCallback{
+public class TerritoriesActivity extends BaseTop implements  ConnectionHTTP.ConnetionCallback{
 
 
     private ProgressBar progressBar;
@@ -37,7 +37,6 @@ public class TerritoriesActivity extends AppCompatActivity implements  Connectio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_territories);
 
         // Initialize variables
         ImageView optionsMenu = findViewById(R.id.optionsMenu);
@@ -152,5 +151,10 @@ public class TerritoriesActivity extends AppCompatActivity implements  Connectio
         // Set the View's visibility back on the main UI Thread
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    int getContentViewId() {
+        return R.layout.activity_territories;
     }
 }

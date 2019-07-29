@@ -43,7 +43,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.ConnetionCallback {
+public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCallback {
 
 
     private ListView tasksList;
@@ -58,7 +58,6 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tasks);
 
         tasksList = findViewById(R.id.tasksList);
         ImageView optionsMenu = findViewById(R.id.optionsMenu);
@@ -292,5 +291,10 @@ public class TasksActivity extends AppCompatActivity implements ConnectionHTTP.C
                 Toast.makeText(this, "Permiso de camara denegado", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    @Override
+    int getContentViewId() {
+        return R.layout.activity_tasks;
     }
 }
