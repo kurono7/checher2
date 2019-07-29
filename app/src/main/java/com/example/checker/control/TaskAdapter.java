@@ -14,8 +14,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.example.checker.R;
 import com.example.checker.model.Task;
+
 import java.util.ArrayList;
 
 public class TaskAdapter extends BaseAdapter {
@@ -48,7 +50,7 @@ public class TaskAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
-        if(convertView==null){
+        if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_task, parent, false);
         }
 
@@ -60,16 +62,14 @@ public class TaskAdapter extends BaseAdapter {
         //TextView location = convertView.findViewById(R.id.location);
         TextView taskExpirationDate = convertView.findViewById(R.id.taskExpirationDate);
         TextView status = convertView.findViewById(R.id.status);
-        ImageView checkIcon = convertView.findViewById(R.id.checkIcon);
         ImageView corner_colored = convertView.findViewById(R.id.corner_colored);
         ImageView attachIcon = convertView.findViewById(R.id.attachIcon);
         taskName.setText(task.getTaskName());
         taskExpirationDate.setText(task.getExpirationDate());
 
         // Ask if the task is a task or entregable
-        if (task.getTaskType() != 0){
+        if (task.getTaskType() != 0) {
             attachIcon.setVisibility(View.VISIBLE);
-            checkIcon.setVisibility(View.GONE);
             attachIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -78,18 +78,16 @@ public class TaskAdapter extends BaseAdapter {
             });
         }
 
-        if(task.getStatus().equals("0")){
+        if (task.getStatus().equals("0")) {
             status.setText(context.getString(R.string.not_reportedTxT));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_not_reported);
-        }else if (task.getStatus().equals("1")) {
+        } else if (task.getStatus().equals("1")) {
             status.setText(context.getString(R.string.acceptedTxT));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_accepted);
-            checkIcon.setVisibility(View.VISIBLE);
             attachIcon.setVisibility(View.GONE);
-        }else if(task.getStatus().equals("2")){
+        } else if (task.getStatus().equals("2")) {
             status.setText(context.getString(R.string.reportedTxT));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_reported);
-            checkIcon.setVisibility(View.GONE);
             attachIcon.setVisibility(View.GONE);
         }
 

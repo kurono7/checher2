@@ -54,6 +54,7 @@
             android:fontFamily="@font/montserrat_regular"
             android:hint="@string/usernameTxt"
             android:paddingLeft="@dimen/normal_margin"
+            android:textSize="@dimen/normal_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginTitle" />
@@ -72,6 +73,7 @@
             android:hint="@string/passwordTxt"
             android:inputType="textPassword"
             android:paddingLeft="@dimen/normal_margin"
+            android:textSize="@dimen/normal_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginUsername" />
@@ -87,6 +89,7 @@
             android:fontFamily="@font/montserrat_semibold"
             android:text="@string/loginTxt"
             android:textColor="@color/colorWhite"
+            android:textSize="@dimen/normal_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginPassword" />

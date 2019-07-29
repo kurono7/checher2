@@ -25,10 +25,10 @@
             android:text="@string/territoriesTitleTxt"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/normal_text"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/optionsMenu"
@@ -38,7 +38,7 @@
             android:paddingTop="@dimen/min_margin"
             android:paddingRight="@dimen/fab_margin"
             android:paddingBottom="@dimen/min_margin"
-            android:src="@drawable/ic_vector_options_icon"
+            android:src="@drawable/ic_vector_options_horizontal_icon"
             app:layout_constraintBottom_toBottomOf="@id/territoriesTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/territoriesTitle" />
@@ -49,6 +49,8 @@
         android:id="@+id/territoriesList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:divider="@null"
+        android:dividerHeight="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

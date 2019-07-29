@@ -8,7 +8,10 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="min_margin">8dp</dimen>
     <dimen name="normal_margin">12dp</dimen>
-    <dimen name="big_text">20dp</dimen>
+
+    <!--TEXT SIZE-->
     <dimen name="normal_text">14dp</dimen>
+    <dimen name="big_text">18dp</dimen>
+
 
 </resources>

@@ -10,9 +10,9 @@
         android:id="@+id/constraintTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
         android:paddingTop="@dimen/fab_margin"
         android:paddingBottom="@dimen/fab_margin"
-        android:background="@color/colorPrimaryDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -44,11 +44,11 @@
             android:id="@+id/optionsMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/min_margin"
-            android:paddingBottom="@dimen/min_margin"
             android:paddingLeft="@dimen/fab_margin"
+            android:paddingTop="@dimen/min_margin"
             android:paddingRight="@dimen/fab_margin"
-            android:src="@drawable/ic_vector_options_icon"
+            android:paddingBottom="@dimen/min_margin"
+            android:src="@drawable/ic_vector_options_horizontal_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -70,10 +70,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/constraintTitle" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:src="@drawable/ic_vector_filter_icon"
+        app:layout_constraintBottom_toTopOf="@id/tasksList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/constraintTitle"/>
+
     <ListView
         android:id="@+id/tasksList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:divider="@null"
+        android:dividerHeight="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

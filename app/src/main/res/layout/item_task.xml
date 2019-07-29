@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/min_margin"
-    android:paddingBottom="@dimen/min_margin">
+    android:paddingTop="@dimen/normal_margin"
+    android:paddingBottom="@dimen/normal_margin">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/intern_layout"
@@ -23,11 +23,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/fab_margin"
             android:layout_marginTop="@dimen/normal_margin"
-            android:fontFamily="@font/montserrat_bold"
+            android:fontFamily="@font/montserrat_semibold"
             android:text="Nombre del hito"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/normal_text"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="@dimen/big_text"
+            app:layout_constraintStart_toEndOf="@id/corner_colored"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/normal_margin"
-            android:fontFamily="@font/montserrat_semibold"
+            android:fontFamily="@font/montserrat_regular"
             android:text="@string/statusTitleTxt"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="@dimen/normal_text"
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/min_margin"
-            android:fontFamily="@font/montserrat_regular"
+            android:fontFamily="@font/montserrat_bold"
             android:text="POR REPORTAR"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="@dimen/normal_text"
@@ -106,7 +106,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_vector_corner_not_reported"
             app:layout_constraintBottom_toBottomOf="@id/locationTitle"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
@@ -115,17 +115,6 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/fab_margin"
             android:src="@drawable/ic_vector_attach_icon"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@id/corner_colored"
-            app:layout_constraintEnd_toEndOf="@id/corner_colored"
-            app:layout_constraintStart_toStartOf="@id/corner_colored"
-            app:layout_constraintTop_toTopOf="@id/corner_colored" />
-
-        <ImageView
-            android:id="@+id/checkIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_vector_check_icon"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@id/corner_colored"
             app:layout_constraintEnd_toEndOf="@id/corner_colored"
