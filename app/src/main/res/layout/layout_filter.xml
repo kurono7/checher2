@@ -9,42 +9,38 @@
 
     <CheckBox
         android:id="@+id/filter_not_reported"
+        style="@style/ContentSemiboldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/fab_margin"
         android:text="Por reportar"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
         android:id="@+id/filter_reported"
+        style="@style/ContentSemiboldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Reportado"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="@id/filter_not_reported"
         app:layout_constraintTop_toBottomOf="@id/filter_not_reported" />
 
     <CheckBox
         android:id="@+id/filter_approved"
+        style="@style/ContentSemiboldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Aprobado"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="@id/filter_not_reported"
         app:layout_constraintTop_toBottomOf="@id/filter_reported" />
 
     <CheckBox
         android:id="@+id/filter_not_approved"
+        style="@style/ContentSemiboldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Rechazado"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="@id/filter_not_reported"
         app:layout_constraintTop_toBottomOf="@id/filter_approved" />
 

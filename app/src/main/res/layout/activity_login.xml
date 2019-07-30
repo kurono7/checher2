@@ -13,7 +13,6 @@
         android:layout_marginStart="@dimen/normal_margin"
         android:layout_marginTop="@dimen/header_logo_margin"
         android:layout_marginEnd="@dimen/normal_margin"
-        android:background="@drawable/white_background_layer_list"
         android:paddingTop="@dimen/normal_margin"
         android:paddingBottom="@dimen/normal_margin"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,18 +30,17 @@
 
         <TextView
             android:id="@+id/loginTitle"
+            style="@style/TitleBoldText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/normal_margin"
-            android:fontFamily="@font/montserrat_semibold"
             android:text="@string/loginTitleTxt"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/big_text"
             app:layout_constraintStart_toStartOf="@id/loginUsername"
             app:layout_constraintTop_toBottomOf="@id/logo" />
 
         <EditText
             android:id="@+id/loginUsername"
+            style="@style/EdidTextNormalText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="@dimen/normal_margin"
@@ -51,16 +49,15 @@
             android:background="@drawable/rounded_white_edit_text_shape"
             android:drawableLeft="@drawable/ic_vector_user_icon"
             android:drawablePadding="@dimen/normal_margin"
-            android:fontFamily="@font/montserrat_regular"
             android:hint="@string/usernameTxt"
             android:paddingLeft="@dimen/normal_margin"
-            android:textSize="@dimen/normal_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginTitle" />
 
         <EditText
             android:id="@+id/loginPassword"
+            style="@style/EdidTextNormalText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="@dimen/normal_margin"
@@ -69,11 +66,9 @@
             android:background="@drawable/rounded_white_edit_text_shape"
             android:drawableLeft="@drawable/ic_vector_password_icon"
             android:drawablePadding="@dimen/normal_margin"
-            android:fontFamily="@font/montserrat_regular"
             android:hint="@string/passwordTxt"
             android:inputType="textPassword"
             android:paddingLeft="@dimen/normal_margin"
-            android:textSize="@dimen/normal_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginUsername" />

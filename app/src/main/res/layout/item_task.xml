@@ -19,27 +19,28 @@
 
         <TextView
             android:id="@+id/taskName"
+            style="@style/TitleBoldText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/fab_margin"
-            android:layout_marginTop="@dimen/normal_margin"
-            android:fontFamily="@font/montserrat_bold"
-            android:text="Nombre del hito"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/big_text"
+            android:layout_marginTop="@dimen/min_margin"
+            android:maxLines="2"
+            android:paddingStart="@dimen/fab_margin"
+            android:paddingEnd="80dp"
+            android:text="Nombre del hito "
+            app:layout_constraintEnd_toStartOf="@id/attachIcon"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/corner_colored"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/statusTitle"
+            style="@style/ContentRegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/fab_margin"
             android:layout_marginTop="@dimen/normal_margin"
-            android:fontFamily="@font/montserrat_regular"
             android:text="@string/statusTitleTxt"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/normal_text"
-            app:layout_constraintStart_toStartOf="@id/taskName"
+            app:layout_constraintStart_toEndOf="@id/corner_colored"
             app:layout_constraintTop_toBottomOf="@id/taskName" />
 
         <TextView
@@ -61,18 +62,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/normal_margin"
             android:src="@drawable/ic_vector_calendar_icon"
-            app:layout_constraintStart_toStartOf="@id/taskName"
+            app:layout_constraintStart_toStartOf="@id/statusTitle"
             app:layout_constraintTop_toBottomOf="@id/statusTitle" />
 
         <TextView
             android:id="@+id/taskExpirationDate"
+            style="@style/ContentRegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/min_margin"
-            android:fontFamily="@font/montserrat_regular"
             android:text="25/06/2019"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/normal_text"
             app:layout_constraintBottom_toBottomOf="@id/taskExpirationDateTitle"
             app:layout_constraintStart_toEndOf="@id/taskExpirationDateTitle"
             app:layout_constraintTop_toTopOf="@id/taskExpirationDateTitle" />
@@ -84,18 +83,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/normal_margin"
             android:src="@drawable/ic_vector_location_icon"
-            app:layout_constraintStart_toStartOf="@id/taskName"
+            app:layout_constraintStart_toStartOf="@id/statusTitle"
             app:layout_constraintTop_toBottomOf="@id/taskExpirationDateTitle" />
 
         <TextView
             android:id="@+id/location"
+            style="@style/ContentRegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/min_margin"
-            android:fontFamily="@font/montserrat_regular"
             android:text="Puesto"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/normal_text"
             app:layout_constraintBottom_toBottomOf="@id/locationTitle"
             app:layout_constraintStart_toEndOf="@id/locationTitle"
             app:layout_constraintTop_toTopOf="@id/locationTitle" />
@@ -105,7 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_vector_corner_not_reported"
-            app:layout_constraintBottom_toBottomOf="@id/locationTitle"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

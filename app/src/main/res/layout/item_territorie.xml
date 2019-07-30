@@ -22,29 +22,18 @@
 
         <TextView
             android:id="@+id/territorieName"
+            style="@style/ContentBoldText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/fab_margin"
-            android:fontFamily="@font/montserrat_bold"
+            android:gravity="center"
+            android:maxLines="2"
+            android:paddingStart="@dimen/min_margin"
+            android:paddingEnd="@dimen/min_margin"
             android:text="Nombre del territorio"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/normal_text"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/optionsMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/fab_margin"
-            android:paddingTop="@dimen/min_margin"
-            android:paddingRight="@dimen/fab_margin"
-            android:paddingBottom="@dimen/min_margin"
-            android:src="@drawable/ic_vector_options_vertical_icon"
-            app:layout_constraintBottom_toBottomOf="@id/projectName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/projectName" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

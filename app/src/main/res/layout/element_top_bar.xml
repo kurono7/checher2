@@ -26,6 +26,7 @@
             app:layout_constraintTop_toTopOf="@id/titleOne" />
 
         <ImageView
+            android:id="@+id/logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_vector_logo2"
@@ -35,12 +36,15 @@
 
         <TextView
             android:id="@+id/titleOne"
+            style="@style/TitleBoldText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_bold"
-            android:text="TÍTULO 1"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/big_text"
+            android:gravity="center"
+            android:maxLines="2"
+            android:paddingStart="90dp"
+            android:paddingEnd="90dp"
+            android:text="Título 1"
+            android:textAllCaps="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,18 +62,34 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/titleTwo"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintBottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
-        android:fontFamily="@font/montserrat_bold"
-        android:gravity="center"
-        android:paddingTop="@dimen/normal_margin"
-        android:paddingBottom="@dimen/normal_margin"
-        android:text="TÍTULO 2"
-        android:textColor="@color/colorWhite"
-        android:textSize="@dimen/big_text"
-        app:layout_constraintTop_toBottomOf="@id/constraintTop" />
+        android:paddingTop="@dimen/min_margin"
+        android:paddingBottom="@dimen/min_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/constraintTop">
+
+
+        <TextView
+            android:id="@+id/titleTwo"
+            style="@style/ButtonBigText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="2"
+            android:paddingStart="@dimen/min_margin"
+            android:paddingEnd="@dimen/min_margin"
+            android:text="Título 2"
+            android:textAllCaps="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

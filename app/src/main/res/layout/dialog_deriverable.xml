@@ -18,99 +18,83 @@
 
     <TextView
         android:id="@+id/taskIDTitle"
+        style="@style/ContentSemiboldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/montserrat_semibold"
         android:text="ID del entregable:"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/closeBtn" />
 
     <TextView
         android:id="@+id/taskID"
+        style="@style/ContentRegularText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/normal_margin"
-        android:fontFamily="@font/montserrat_regular"
         android:text="taskID"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toBottomOf="@id/taskIDTitle"
         app:layout_constraintStart_toEndOf="@id/taskIDTitle"
         app:layout_constraintTop_toTopOf="@id/taskIDTitle" />
 
     <TextView
         android:id="@+id/processIDTitle"
+        style="@style/ContentSemiboldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_margin"
-        android:fontFamily="@font/montserrat_semibold"
         android:text="ID del proceso"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="@id/taskIDTitle"
         app:layout_constraintTop_toBottomOf="@id/taskIDTitle" />
 
     <TextView
         android:id="@+id/processID"
+        style="@style/ContentRegularText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/normal_margin"
-        android:fontFamily="@font/montserrat_regular"
         android:text="processID"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toBottomOf="@id/processIDTitle"
         app:layout_constraintStart_toEndOf="@id/processIDTitle"
         app:layout_constraintTop_toTopOf="@id/processIDTitle" />
 
     <TextView
         android:id="@+id/taskNameTitle"
+        style="@style/ContentSemiboldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_margin"
-        android:fontFamily="@font/montserrat_semibold"
         android:text="Nombre de la tarea:"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="@id/processIDTitle"
         app:layout_constraintTop_toBottomOf="@id/processIDTitle" />
 
     <TextView
         android:id="@+id/taskName"
+        style="@style/ContentRegularText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/normal_margin"
-        android:fontFamily="@font/montserrat_regular"
         android:text="taskName"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toBottomOf="@id/taskNameTitle"
         app:layout_constraintStart_toEndOf="@id/taskNameTitle"
         app:layout_constraintTop_toTopOf="@id/taskNameTitle" />
 
     <TextView
         android:id="@+id/statusTitle"
+        style="@style/ContentSemiboldText"
         android:layout_width="wrap_content"
         android:layout_height="19dp"
         android:layout_marginTop="@dimen/normal_margin"
-        android:fontFamily="@font/montserrat_semibold"
         android:text="Estado:"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="@id/taskNameTitle"
         app:layout_constraintTop_toBottomOf="@id/taskNameTitle" />
 
     <TextView
         android:id="@+id/status"
+        style="@style/ContentRegularText"
         android:layout_width="wrap_content"
         android:layout_height="19dp"
         android:layout_marginLeft="@dimen/normal_margin"
-        android:fontFamily="@font/montserrat_regular"
         android:text="POR ENTREGAR"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toBottomOf="@id/statusTitle"
         app:layout_constraintStart_toEndOf="@id/statusTitle"
         app:layout_constraintTop_toTopOf="@id/statusTitle"
@@ -118,25 +102,21 @@
 
     <TextView
         android:id="@+id/expirationDateTitle"
+        style="@style/ContentSemiboldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_margin"
-        android:fontFamily="@font/montserrat_semibold"
         android:text="Fecha de vencimiento:"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="@id/statusTitle"
         app:layout_constraintTop_toBottomOf="@id/statusTitle" />
 
     <TextView
         android:id="@+id/expirationDate"
+        style="@style/ContentRegularText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/normal_margin"
-        android:fontFamily="@font/montserrat_regular"
         android:text="expirationDate"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toBottomOf="@id/expirationDateTitle"
         app:layout_constraintStart_toEndOf="@id/expirationDateTitle"
         app:layout_constraintTop_toTopOf="@id/expirationDateTitle" />
