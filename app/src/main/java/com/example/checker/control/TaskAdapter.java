@@ -83,14 +83,14 @@ public class TaskAdapter extends BaseAdapter {
         }
 
         if (task.getStatus().equals("0")) {
-            status.setText(context.getString(R.string.not_reportedTxT));
+            status.setText(context.getString(R.string.not_reportedTxt));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_not_reported);
         } else if (task.getStatus().equals("1")) {
-            status.setText(context.getString(R.string.acceptedTxT));
+            status.setText(context.getString(R.string.approvedTxt));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_accepted);
             attachIcon.setVisibility(View.GONE);
         } else if (task.getStatus().equals("2")) {
-            status.setText(context.getString(R.string.reportedTxT));
+            status.setText(context.getString(R.string.reportedTxt));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_reported);
             attachIcon.setVisibility(View.GONE);
         }
@@ -105,32 +105,32 @@ public class TaskAdapter extends BaseAdapter {
         editor.apply();
 
 
-        final CharSequence[] items = { "Tomar foto", "Seleccionar archivo"};
+        final CharSequence[] items = {"Tomar foto", "Seleccionar archivo"};
         AlertDialog.Builder builder = new AlertDialog.Builder(((Activity) mContext));
         builder.setItems(items, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int item) {
-                    if (items[item].equals("Tomar foto")) {
-                        if (mContext.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                            ((Activity) mContext).requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
-                        } else {
-                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            ((Activity) mContext).startActivityForResult(intent, PICK_IMAGE_CAMERA);
-                        }
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("Tomar foto")) {
+                    if (mContext.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        ((Activity) mContext).requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+                    } else {
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         ((Activity) mContext).startActivityForResult(intent, PICK_IMAGE_CAMERA);
-                    } else if (items[item].equals("Seleccionar archivo")) {
-                        if (mContext.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            ((Activity) mContext).requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_GALLERY_REQUES_CODE);
-                        } else {
-                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                            intent.setType("application/pdf");
-                            ((Activity) mContext).startActivityForResult(intent, PICK_IMAGE_GALLERY);
-                        }
+                    }
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    ((Activity) mContext).startActivityForResult(intent, PICK_IMAGE_CAMERA);
+                } else if (items[item].equals("Seleccionar archivo")) {
+                    if (mContext.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ((Activity) mContext).requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_GALLERY_REQUES_CODE);
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.setType("application/pdf");
+                        ((Activity) mContext).startActivityForResult(intent, PICK_IMAGE_GALLERY);
                     }
                 }
-            });
-            builder.show();
+            }
+        });
+        builder.show();
 
     }
 

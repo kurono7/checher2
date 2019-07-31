@@ -44,13 +44,13 @@
     <string name="subprocessTitleTxt">Subproceso:</string>
     <string name="statusTitleTxt">Estado:</string>
     <string name="expirationDateTitleTxt">Fecha de vencimiento:</string>
-    <string name="acceptedTxT">ACEPTADO!</string>
-    <string name="reportedTxT">REPORTADO!</string>
-    <string name="not_reportedTxT">NO REPORTADO!</string>
+    <string name="not_reportedTxt">NO REPORTADO</string>
+    <string name="approvedTxt">APROBADO</string>
+    <string name="reportedTxt">REPORTADO</string>
+    <string name="not_approvedTxt">NO APROBADO</string>
+    <string name="error_no_results">No hay tareas en este estado. Intenta limpiando los filtros</string>
 
     <!--TASK DIALOG-->
     <string name="reportTaskTxt">Reportar tarea</string>
-
-
 
 </resources>

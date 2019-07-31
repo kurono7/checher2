@@ -1,10 +1,8 @@
 package com.example.checker.control;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,13 +20,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +49,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
 
 
     private ListView tasksList;
+    private ArrayList<Task> tasks;
     private ProgressBar progressBar;
 
 
@@ -96,6 +93,64 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             }
         });
 
+        //Cleaning filters
+        final CheckBox filter_not_reported = filterLayout.findViewById(R.id.filter_not_reported);
+        final CheckBox filter_reported = filterLayout.findViewById(R.id.filter_reported);
+        final CheckBox filter_approved = filterLayout.findViewById(R.id.filter_approved);
+        final CheckBox filter_not_approved = filterLayout.findViewById(R.id.filter_not_approved);
+        Button filter_clear = filterLayout.findViewById(R.id.filter_clear);
+        filter_clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filter_not_reported.setChecked(false);
+                filter_reported.setChecked(false);
+                filter_approved.setChecked(false);
+                filter_not_approved.setChecked(false);
+                TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasks);
+                tasksList.setAdapter(taskAdapter);
+                filterLayout.setVisibility(View.INVISIBLE);
+            }
+        });
+
+
+        //Filtering results
+        Button filter_find = filterLayout.findViewById(R.id.filter_find);
+        filter_find.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (filter_not_reported.isChecked() || filter_reported.isChecked() || filter_not_approved.isChecked() || filter_approved.isChecked()) {
+                    ArrayList<Task> tasksFiltered = new ArrayList<Task>();
+                    String taskStatus = "";
+                    for (int i = 0; i < tasks.size(); i++) {
+                        Task task = tasks.get(i);
+                        taskStatus = task.getStatus();
+                        if (filter_not_reported.isChecked()) {
+                            if (taskStatus.equals("0"))
+                                tasksFiltered.add(task);
+                        } else if (filter_reported.isChecked()) {
+                            if (taskStatus.equals("2"))
+                                tasksFiltered.add(task);
+                        } else if (filter_approved.isChecked()) {
+                            if (taskStatus.equals("1"))
+                                tasksFiltered.add(task);
+                        } else if (filter_not_approved.isChecked()) {
+                            if (taskStatus.equals("3"))
+                                tasksFiltered.add(task);
+                        }
+                    }
+                    TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasksFiltered);
+                    tasksList.setAdapter(taskAdapter);
+                    if (tasksFiltered.size() < 1)
+                        Toast.makeText(TasksActivity.this, R.string.error_no_results, Toast.LENGTH_LONG).show();
+
+                } else {
+                    TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasks);
+                    tasksList.setAdapter(taskAdapter);
+                }
+                filterLayout.setVisibility(View.INVISIBLE);
+
+            }
+        });
 
         tasksList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -199,7 +254,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
     @Override
     public void onResultReceived(String result, String service) {
         if (service.equals(ConnectionHTTP.GETTASKS)) {
-            ArrayList<Task> tasks = new ArrayList<>();
+            tasks = new ArrayList<>();
             try {
                 JSONObject respuesta = new JSONObject(result);
                 boolean exito = respuesta.getBoolean("exito");
@@ -259,16 +314,16 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
      */
 
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        if (resultCode == RESULT_OK ) {
+        if (resultCode == RESULT_OK) {
 
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String taskID = preferences.getString(getString(R.string.shared_taskID), "");
             Log.e("TASK: ", taskID);
 
-            String encodedBase64= "";
-            if(requestCode == TaskAdapter.PICK_IMAGE_CAMERA){
+            String encodedBase64 = "";
+            if (requestCode == TaskAdapter.PICK_IMAGE_CAMERA) {
                 encodedBase64 = sendImageCaptured(data);
-            }else if(requestCode == TaskAdapter.PICK_IMAGE_GALLERY){
+            } else if (requestCode == TaskAdapter.PICK_IMAGE_GALLERY) {
                 encodedBase64 = sendFileSelected(data);
             }
 
@@ -293,7 +348,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         }
     }
 
-    private String sendImageCaptured(Intent data){
+    private String sendImageCaptured(Intent data) {
         String base64 = "";
         Bundle extras = data.getExtras();
         Bitmap imageBitmap = (Bitmap) (extras != null ? extras.get("data") : null);
@@ -306,7 +361,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         return base64;
     }
 
-    private String sendFileSelected(Intent data){
+    private String sendFileSelected(Intent data) {
         String base64 = "";
         // Get the Uri of the selected file
         Uri uri = data.getData();
@@ -315,7 +370,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
 
         try {
             FileInputStream fileInputStreamReader = new FileInputStream(myFile);
-            byte[] bytes = new byte[(int)myFile.length()];
+            byte[] bytes = new byte[(int) myFile.length()];
             fileInputStreamReader.read(bytes);
             base64 = Base64.encodeToString(bytes, Base64.DEFAULT);
         } catch (FileNotFoundException e) {
@@ -344,11 +399,11 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             } else {
                 Toast.makeText(this, "Permiso de camara denegado", Toast.LENGTH_LONG).show();
             }
-        }else if(requestCode == TaskAdapter.MY_GALLERY_REQUES_CODE){
+        } else if (requestCode == TaskAdapter.MY_GALLERY_REQUES_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*|application/pdf");
-               startActivityForResult(intent, TaskAdapter.PICK_IMAGE_GALLERY);
+                startActivityForResult(intent, TaskAdapter.PICK_IMAGE_GALLERY);
             } else {
                 Toast.makeText(this, "Permiso de archivos denegado", Toast.LENGTH_LONG).show();
             }
