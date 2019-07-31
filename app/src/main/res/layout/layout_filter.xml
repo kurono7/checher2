@@ -46,29 +46,25 @@
 
     <Button
         android:id="@+id/filter_clear"
+        style="@style/ButtonNormalText"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginTop="@dimen/normal_margin"
         android:background="@drawable/rounded_blue_button_shape"
-        android:fontFamily="@font/montserrat_semibold"
         android:text="Limpiar"
         android:textAllCaps="false"
-        android:textColor="@color/colorWhite"
-        android:textSize="@dimen/normal_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/filter_not_approved" />
 
     <Button
         android:id="@+id/filter_find"
+        style="@style/ButtonNormalText"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginStart="@dimen/normal_margin"
         android:background="@drawable/rounded_green_button_shape"
-        android:fontFamily="@font/montserrat_semibold"
         android:text="Buscar"
         android:textAllCaps="false"
-        android:textColor="@color/colorWhite"
-        android:textSize="@dimen/normal_text"
         app:layout_constraintBottom_toBottomOf="@id/filter_clear"
         app:layout_constraintStart_toEndOf="@id/filter_clear"
         app:layout_constraintTop_toTopOf="@id/filter_clear" />
