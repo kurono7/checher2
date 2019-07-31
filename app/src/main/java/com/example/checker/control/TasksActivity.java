@@ -4,11 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -40,6 +42,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -253,25 +259,73 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
      */
 
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        if (resultCode == RESULT_OK && requestCode == TaskAdapter.PICK_IMAGE_CAMERA) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) (extras != null ? extras.get("data") : null);
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            Objects.requireNonNull(imageBitmap).compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            byte[] byteArray = byteArrayOutputStream.toByteArray();
-            String encodedBase64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
-            Log.e("BASE64", encodedBase64);
+        if (resultCode == RESULT_OK ) {
 
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String taskID = preferences.getString(getString(R.string.shared_taskID), "");
             Log.e("TASK: ", taskID);
 
-            Toast.makeText(getApplicationContext(), "Proximamente", Toast.LENGTH_LONG).show();
+            String encodedBase64= "";
+            if(requestCode == TaskAdapter.PICK_IMAGE_CAMERA){
+                encodedBase64 = sendImageCaptured(data);
+            }else if(requestCode == TaskAdapter.PICK_IMAGE_GALLERY){
+                encodedBase64 = sendFileSelected(data);
+            }
+
+            final ConnectionHTTP connectionHTTP = new ConnectionHTTP(this);
+            if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
+                progressBar.setVisibility(View.VISIBLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                Intent intent = getIntent();
+                Territorie territorie = (Territorie) intent.getSerializableExtra("territorie");
+                String idProject = territorie != null ? territorie.getProjectID() : null;
+                String idTerritore = territorie != null ? territorie.getTerritorieID() : null;
+
+                String token = preferences.getString("token", "");
+
+                connectionHTTP.setAttachTask(idProject, idTerritore, taskID, token, encodedBase64);
+            } else {
+                Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
+            }
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.not_file), Toast.LENGTH_LONG).show();
         }
     }
 
+    private String sendImageCaptured(Intent data){
+        String base64 = "";
+        Bundle extras = data.getExtras();
+        Bitmap imageBitmap = (Bitmap) (extras != null ? extras.get("data") : null);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        Objects.requireNonNull(imageBitmap).compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        base64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        Log.e("BASE64", base64);
+
+        return base64;
+    }
+
+    private String sendFileSelected(Intent data){
+        String base64 = "";
+        // Get the Uri of the selected file
+        Uri uri = data.getData();
+        String uriString = uri.toString();
+        File myFile = new File(uriString);
+
+        try {
+            FileInputStream fileInputStreamReader = new FileInputStream(myFile);
+            byte[] bytes = new byte[(int)myFile.length()];
+            fileInputStreamReader.read(bytes);
+            base64 = Base64.encodeToString(bytes, Base64.DEFAULT);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return base64;
+    }
 
     /**
      * Receive the permissions that was requered by camera. <br>
@@ -289,6 +343,14 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                 startActivityForResult(intent, TaskAdapter.PICK_IMAGE_CAMERA);
             } else {
                 Toast.makeText(this, "Permiso de camara denegado", Toast.LENGTH_LONG).show();
+            }
+        }else if(requestCode == TaskAdapter.MY_GALLERY_REQUES_CODE){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*|application/pdf");
+               startActivityForResult(intent, TaskAdapter.PICK_IMAGE_GALLERY);
+            } else {
+                Toast.makeText(this, "Permiso de archivos denegado", Toast.LENGTH_LONG).show();
             }
         }
     }

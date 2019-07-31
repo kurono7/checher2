@@ -22,7 +22,8 @@ public class ConnectionHTTP {
     private ConnetionCallback listener;
 
     //SERVER
-    private final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8080";
+    private final static String SERVER = "http://172.19.15.51:8000";
+    //private final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8080";
     private final static int WAIT = 30000;
 
     // URL API'S
@@ -31,10 +32,29 @@ public class ConnectionHTTP {
     private final static String SIGNOUT = "/api/v1/usuarios/cerrar-sesion/";
     public final static String GETPROYECTS = "/api/v1/general/autenticacion/mobile/";
     private final static String UPDATETASKSTATE = "/api/v1/tareasProyecto/procesar-tarea/";
+    private final static String ATTACH_TASK = "/api/v1/tareasProyecto/adjuntar-entregable/";
 
 
     public ConnectionHTTP(ConnetionCallback listener) {
         this.listener = listener;
+    }
+
+    public void setAttachTask(String IdProyecto, String IdTerritorio, String IdTarea, String token, String image) {
+        JSONObject post = new JSONObject();
+        try {
+            token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUxM2U5ZTUwLWVjMTYtNDc1Ny05YWE4LTM5MjM5Yzg2MTEzYyIsImlwIjoiOjoxIiwiaWRVc3VhcmlvIjoiMDJkYjZlZWUtMTdkNC00ZDk0LTgxNmQtODgwYzljZjQwYTRkIiwidXN1YXJpbyI6IkNPT1JCT0dPVEEyIiwibm9tYnJlQ29tcGxldG8iOiJDb29yZGluYWRvciBkZSBTb3BvcnRlIEFNRVJJQ0FTIiwiaWRQZXJmaWwiOiIwNCIsImVtYWlsIjoiTE9SRU5BLkdBVklSSUFAQ0FSVkFKQUwuQ09NIiwiY29kaWdvQ2FyZ28iOiIzIiwiaWF0IjoxNTY0NDk0ODMwLCJleHAiOjE1NjQ1ODEyMzB9.-N8rLm-fCvY5qB0pS6JlfUvGdRjH5bU2ETrrNUTzr20";
+            IdProyecto = "78065db9-89c9-45f2-a0b4-c38f5705b037";
+            IdTerritorio = "57301f26-cce5-4c00-a099-b97252e102b6";
+            IdTarea = "00fb628b-9d87-40fe-9d4a-2781e7d92f48";
+
+            post.put("idProyecto", IdProyecto);
+            post.put("idTerritorio", IdTerritorio);
+            post.put("idTarea", IdTarea);
+            post.put("image", image);
+            new SendDeviceDetailsPOST().execute(ATTACH_TASK, post.toString(), token, IdProyecto);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void updateTaskState(String IdProyecto, String IdTerritorio, String IdTarea, String token) {
@@ -87,6 +107,10 @@ public class ConnectionHTTP {
             StringBuilder data = new StringBuilder();
             HttpURLConnection httpURLConnection = null;
             try {
+                if(params[0].equals(ATTACH_TASK)){
+                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[3]).openConnection();
+                    httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[2]);
+                }else
                 if (params[0].equals(UPDATETASKSTATE)) {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[3]).openConnection();
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[2]);
