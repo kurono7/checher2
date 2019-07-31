@@ -90,8 +90,8 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
 
         if (task.getStatus().equals("1")) {
             reportTaskBtn.setEnabled(false);
-            reportTaskBtn.setText(getContext().getString(R.string.reportedTxt));
             reportTaskBtn.setBackground(getContext().getDrawable(R.drawable.rounded_green_button_shape_dissabled));
+            reportTaskBtn.setText(getContext().getString(R.string.reportedTxt));
             Toast.makeText(getContext(), "La tarea esta reportada", Toast.LENGTH_LONG).show();
         }
 

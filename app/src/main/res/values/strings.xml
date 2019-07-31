@@ -48,7 +48,7 @@
     <string name="approvedTxt">APROBADO</string>
     <string name="reportedTxt">REPORTADO</string>
     <string name="not_approvedTxt">NO APROBADO</string>
-    <string name="error_no_results">No hay tareas en este estado. Intenta limpiando los filtros</string>
+    <string name="error_no_results">No hay tareas en este estado. Intente limpiando los filtros</string>
 
     <!--TASK DIALOG-->
     <string name="reportTaskTxt">Reportar tarea</string>

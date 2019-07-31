@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.checker.R;
 import com.example.checker.model.Project;
+import com.example.checker.model.Territorie;
 import com.example.checker.utils.ConnectionHTTP;
 
 import org.json.JSONArray;
@@ -168,7 +169,7 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
             }
-            // Load the list with projects
+            // Load the list with projects or sent to TasksActivity if there is only one project
             ProjectAdapter pAdapter = new ProjectAdapter(getApplicationContext(), projects);
             projectsList.setAdapter(pAdapter);
         } else {
