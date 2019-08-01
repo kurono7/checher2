@@ -401,8 +401,8 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             }
         } else if (requestCode == TaskAdapter.MY_GALLERY_REQUES_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*|application/pdf");
+                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                intent.setType("application/pdf");
                 startActivityForResult(intent, TaskAdapter.PICK_IMAGE_GALLERY);
             } else {
                 Toast.makeText(this, "Permiso de archivos denegado", Toast.LENGTH_LONG).show();

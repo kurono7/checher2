@@ -1,9 +1,20 @@
 package com.example.checker.control;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.checker.R;
 import com.example.checker.model.Project;
+import com.example.checker.model.Task;
 import com.example.checker.model.Territorie;
 import com.example.checker.utils.ConnectionHTTP;
 
@@ -23,7 +35,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ProjectsActivity extends BaseTop implements ConnectionHTTP.ConnetionCallback {
 
@@ -39,6 +57,7 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         // Initialize variables
         projectsList = findViewById(R.id.projectsList);
@@ -169,7 +188,7 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
             }
-            // Load the list with projects or sent to TasksActivity if there is only one project
+            // Load the list with projects
             ProjectAdapter pAdapter = new ProjectAdapter(getApplicationContext(), projects);
             projectsList.setAdapter(pAdapter);
         } else {
@@ -196,4 +215,10 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
     int getContentViewId() {
         return R.layout.activity_projects;
     }
+
+
+
+
+
+
 }
