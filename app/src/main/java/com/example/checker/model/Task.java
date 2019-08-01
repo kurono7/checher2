@@ -12,8 +12,9 @@ public class Task implements Serializable {
     private String taskName;
     private String status;
     private String expirationDate;
+    private String extensionArchivo;
 
-    public Task(String taskID, int taskType, String processID, String process, String subprocess, String taskName, String status, String expirationDate) {
+    public Task(String taskID, int taskType, String processID, String process, String subprocess, String taskName, String status, String expirationDate, String extensionArchivo) {
         this.taskID = taskID;
         this.taskType = taskType;
         this.processID = processID;
@@ -22,6 +23,7 @@ public class Task implements Serializable {
         this.taskName = taskName;
         this.status = status;
         this.expirationDate = expirationDate;
+        this.extensionArchivo = extensionArchivo;
     }
 
     public String getTaskID() {
@@ -54,5 +56,9 @@ public class Task implements Serializable {
 
     public String getExpirationDate() {
         return expirationDate;
+    }
+
+    public String getExtensionArchivo() {
+        return extensionArchivo;
     }
 }

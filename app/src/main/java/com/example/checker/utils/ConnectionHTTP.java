@@ -22,8 +22,8 @@ public class ConnectionHTTP {
     private ConnetionCallback listener;
 
     //SERVER
-    //private final static String SERVER = "http://192.168.137.77:8000";
-    private final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8080";
+    private final static String SERVER = "http://192.168.137.77:8000";
+    //private final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8080";
     private final static int WAIT = 30000;
 
     // URL API'S

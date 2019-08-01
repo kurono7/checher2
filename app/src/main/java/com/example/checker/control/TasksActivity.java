@@ -285,11 +285,9 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                         String expirationDate = task.getString("FechaVencimiento");
                         String process = task.getString("Proceso");
                         String subprocess = task.getString("SubProceso");
+                        String extensionArchivo = task.getString("ExtensionArchivo");
 
-                        //@SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                        //expirationDate = sdf.format(expirationDate);
-
-                        tasks.add(new Task(taskID, taskType, processID, process, subprocess, taskName, status, expirationDate));
+                        tasks.add(new Task(taskID, taskType, processID, process, subprocess, taskName, status, expirationDate, extensionArchivo));
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), respuesta.getString("message"), Toast.LENGTH_LONG).show();

@@ -32,6 +32,12 @@ public class TaskAdapter extends BaseAdapter {
     final static int PICK_IMAGE_CAMERA = 3;
     final static int PICK_IMAGE_GALLERY = 4;
 
+    final static String PDF = ".pdf";
+    final static String PNG = ".png";
+    final static String XSLX = ".xslx";
+    final static String XSL = ".xsl";
+    final static String JPG = ".jpg";
+
     TaskAdapter(Context context, ArrayList<Task> tasksList) {
         this.context = context;
         this.tasksList = tasksList;
@@ -98,12 +104,11 @@ public class TaskAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void openImageChooser(final Context mContext, Task task) {
+    private void openImageChooser(final Context mContext, final Task task) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(context.getString(R.string.shared_taskID), task.getTaskID());
         editor.apply();
-
 
         final CharSequence[] items = {"Tomar foto", "Seleccionar archivo"};
         AlertDialog.Builder builder = new AlertDialog.Builder(((Activity) mContext));
@@ -125,7 +130,28 @@ public class TaskAdapter extends BaseAdapter {
                     } else {
                         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                         intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        intent.setType("application/pdf");
+
+                        String extension = "";
+                        String[] taskExtension = task.getExtensionArchivo().split(", ");
+                        for (int i = 0; i < taskExtension.length; i++) {
+                            if(taskExtension.equals(PDF)){
+                                extension += "application/pdf";
+                            } else if(taskExtension.equals(XSL)){
+                                extension += "application/vnd.ms-excel";
+                            } else if(taskExtension.equals(XSLX)){
+                                extension += "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                            } else if(taskExtension.equals(PNG)){
+                                extension += "image/png";
+                            } else if(taskExtension.equals(JPG)){
+                                extension += "image/jpg";
+                            }
+
+                            if(i<taskExtension.length-1){
+                                extension+="||";
+                            }
+                        }
+
+                        intent.setType(extension);
                         ((Activity) mContext).startActivityForResult(intent, PICK_IMAGE_GALLERY);
                     }
                 }
