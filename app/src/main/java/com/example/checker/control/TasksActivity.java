@@ -32,6 +32,7 @@ import com.example.checker.R;
 import com.example.checker.model.Task;
 import com.example.checker.model.Territorie;
 import com.example.checker.utils.ConnectionHTTP;
+import com.example.checker.utils.ExternalStorage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +41,6 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -124,20 +124,22 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                     for (int i = 0; i < tasks.size(); i++) {
                         Task task = tasks.get(i);
                         taskStatus = task.getStatus();
-                        if (filter_not_reported.isChecked()) {
-                            if (taskStatus.equals("0"))
+                        if (filter_not_reported.isChecked() && taskStatus.equals("0")) {
                                 tasksFiltered.add(task);
-                        } else if (filter_reported.isChecked()) {
-                            if (taskStatus.equals("2"))
+                        }else
+                        if (filter_approved.isChecked() && taskStatus.equals("1")) {
                                 tasksFiltered.add(task);
-                        } else if (filter_approved.isChecked()) {
-                            if (taskStatus.equals("1"))
+                        }
+                        else
+                        if (filter_reported.isChecked() && taskStatus.equals("2")) {
                                 tasksFiltered.add(task);
-                        } else if (filter_not_approved.isChecked()) {
-                            if (taskStatus.equals("3"))
+                        }
+                        else
+                        if (filter_not_approved.isChecked() && taskStatus.equals("3")) {
                                 tasksFiltered.add(task);
                         }
                     }
+
                     TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasksFiltered);
                     tasksList.setAdapter(taskAdapter);
                     if (tasksFiltered.size() < 1)
@@ -148,7 +150,6 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                     tasksList.setAdapter(taskAdapter);
                 }
                 filterLayout.setVisibility(View.INVISIBLE);
-
             }
         });
 
@@ -253,7 +254,21 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
 
     @Override
     public void onResultReceived(String result, String service) {
-        if (service.equals(ConnectionHTTP.GETTASKS)) {
+
+        if (result.equals(ConnectionHTTP.ATTACH_TASK)) {
+            try {
+                JSONObject respuesta = new JSONObject(result);
+                boolean exito = respuesta.getBoolean("exito");
+
+                if(exito){
+                    refreshList();
+                }
+
+                Toast.makeText(getApplicationContext(), respuesta.getString("message"), Toast.LENGTH_LONG);
+            } catch (JSONException e) {
+                Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
+            }
+        } else if (service.equals(ConnectionHTTP.GETTASKS)) {
             tasks = new ArrayList<>();
             try {
                 JSONObject respuesta = new JSONObject(result);
@@ -315,7 +330,6 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
 
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (resultCode == RESULT_OK) {
-
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String taskID = preferences.getString(getString(R.string.shared_taskID), "");
             Log.e("TASK: ", taskID);
@@ -364,17 +378,17 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
     private String sendFileSelected(Intent data) {
         String base64 = "";
         // Get the Uri of the selected file
-        Uri uri = data.getData();
-        String uriString = uri.toString();
-        File myFile = new File(uriString);
+        Uri uri = Uri.parse(Objects.requireNonNull(data.getData()).toString());
+        String getPath = ExternalStorage.getPath(this, uri);
 
         try {
-            FileInputStream fileInputStreamReader = new FileInputStream(myFile);
-            byte[] bytes = new byte[(int) myFile.length()];
-            fileInputStreamReader.read(bytes);
-            base64 = Base64.encodeToString(bytes, Base64.DEFAULT);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            File file = new File(getPath);
+            byte[] buffer = new byte[(int) file.length()];
+            @SuppressWarnings("resource")
+            int length = new FileInputStream(file).read(buffer);
+            base64 = Base64.encodeToString(buffer, 0, length,
+                    Base64.DEFAULT);
+            Log.e("BASE64", base64);
         } catch (IOException e) {
             e.printStackTrace();
         }
