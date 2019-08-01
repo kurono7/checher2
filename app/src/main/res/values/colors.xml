@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1a0a7a</color>
-    <color name="colorPrimaryDark">#1a0a7a</color>
-    <color name="colorAccent">#39b54a</color>
-    <color name="colorUndelivered">#CCCCCC</color>
-    <color name="colorAccepted">#39B54A</color>
-    <color name="colorReported">#FFD900</color>
-    <color name="colorRejected">#FF294F</color>
+    <color name="colorPrimary">#18037D</color>
+    <color name="colorPrimaryDark">#18037D</color>
+    <color name="colorBlueBar">#001F49</color>
+    <color name="colorAccent">#00B43E</color>
+    <color name="colorUndelivered">#9AA3A7</color>
+    <color name="colorAccepted">#00B43E</color>
+    <color name="colorReported">#FFD700</color>
+    <color name="colorRejected">#FF2D51</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorGrayBackground">#ECEDF2</color>
 </resources>

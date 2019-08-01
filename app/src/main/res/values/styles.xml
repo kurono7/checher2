@@ -14,7 +14,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:statusBarColor">@color/colorBlueBar</item>
         <item name="android:windowBackground">@color/colorGrayBackground</item>
     </style>
 
@@ -24,37 +24,55 @@
     <style name="ContentRegularText">
         <item name="android:textSize">@dimen/normal_text</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/colorBlueBar</item>
     </style>
 
     <style name="ContentSemiboldText">
         <item name="android:textSize">@dimen/normal_text</item>
         <item name="android:fontFamily">@font/montserrat_semibold</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/colorBlueBar</item>
     </style>
 
     <style name="ContentBoldText">
         <item name="android:textSize">@dimen/normal_text</item>
         <item name="android:fontFamily">@font/montserrat_bold</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/colorBlueBar</item>
     </style>
 
     <style name="TitleRegularText">
         <item name="android:textSize">@dimen/big_text</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/colorBlueBar</item>
     </style>
 
     <style name="TitleSemiboldText">
         <item name="android:textSize">@dimen/big_text</item>
         <item name="android:fontFamily">@font/montserrat_semibold</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/colorBlueBar</item>
     </style>
 
     <style name="TitleBoldText">
         <item name="android:textSize">@dimen/big_text</item>
         <item name="android:fontFamily">@font/montserrat_bold</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/colorBlueBar</item>
+    </style>
+
+    <style name="TitleRegularWhiteText">
+        <item name="android:textSize">@dimen/big_text</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="TitleSemiboldWhiteText">
+        <item name="android:textSize">@dimen/big_text</item>
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="TitleBoldWhiteText">
+        <item name="android:textSize">@dimen/big_text</item>
+        <item name="android:fontFamily">@font/montserrat_bold</item>
+        <item name="android:textColor">@color/colorWhite</item>
     </style>
 
     <!-- Buttons -->
@@ -77,11 +95,13 @@
 
     <!-- EditTexts -->
 
-    <style name="EdidTextNormalText">
+    <style name="EdidTextNormal">
         <item name="android:textSize">@dimen/normal_text</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
-        <item name="android:textColorHint">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/colorBlueBar</item>
+        <item name="android:textColorHint">@color/colorBlueBar</item>
+        <item name="android:background">@drawable/rounded_white_edit_text_shape</item>
+
     </style>
 
 

@@ -45,13 +45,11 @@
 
         <TextView
             android:id="@+id/status"
+            style="@style/ContentSemiboldText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/min_margin"
-            android:fontFamily="@font/montserrat_semibold"
             android:text="POR REPORTAR"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/normal_text"
             app:layout_constraintBottom_toBottomOf="@id/statusTitle"
             app:layout_constraintStart_toEndOf="@id/statusTitle"
             app:layout_constraintTop_toTopOf="@id/statusTitle" />
