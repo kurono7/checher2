@@ -2,10 +2,9 @@ package com.example.checker.control;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.checker.R;
 
@@ -16,7 +15,7 @@ public abstract class BaseTop extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewId());
 
-        ImageView backBtn = findViewById(R.id.backBtn);
+        ConstraintLayout backBtn = findViewById(R.id.backBtn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -15,24 +15,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/backBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/normal_margin"
-            android:src="@drawable/ic_vector_back_button"
+            android:layout_marginStart="@dimen/normal_margin"
             app:layout_constraintBottom_toBottomOf="@id/titleOne"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/titleOne" />
+            app:layout_constraintTop_toTopOf="@id/titleOne">
 
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_vector_logo2"
-            app:layout_constraintBottom_toBottomOf="@id/backBtn"
-            app:layout_constraintStart_toEndOf="@id/backBtn"
-            app:layout_constraintTop_toTopOf="@id/backBtn" />
+            <ImageView
+                android:id="@+id/backIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_vector_back_button"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:src="@drawable/ic_vector_logo2"
+                app:layout_constraintBottom_toBottomOf="@id/backIcon"
+                app:layout_constraintStart_toEndOf="@id/backIcon"
+                app:layout_constraintTop_toTopOf="@id/backIcon" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/titleOne"
@@ -56,9 +67,9 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/normal_margin"
             android:src="@drawable/ic_vector_avatar"
-            app:layout_constraintBottom_toBottomOf="@id/backBtn"
+            app:layout_constraintBottom_toBottomOf="@id/titleOne"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/backBtn" />
+            app:layout_constraintTop_toTopOf="@id/titleOne" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

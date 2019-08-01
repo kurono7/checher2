@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +33,6 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
     private ProgressBar progressBar;
 
 
-
     /**
      * Create a Task Dialog. <br>
      * <b>pre: </b> context != null && task != null && territorie != null. <br>
@@ -45,7 +44,6 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
         this.task = task;
         this.territorie = territorie;
     }
-
 
 
     /**
@@ -80,7 +78,7 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
         expirationDate.setText(task.getExpirationDate());
         progressBar = findViewById(R.id.progressBar);
 
-        ImageButton closeBtn = findViewById(R.id.closeBtn);
+        ImageView closeBtn = findViewById(R.id.closeBtn);
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,7 +102,6 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
             }
         });
     }
-
 
 
     /**
@@ -133,11 +130,11 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
     }
 
 
-
     /**
      * Receive the response of state changed from server. <br>
      * <b>pre: </b> progressBar != null. <br>
-     * @param result Response of request report task from server. result != null && result != "".
+     *
+     * @param result  Response of request report task from server. result != null && result != "".
      * @param service Service sended to server. service != null && service != "".
      */
 
