@@ -130,29 +130,6 @@
         app:layout_constraintStart_toEndOf="@id/expirationDateTitle"
         app:layout_constraintTop_toTopOf="@id/expirationDateTitle" />
 
-    <TextView
-        android:id="@+id/commentTitle"
-        style="@style/ContentSemiboldText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/normal_margin"
-        android:text="@string/commentTitleTxt"
-        app:layout_constraintStart_toStartOf="@id/taskName"
-        app:layout_constraintTop_toBottomOf="@id/expirationDateTitle" />
-
-    <EditText
-        android:id="@+id/commentTxt"
-        style="@style/EdidTextNormal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/normal_margin"
-        android:layout_marginEnd="@dimen/normal_margin"
-        android:hint="@string/commentContentTxt"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/commentTitle" />
-
-
     <Button
         android:id="@+id/reportTaskBtn"
         style="@style/ButtonGreenNormal"
@@ -166,7 +143,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/commentTxt" />
+        app:layout_constraintTop_toBottomOf="@id/expirationDateTitle" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -176,9 +153,7 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.463"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.645" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,7 +11,8 @@ import com.example.checker.model.Task;
 
 public class DeliverableDialog extends Dialog {
     private TextView taskID;
-    private TextView processID;
+    private TextView processName;
+    private TextView subprocessName;
     private TextView taskName;
     private TextView status;
     private TextView expirationDate;
@@ -20,12 +21,13 @@ public class DeliverableDialog extends Dialog {
         super(context);
         Task task = (Task) bundle.getSerializable("task");
         taskID = findViewById(R.id.taskID);
-        processID = findViewById(R.id.processID);
         taskName = findViewById(R.id.taskName);
         status = findViewById(R.id.status);
+        processName = findViewById(R.id.process);
+        subprocessName = findViewById(R.id.subprocess);
         expirationDate = findViewById(R.id.expirationDate);
         taskID.setText(task.getTaskID());
-        processID.setText(task.getProcessID());
+        processName.setText(task.getProcess());
         taskName.setText(task.getTaskName());
         status.setText(task.getStatus());
         expirationDate.setText(task.getExpirationDate());
@@ -35,6 +37,6 @@ public class DeliverableDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.dialog_task);
+        setContentView(R.layout.dialog_deriverable);
     }
 }

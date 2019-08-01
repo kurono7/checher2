@@ -55,4 +55,9 @@
     <!--TASK DIALOG-->
     <string name="reportTaskTxt">Reportar tarea</string>
 
+    <!--TASK DIALOG-->
+    <string name="attachDeliverableTxt">Adjuntar entregable</string>
+    <string name="sendReportTxt">Enviar reporte</string>
+
+
 </resources>

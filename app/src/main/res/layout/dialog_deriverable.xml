@@ -2,9 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/fab_margin"
-    android:paddingBottom="@dimen/fab_margin">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/closeBtn"
@@ -16,66 +14,78 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/taskName"
+        style="@style/ContentBoldText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:text="taskName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/taskIDTitle"
         style="@style/ContentSemiboldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ID del entregable:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/closeBtn" />
+        android:layout_marginTop="@dimen/normal_margin"
+        android:text="@string/taskIDTitleTxt"
+        app:layout_constraintStart_toStartOf="@id/taskName"
+        app:layout_constraintTop_toBottomOf="@id/taskName" />
 
     <TextView
         android:id="@+id/taskID"
         style="@style/ContentRegularText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/normal_margin"
+        android:layout_marginLeft="@dimen/min_margin"
         android:text="taskID"
         app:layout_constraintBottom_toBottomOf="@id/taskIDTitle"
         app:layout_constraintStart_toEndOf="@id/taskIDTitle"
         app:layout_constraintTop_toTopOf="@id/taskIDTitle" />
 
     <TextView
-        android:id="@+id/processIDTitle"
+        android:id="@+id/processTitle"
         style="@style/ContentSemiboldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_margin"
-        android:text="ID del proceso"
+        android:text="@string/processTitleTxt"
         app:layout_constraintStart_toStartOf="@id/taskIDTitle"
         app:layout_constraintTop_toBottomOf="@id/taskIDTitle" />
 
     <TextView
-        android:id="@+id/processID"
+        android:id="@+id/process"
         style="@style/ContentRegularText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/normal_margin"
-        android:text="processID"
-        app:layout_constraintBottom_toBottomOf="@id/processIDTitle"
-        app:layout_constraintStart_toEndOf="@id/processIDTitle"
-        app:layout_constraintTop_toTopOf="@id/processIDTitle" />
+        android:layout_marginLeft="@dimen/min_margin"
+        android:text="processName"
+        app:layout_constraintBottom_toBottomOf="@id/processTitle"
+        app:layout_constraintStart_toEndOf="@id/processTitle"
+        app:layout_constraintTop_toTopOf="@id/processTitle" />
 
     <TextView
-        android:id="@+id/taskNameTitle"
+        android:id="@+id/subprocessTitle"
         style="@style/ContentSemiboldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_margin"
-        android:text="Nombre de la tarea:"
-        app:layout_constraintStart_toStartOf="@id/processIDTitle"
-        app:layout_constraintTop_toBottomOf="@id/processIDTitle" />
+        android:text="@string/subprocessTitleTxt"
+        app:layout_constraintStart_toStartOf="@id/taskName"
+        app:layout_constraintTop_toBottomOf="@id/processTitle" />
 
     <TextView
-        android:id="@+id/taskName"
+        android:id="@+id/subprocess"
         style="@style/ContentRegularText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/normal_margin"
-        android:text="taskName"
-        app:layout_constraintBottom_toBottomOf="@id/taskNameTitle"
-        app:layout_constraintStart_toEndOf="@id/taskNameTitle"
-        app:layout_constraintTop_toTopOf="@id/taskNameTitle" />
+        android:layout_marginLeft="@dimen/min_margin"
+        android:text="subprocessName"
+        app:layout_constraintBottom_toBottomOf="@id/subprocessTitle"
+        app:layout_constraintStart_toEndOf="@id/subprocessTitle"
+        app:layout_constraintTop_toTopOf="@id/subprocessTitle" />
 
     <TextView
         android:id="@+id/statusTitle"
@@ -83,16 +93,16 @@
         android:layout_width="wrap_content"
         android:layout_height="19dp"
         android:layout_marginTop="@dimen/normal_margin"
-        android:text="Estado:"
-        app:layout_constraintStart_toStartOf="@id/taskNameTitle"
-        app:layout_constraintTop_toBottomOf="@id/taskNameTitle" />
+        android:text="@string/statusTitleTxt"
+        app:layout_constraintStart_toStartOf="@id/taskName"
+        app:layout_constraintTop_toBottomOf="@id/subprocessTitle" />
 
     <TextView
         android:id="@+id/status"
         style="@style/ContentRegularText"
         android:layout_width="wrap_content"
         android:layout_height="19dp"
-        android:layout_marginLeft="@dimen/normal_margin"
+        android:layout_marginLeft="@dimen/min_margin"
         android:text="POR ENTREGAR"
         app:layout_constraintBottom_toBottomOf="@id/statusTitle"
         app:layout_constraintStart_toEndOf="@id/statusTitle"
@@ -105,8 +115,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_margin"
-        android:text="Fecha de vencimiento:"
-        app:layout_constraintStart_toStartOf="@id/statusTitle"
+        android:text="@string/expirationDateTitleTxt"
+        app:layout_constraintStart_toStartOf="@id/taskName"
         app:layout_constraintTop_toBottomOf="@id/statusTitle" />
 
     <TextView
@@ -114,20 +124,72 @@
         style="@style/ContentRegularText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/normal_margin"
+        android:layout_marginLeft="@dimen/min_margin"
         android:text="expirationDate"
         app:layout_constraintBottom_toBottomOf="@id/expirationDateTitle"
         app:layout_constraintStart_toEndOf="@id/expirationDateTitle"
         app:layout_constraintTop_toTopOf="@id/expirationDateTitle" />
 
-    <ImageView
-        android:id="@+id/statusIndicator"
+    <TextView
+        android:id="@+id/commentTitle"
+        style="@style/ContentSemiboldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_margin"
-        android:src="@drawable/ic_vector_bar_not_reported"
+        android:text="@string/commentTitleTxt"
+        app:layout_constraintStart_toStartOf="@id/taskName"
+        app:layout_constraintTop_toBottomOf="@id/expirationDateTitle" />
+
+    <EditText
+        android:id="@+id/commentTxt"
+        style="@style/EdidTextComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin"
+        android:hint="@string/commentContentTxt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/commentTitle" />
+
+    <Button
+        android:id="@+id/attachFileBtn"
+        style="@style/ButtonGreenNormal"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:text="@string/attachDeliverableTxt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/expirationDateTitle" />
+        app:layout_constraintTop_toBottomOf="@id/commentTxt" />
+
+    <Button
+        android:id="@+id/sendReportBtn"
+        style="@style/ButtonGreenNormal"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:text="@string/sendReportTxt"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/attachFileBtn" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
