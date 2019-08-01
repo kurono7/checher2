@@ -28,7 +28,8 @@
             android:theme="@style/BlueStatusbarTheme" />
         <activity
             android:name=".control.LoginActivity"
-            android:theme="@style/BlueStatusbarTheme">
+            android:theme="@style/BlueStatusbarTheme"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

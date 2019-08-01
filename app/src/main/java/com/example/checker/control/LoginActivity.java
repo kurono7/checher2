@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -21,11 +22,9 @@ import org.json.JSONObject;
 public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.ConnetionCallback {
 
 
-
     private EditText loginUsername;
     private EditText loginPassword;
     private ProgressBar progressBar;
-
 
 
     /**
@@ -44,6 +43,22 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
         progressBar = findViewById(R.id.progressBar);
 
         // Button to login
+        loginPassword.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_DPAD_CENTER:
+                        case KeyEvent.KEYCODE_ENTER:
+                            login();
+                            return true;
+                        default:
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
         findViewById(R.id.loginBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,7 +66,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
             }
         });
     }
-
 
 
     /**
@@ -77,11 +91,11 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
     }
 
 
-
     /**
      * Receive the response of authentification from server. <br>
      * <b>pre: </b> progressBar != null. <br>
-     * @param result Response of authentification from server. result != null && result != "".
+     *
+     * @param result  Response of authentification from server. result != null && result != "".
      * @param service Service sended to server. service != null && service != "".
      */
 
@@ -121,7 +135,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         progressBar.setVisibility(View.GONE);
     }
-
 
 
     /**

@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".control.LoginActivity">
 
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/header_logo_margin"
+        android:src="@drawable/ic_vector_logo1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/intern_layout"
         android:layout_width="match_parent"
@@ -13,24 +23,14 @@
         android:layout_marginStart="@dimen/normal_margin"
         android:layout_marginTop="@dimen/header_logo_margin"
         android:layout_marginEnd="@dimen/normal_margin"
-        android:paddingTop="@dimen/normal_margin"
-        android:paddingBottom="@dimen/normal_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/logo">
 
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_vector_logo1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/loginTitle"
-            style="@style/TitleBoldText"
+            style="@style/TitleSemiboldText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/normal_margin"
@@ -40,13 +40,12 @@
 
         <EditText
             android:id="@+id/loginUsername"
-            style="@style/EdidTextNormalText"
+            style="@style/EdidTextNormal"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="@dimen/normal_margin"
             android:layout_marginTop="@dimen/normal_margin"
             android:layout_marginEnd="@dimen/normal_margin"
-            android:background="@drawable/rounded_white_edit_text_shape"
             android:drawableLeft="@drawable/ic_vector_user_icon"
             android:drawablePadding="@dimen/normal_margin"
             android:hint="@string/usernameTxt"
@@ -57,13 +56,12 @@
 
         <EditText
             android:id="@+id/loginPassword"
-            style="@style/EdidTextNormalText"
+            style="@style/EdidTextNormal"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="@dimen/normal_margin"
             android:layout_marginTop="@dimen/normal_margin"
             android:layout_marginEnd="@dimen/normal_margin"
-            android:background="@drawable/rounded_white_edit_text_shape"
             android:drawableLeft="@drawable/ic_vector_password_icon"
             android:drawablePadding="@dimen/normal_margin"
             android:hint="@string/passwordTxt"
@@ -73,27 +71,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginUsername" />
 
-        <Button
-            android:id="@+id/loginBtn"
-            style="@style/ButtonGreenNormalText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/normal_margin"
-            android:layout_marginTop="@dimen/normal_margin"
-            android:layout_marginEnd="@dimen/normal_margin"
-            android:text="@string/loginTxt"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/loginPassword" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <Button
+        android:id="@+id/loginBtn"
+        style="@style/ButtonGreenNormal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:text="@string/loginTxt"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/header_logo_margin"
         android:indeterminate="true"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"

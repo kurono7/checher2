@@ -66,7 +66,7 @@
         android:id="@+id/constraintBottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorBlueBar"
         android:paddingTop="@dimen/min_margin"
         android:paddingBottom="@dimen/min_margin"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +76,7 @@
 
         <TextView
             android:id="@+id/titleTwo"
-            style="@style/ButtonBigText"
+            style="@style/TitleBoldWhiteText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
