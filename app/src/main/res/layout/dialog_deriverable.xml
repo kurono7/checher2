@@ -155,7 +155,7 @@
     <Button
         android:id="@+id/attachFileBtn"
         style="@style/ButtonGreenNormal"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginStart="@dimen/normal_margin"
         android:layout_marginTop="@dimen/normal_margin"
@@ -169,7 +169,7 @@
     <Button
         android:id="@+id/sendReportBtn"
         style="@style/ButtonGreenNormal"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginStart="@dimen/normal_margin"
         android:layout_marginTop="@dimen/normal_margin"

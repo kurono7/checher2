@@ -22,8 +22,8 @@ public class ConnectionHTTP {
     private ConnetionCallback listener;
 
     //SERVER
-    private final static String SERVER = "http://192.168.137.77:8000";
-    //private final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8080";
+    //private final static String SERVER = "http://192.168.137.77:8000";
+    private final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8080";
     private final static int WAIT = 30000;
 
     // URL API'S
@@ -86,7 +86,7 @@ public class ConnectionHTTP {
         new SendDeviceDetailsGET().execute(GETTASKS, projectID, territorieID, responsable, token);
     }
 
-    public void getproyects(String IdPerfil, String idUsuario, String token) {
+    public void getProyects(String IdPerfil, String idUsuario, String token) {
         new SendDeviceDetailsGET().execute(GETPROYECTS, idUsuario, IdPerfil, token);
     }
 

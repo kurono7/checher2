@@ -104,7 +104,7 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
             String IdPerfil = preferences.getString("IdPerfil", "");
 
             // Send the request to get projects
-            connectionHTTP.getproyects(IdPerfil, IdUsuario, token);
+            connectionHTTP.getProyects(IdPerfil, IdUsuario, token);
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
         }
@@ -191,6 +191,8 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
             // Load the list with projects
             ProjectAdapter pAdapter = new ProjectAdapter(getApplicationContext(), projects);
             projectsList.setAdapter(pAdapter);
+
+
         } else {
             try {
                 // Launch the login activity if all look perfect

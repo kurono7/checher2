@@ -27,17 +27,13 @@
     <string name="error_user_name">Ingrese el nombre de usuario</string>
     <string name="error_user_password">Ingrese la contraseña</string>
 
-    <!--TASK ACTIVITY-->
-    <string name="tasksAndDeliverableTitleTxt">TAREAS / ENTREGABLES</string>
-
     <!--PROJECT ACTIVITY-->
-    <string name="projectsTitleTxt">PROYECTOS</string>
+    <string name="projectsTitleTxt">Proyectos</string>
 
     <!--TERRITORIE ACTIVITY-->
-    <string name="territoriesTitleTxt">TERRITORIOS</string>
+    <string name="territoriesTitleTxt">Territorios</string>
 
     <!--TASK ITEM ACTIVITY-->
-    locationTitleTxt
     <string name="locationTitleTxt">Localización:</string>
     <string name="taskIDTitleTxt">ID tarea:</string>
     <string name="processTitleTxt">Proceso:</string>
