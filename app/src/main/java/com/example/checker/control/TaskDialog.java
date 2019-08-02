@@ -149,6 +149,10 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
             }
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             preferences.edit().putBoolean("update", true).apply();
+
+            // Set the View's visibility back on the main UI Thread
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            progressBar.setVisibility(View.GONE);
         } catch (JSONException e) {
             Toast.makeText(getContext(), getContext().getString(R.string.error_json), Toast.LENGTH_LONG).show();
         }

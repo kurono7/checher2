@@ -27,17 +27,6 @@ public class TaskAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<Task> tasksList;
 
-    final static int MY_CAMERA_REQUEST_CODE = 1;
-    final static int MY_GALLERY_REQUES_CODE = 2;
-    final static int PICK_IMAGE_CAMERA = 3;
-    final static int PICK_IMAGE_GALLERY = 4;
-
-    final static String PDF = ".pdf";
-    final static String PNG = ".png";
-    final static String XSLX = ".xslx";
-    final static String XSL = ".xsl";
-    final static String JPG = ".jpg";
-
     TaskAdapter(Context context, ArrayList<Task> tasksList) {
         this.context = context;
         this.tasksList = tasksList;
@@ -80,12 +69,6 @@ public class TaskAdapter extends BaseAdapter {
         // Ask if the task is a task or entregable
         if (task.getTaskType() != 0) {
             attachIcon.setVisibility(View.VISIBLE);
-            attachIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    openImageChooser(parent.getContext(), task);
-                }
-            });
         }
 
         if (task.getStatus().equals("0")) {
@@ -103,62 +86,4 @@ public class TaskAdapter extends BaseAdapter {
 
         return convertView;
     }
-
-    private void openImageChooser(final Context mContext, final Task task) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(context.getString(R.string.shared_taskID), task.getTaskID());
-        editor.apply();
-
-        final CharSequence[] items = {"Tomar foto", "Seleccionar archivo"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(((Activity) mContext));
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("Tomar foto")) {
-                    if (mContext.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        ((Activity) mContext).requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
-                    } else {
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        ((Activity) mContext).startActivityForResult(intent, PICK_IMAGE_CAMERA);
-                    }
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    ((Activity) mContext).startActivityForResult(intent, PICK_IMAGE_CAMERA);
-                } else if (items[item].equals("Seleccionar archivo")) {
-                    if (mContext.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ((Activity) mContext).requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_GALLERY_REQUES_CODE);
-                    } else {
-                        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-                        String extension = "";
-                        String[] taskExtension = task.getExtensionArchivo().split(", ");
-                        for (int i = 0; i < taskExtension.length; i++) {
-                            if(taskExtension.equals(PDF)){
-                                extension += "application/pdf";
-                            } else if(taskExtension.equals(XSL)){
-                                extension += "application/vnd.ms-excel";
-                            } else if(taskExtension.equals(XSLX)){
-                                extension += "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                            } else if(taskExtension.equals(PNG)){
-                                extension += "image/png";
-                            } else if(taskExtension.equals(JPG)){
-                                extension += "image/jpg";
-                            }
-
-                            if(i<taskExtension.length-1){
-                                extension+="||";
-                            }
-                        }
-
-                        intent.setType(extension);
-                        ((Activity) mContext).startActivityForResult(intent, PICK_IMAGE_GALLERY);
-                    }
-                }
-            }
-        });
-        builder.show();
-
-    }
-
 }

@@ -26,7 +26,7 @@
             android:theme="@style/BlueStatusbarTheme" />
         <activity
             android:name=".control.ProjectsActivity"
-            android:theme="@style/BlueStatusbarTheme" />
+            android:theme="@style/BlueStatusbarTheme"/>
         <activity
             android:name=".control.LoginActivity"
             android:theme="@style/BlueStatusbarTheme">

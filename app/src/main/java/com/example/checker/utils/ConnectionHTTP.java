@@ -29,7 +29,7 @@ public class ConnectionHTTP {
     // URL API'S
     private final static String AUTENTIFICATION = "/auth/autenticar/mobile";
     public final static String GETTASKS = "/api/v1/tareas/";
-    private final static String SIGNOUT = "/api/v1/usuarios/cerrar-sesion/";
+    public final static String SIGNOUT = "/api/v1/usuarios/cerrar-sesion/";
     public final static String GETPROYECTS = "/api/v1/general/autenticacion/mobile/";
     private final static String UPDATETASKSTATE = "/api/v1/tareasProyecto/procesar-tarea/";
     public final static String ATTACH_TASK = "/api/v1/tareasProyecto/adjuntar-entregable/";
@@ -38,18 +38,19 @@ public class ConnectionHTTP {
         this.listener = listener;
     }
 
-    public void setAttachTask(String IdProyecto, String IdTerritorio, String IdTarea, String token, String image) {
+    public void setAttachTask(String IdProyecto, String IdTerritorio, String IdTarea, String token, String image, String comment) {
         JSONObject post = new JSONObject();
         try {
             //token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyOTQ4MTQyLTM1ZjYtNDRkYi04ZDU2LTU5OGMyOGQ1MjdlZCIsImlwIjoiOjoxIiwiaWRVc3VhcmlvIjoiM2FhNTY5YjctNmE4OS00NTdkLWFmYjItNWUwMjBhYTk1ZTgwIiwidXN1YXJpbyI6Im1hc3RlciIsIm5vbWJyZUNvbXBsZXRvIjoiQWRtaW5pc3RyYWRvciBNYXN0ZXIiLCJpZFBlcmZpbCI6IjAwIiwiZW1haWwiOiJjaGVja2VyQGNhcnZhamFsLmNvbSIsImNvZGlnb0NhcmdvIjoiMCIsImlhdCI6MTU2NDU4MTQ0MSwiZXhwIjoxNTY0NjY3ODQxfQ.Vj6YkrjNqgnSqfv9V4DvP6Xnj34J2r-Gj98SHa7HoLg ";
             //IdProyecto = "78065db9-89c9-45f2-a0b4-c38f5705b037";
             //IdTerritorio = "57301f26-cce5-4c00-a099-b97252e102b6";
             //IdTarea = "00fb628b-9d87-40fe-9d4a-2781e7d92f48";
-
+            Log.e("COMMENT", comment);
             post.put("idProyecto", IdProyecto);
             post.put("idTerritorio", IdTerritorio);
             post.put("idTarea", IdTarea);
             post.put("image", image);
+            post.put("comment", comment);
             new SendDeviceDetailsPOST().execute(ATTACH_TASK, post.toString(), token, IdProyecto);
         } catch (JSONException e) {
             e.printStackTrace();

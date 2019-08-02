@@ -3,6 +3,8 @@ package com.example.checker.control;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -47,11 +50,21 @@ import java.util.Objects;
 
 public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCallback {
 
-
     private ListView tasksList;
     private ArrayList<Task> tasks;
     private ProgressBar progressBar;
+    private int positionItemSelected;
+    private DeliverableDialog deliverableDialog;
 
+    final static String PDF = ".pdf";
+    final static String PNG = ".png";
+    final static String XSLX = ".xslx";
+    final static String XSL = ".xsl";
+    final static String JPG = ".jpg";
+    final static int MY_CAMERA_REQUEST_CODE = 1;
+    final static int MY_GALLERY_REQUES_CODE = 2;
+    final static int PICK_IMAGE_CAMERA = 3;
+    final static int PICK_IMAGE_GALLERY = 4;
 
     /**
      * Initialize variables UI. <br>
@@ -63,12 +76,12 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         super.onCreate(savedInstanceState);
 
         tasksList = findViewById(R.id.tasksList);
-        ImageView optionsMenu = findViewById(R.id.optionsMenu);
         progressBar = findViewById(R.id.progressBar);
+        ImageView optionsMenu = findViewById(R.id.optionsMenu);
         TextView projectName = findViewById(R.id.titleOne);
         TextView territorieName = findViewById(R.id.titleTwo);
-        final ImageView button_filter = findViewById(R.id.button_filter);
 
+        final ImageView button_filter = findViewById(R.id.button_filter);
         final ConstraintLayout filterLayout = findViewById(R.id.filter_layout);
         filterLayout.setVisibility(View.INVISIBLE);
 
@@ -112,14 +125,13 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             }
         });
 
-
         //Filtering results
         Button filter_find = filterLayout.findViewById(R.id.filter_find);
         filter_find.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (filter_not_reported.isChecked() || filter_reported.isChecked() || filter_not_approved.isChecked() || filter_approved.isChecked()) {
-                    ArrayList<Task> tasksFiltered = new ArrayList<Task>();
+                    ArrayList<Task> tasksFiltered = new ArrayList<>();
                     String taskStatus = "";
                     for (int i = 0; i < tasks.size(); i++) {
                         Task task = tasks.get(i);
@@ -156,20 +168,76 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         tasksList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Territorie territorie = (Territorie) getIntent().getSerializableExtra("territorie");
-                TaskDialog taskDialog = new TaskDialog(TasksActivity.this, (Task) tasksList.getAdapter().getItem(position), territorie);
-                taskDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        boolean update = preferences.getBoolean("update", false);
-                        if (update) {
-                            refreshList();
+                final Territorie territorie = (Territorie) getIntent().getSerializableExtra("territorie");
+                final Task task = (Task) tasksList.getAdapter().getItem(position);
+                if(task.getTaskType()==1){
+                    positionItemSelected = position;
+                    deliverableDialog = new DeliverableDialog(TasksActivity.this, task, territorie, "");
+                    deliverableDialog.setCancelable(true);
+                    deliverableDialog.show();
+
+                    Button attachFileBtn = deliverableDialog.findViewById(R.id.attachFileBtn);
+                    attachFileBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            openImageChooser();
                         }
-                    }
-                });
-                taskDialog.setCancelable(true);
-                taskDialog.show();
+                    });
+
+                    Button sendReportBtn = deliverableDialog.findViewById(R.id.sendReportBtn);
+                    sendReportBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String base64 = deliverableDialog.getBase64();
+
+                            if (base64 != null && !base64.isEmpty()) {
+                                final ConnectionHTTP connectionHTTP = new ConnectionHTTP(TasksActivity.this);
+                                if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
+                                    progressBar.setVisibility(View.VISIBLE);
+                                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                    String token = preferences.getString("token", "");
+
+                                    connectionHTTP.setAttachTask(territorie.getProjectID(), territorie.getTerritorieID(), task.getTaskID(), token, base64, ((EditText)deliverableDialog.findViewById(R.id.commentTxt)).getText().toString());
+                                    deliverableDialog.dismiss();
+                                } else {
+                                    Toast.makeText(getApplicationContext(),getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
+                                }
+                            }else{
+                                Toast.makeText(getApplicationContext(), "Debe seleccionar un archivo",Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+
+                    deliverableDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            boolean update = preferences.getBoolean("update", false);
+                            if (update) {
+                                refreshList();
+                            }
+                        }
+                    });
+
+                }else{
+                    TaskDialog taskDialog = new TaskDialog(TasksActivity.this, (Task) tasksList.getAdapter().getItem(position), territorie);
+                    taskDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            boolean update = preferences.getBoolean("update", false);
+                            if (update) {
+                                refreshList();
+                            }
+                        }
+                    });
+                    taskDialog.setCancelable(true);
+                    taskDialog.show();
+                }
+
+
             }
         });
 
@@ -254,7 +322,6 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
 
     @Override
     public void onResultReceived(String result, String service) {
-
         if (result.equals(ConnectionHTTP.ATTACH_TASK)) {
             try {
                 JSONObject respuesta = new JSONObject(result);
@@ -264,7 +331,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                     refreshList();
                 }
 
-                Toast.makeText(getApplicationContext(), respuesta.getString("message"), Toast.LENGTH_LONG);
+                Toast.makeText(TasksActivity.this, respuesta.getString("message"), Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
             }
@@ -297,7 +364,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             }
             TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasks);
             tasksList.setAdapter(taskAdapter);
-        } else {
+        } else if(service.equals(ConnectionHTTP.SIGNOUT)){
             try {
                 // Launch the login activity if all look perfect
                 JSONObject object = new JSONObject(result);
@@ -328,32 +395,33 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
 
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (resultCode == RESULT_OK) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            String taskID = preferences.getString(getString(R.string.shared_taskID), "");
-            Log.e("TASK: ", taskID);
-
             String encodedBase64 = "";
-            if (requestCode == TaskAdapter.PICK_IMAGE_CAMERA) {
+            if (requestCode == PICK_IMAGE_CAMERA) {
                 encodedBase64 = sendImageCaptured(data);
-            } else if (requestCode == TaskAdapter.PICK_IMAGE_GALLERY) {
+            } else if (requestCode == PICK_IMAGE_GALLERY) {
                 encodedBase64 = sendFileSelected(data);
             }
 
-            final ConnectionHTTP connectionHTTP = new ConnectionHTTP(this);
-            if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
-                progressBar.setVisibility(View.VISIBLE);
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            final Territorie territorie = (Territorie) getIntent().getSerializableExtra("territorie");
+            final Task task = (Task) tasksList.getAdapter().getItem(positionItemSelected);
 
-                Intent intent = getIntent();
-                Territorie territorie = (Territorie) intent.getSerializableExtra("territorie");
-                String idProject = territorie != null ? territorie.getProjectID() : null;
-                String idTerritore = territorie != null ? territorie.getTerritorieID() : null;
 
-                String token = preferences.getString("token", "");
-
-                connectionHTTP.setAttachTask(idProject, idTerritore, taskID, token, encodedBase64);
-            } else {
-                Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
+            if(task.getTaskType()==1){
+                deliverableDialog.setBase64(encodedBase64);
+            }else {
+                TaskDialog taskDialog = new TaskDialog(TasksActivity.this, task, territorie);
+                taskDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        boolean update = preferences.getBoolean("update", false);
+                        if (update) {
+                            refreshList();
+                        }
+                    }
+                });
+                taskDialog.setCancelable(true);
+                taskDialog.show();
             }
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.not_file), Toast.LENGTH_LONG).show();
@@ -361,14 +429,12 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
     }
 
     private String sendImageCaptured(Intent data) {
-        String base64 = "";
         Bundle extras = data.getExtras();
         Bitmap imageBitmap = (Bitmap) (extras != null ? extras.get("data") : null);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         Objects.requireNonNull(imageBitmap).compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
-        base64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
-        Log.e("BASE64", base64);
+        String base64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
         return base64;
     }
@@ -404,22 +470,79 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == TaskAdapter.MY_CAMERA_REQUEST_CODE) {
+        if (requestCode == MY_CAMERA_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, TaskAdapter.PICK_IMAGE_CAMERA);
+                startActivityForResult(intent, PICK_IMAGE_CAMERA);
             } else {
                 Toast.makeText(this, "Permiso de camara denegado", Toast.LENGTH_LONG).show();
             }
-        } else if (requestCode == TaskAdapter.MY_GALLERY_REQUES_CODE) {
+        } else if (requestCode == MY_GALLERY_REQUES_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                intent.setType("application/pdf");
-                startActivityForResult(intent, TaskAdapter.PICK_IMAGE_GALLERY);
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+                StringBuilder extension = new StringBuilder();
+                String[] taskExtension = ((Task)tasksList.getAdapter().getItem(positionItemSelected)).getExtensionArchivo().split(", ");
+                for (int i = 0; i < taskExtension.length; i++) {
+                    if(taskExtension[i].equals(PDF)){
+                        extension.append("application/pdf");
+                    } else if(taskExtension[i].equals(XSL)){
+                        extension.append("application/vnd.ms-excel");
+                    } else if(taskExtension[i].equals(XSLX)){
+                        extension.append("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    } else if(taskExtension[i].equals(PNG)){
+                        extension.append("image/png");
+                    } else if(taskExtension[i].equals(JPG)){
+                        extension.append("image/jpg");
+                    }
+
+                    if(i<taskExtension.length-1){
+                        extension.append("||");
+                    }
+                }
+
+                intent.setType(extension.toString());
+                startActivityForResult(intent, PICK_IMAGE_GALLERY);
             } else {
                 Toast.makeText(this, "Permiso de archivos denegado", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    public void openImageChooser() {
+        final CharSequence[] items = {"Tomar foto", "Seleccionar archivo"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals(items[0])) {
+                    if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+                    } else {
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, PICK_IMAGE_CAMERA);
+                    }
+                } else if (items[item].equals(items[1])) {
+                    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_GALLERY_REQUES_CODE);
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+                        String ex = ((Task) tasksList.getAdapter().getItem(positionItemSelected)).getExtensionArchivo();
+                        //String extension = "application/pdf|application/vnd.ms-excel|" +
+                           //     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|" +
+                           //     "image/png|image/jpg";
+                        String extension = "application/pdf";
+                        Log.e("EXTENCION", extension);
+                        intent.setType(extension);
+                        startActivityForResult(intent, PICK_IMAGE_GALLERY);
+                    }
+                }
+            }
+        });
+        builder.show();
     }
 
     @Override

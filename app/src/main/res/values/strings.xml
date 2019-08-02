@@ -6,6 +6,7 @@
     <!--SHARED PREFERENCES -->
     <string name="shared_username">username</string>
     <string name="shared_taskID">taskId_selected</string>
+    <string name="shared_taskExtension">shared_taskExtension</string>
 
     <!--CONNETION_HTTP-->
     <string name="failed_connection">Falló la conexión</string>

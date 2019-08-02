@@ -1,7 +1,5 @@
 package com.example.checker.control;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -90,6 +88,15 @@ public class TerritoriesActivity extends BaseTop implements ConnectionHTTP.Conne
             // Load the list
             TerritorieAdapter pAdapter = new TerritorieAdapter(getApplicationContext(), territories);
             territoriesList.setAdapter(pAdapter);
+
+            if(territories.size()==1){
+                // Launch the Task activity with the territorie selected
+                intent = new Intent(TerritoriesActivity.this, TasksActivity.class);
+                intent.putExtra("territorie", territories.get(0));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+
         } catch (JSONException e) {
             Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
         }
