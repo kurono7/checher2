@@ -148,7 +148,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
                 JSONArray array = proyectos.getJSONArray("data");
                 JSONArray array2 = territorios.getJSONArray("data");
 
-
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject project = array.getJSONObject(i);
                     String IdProyecto = project.getString("IdProyecto");
@@ -188,18 +187,12 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
                     // Launch the projects activity
                     startActivity(new Intent(LoginActivity.this, ProjectsActivity.class));
                 }
-
-
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
             }
-
-
             // Load the list with projects
             //ProjectAdapter pAdapter = new ProjectAdapter(getApplicationContext(), projects);
             //projectsList.setAdapter(pAdapter);
-
-
         } else {
             try {
                 // Get the response
@@ -224,7 +217,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
                     editor.apply();
 
                     refreshProjects();
-
                 } else {
                     Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_LONG).show();
                 }

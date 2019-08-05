@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -47,7 +48,6 @@ import java.util.Objects;
 
 public class ProjectsActivity extends BaseTop implements ConnectionHTTP.ConnetionCallback {
 
-    private SwipeRefreshLayout swipeRefresh;
     private ListView projectsList;
     private SwipeRefreshLayout swiperefresh;
     private ProgressBar progressBar;
@@ -60,7 +60,6 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         // Initialize variables
         swiperefresh = findViewById(R.id.swiperefresh);
@@ -88,10 +87,10 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
                 @Override
                 public void onRefresh() {
                     refreshProjects();
+                    swiperefresh.setRefreshing(false);
                 }
             });
         }
-
 
         // Get the projects
         refreshProjects();
@@ -206,8 +205,6 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
             // Load the list with projects
             ProjectAdapter pAdapter = new ProjectAdapter(getApplicationContext(), projects);
             projectsList.setAdapter(pAdapter);
-
-
         } else {
             try {
                 // Launch the login activity if all look perfect
