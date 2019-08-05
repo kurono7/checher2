@@ -41,6 +41,7 @@
     <string name="subprocessTitleTxt">Subproceso:</string>
     <string name="statusTitleTxt">Estado:</string>
     <string name="expirationDateTitleTxt">Fecha de vencimiento:</string>
+    <string name="rejectionReasonTitleTxt">Motivo de rechazo:</string>
     <string name="commentTitleTxt">Comentarios:</string>
     <string name="commentContentTxt">Deja un comentario</string>
     <string name="not_reportedTxt">NO REPORTADO</string>
