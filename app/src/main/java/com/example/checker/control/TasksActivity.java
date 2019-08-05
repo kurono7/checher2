@@ -2,6 +2,7 @@ package com.example.checker.control;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -55,6 +56,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
     private ProgressBar progressBar;
     private int positionItemSelected;
     private DeliverableDialog deliverableDialog;
+    private SwipeRefreshLayout swiperefresh;
 
     final static String PDF = ".pdf";
     final static String PNG = ".png";
@@ -106,6 +108,17 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             }
         });
 
+        //Refreshing tasks
+        swiperefresh = findViewById(R.id.swiperefresh);
+        if (swiperefresh != null) {
+            swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    refreshList();
+                }
+            });
+        }
+
         //Cleaning filters
         final CheckBox filter_not_reported = filterLayout.findViewById(R.id.filter_not_reported);
         final CheckBox filter_reported = filterLayout.findViewById(R.id.filter_reported);
@@ -137,18 +150,13 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                         Task task = tasks.get(i);
                         taskStatus = task.getStatus();
                         if (filter_not_reported.isChecked() && taskStatus.equals("0")) {
-                                tasksFiltered.add(task);
-                        }else
-                        if (filter_approved.isChecked() && taskStatus.equals("1")) {
-                                tasksFiltered.add(task);
-                        }
-                        else
-                        if (filter_reported.isChecked() && taskStatus.equals("2")) {
-                                tasksFiltered.add(task);
-                        }
-                        else
-                        if (filter_not_approved.isChecked() && taskStatus.equals("3")) {
-                                tasksFiltered.add(task);
+                            tasksFiltered.add(task);
+                        } else if (filter_approved.isChecked() && taskStatus.equals("1")) {
+                            tasksFiltered.add(task);
+                        } else if (filter_reported.isChecked() && taskStatus.equals("2")) {
+                            tasksFiltered.add(task);
+                        } else if (filter_not_approved.isChecked() && taskStatus.equals("3")) {
+                            tasksFiltered.add(task);
                         }
                     }
 
@@ -170,7 +178,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 final Territorie territorie = (Territorie) getIntent().getSerializableExtra("territorie");
                 final Task task = (Task) tasksList.getAdapter().getItem(position);
-                if(task.getTaskType()==1){
+                if (task.getTaskType() == 1) {
                     positionItemSelected = position;
                     deliverableDialog = new DeliverableDialog(TasksActivity.this, task, territorie, "");
                     deliverableDialog.setCancelable(true);
@@ -199,13 +207,13 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                     String token = preferences.getString("token", "");
 
-                                    connectionHTTP.setAttachTask(territorie.getProjectID(), territorie.getTerritorieID(), task.getTaskID(), token, base64, ((EditText)deliverableDialog.findViewById(R.id.commentTxt)).getText().toString());
+                                    connectionHTTP.setAttachTask(territorie.getProjectID(), territorie.getTerritorieID(), task.getTaskID(), token, base64, ((EditText) deliverableDialog.findViewById(R.id.commentTxt)).getText().toString());
                                     deliverableDialog.dismiss();
                                 } else {
-                                    Toast.makeText(getApplicationContext(),getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
                                 }
-                            }else{
-                                Toast.makeText(getApplicationContext(), "Debe seleccionar un archivo",Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Debe seleccionar un archivo", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
@@ -221,7 +229,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                         }
                     });
 
-                }else{
+                } else {
                     TaskDialog taskDialog = new TaskDialog(TasksActivity.this, (Task) tasksList.getAdapter().getItem(position), territorie);
                     taskDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
@@ -327,7 +335,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                 JSONObject respuesta = new JSONObject(result);
                 boolean exito = respuesta.getBoolean("exito");
 
-                if(exito){
+                if (exito) {
                     refreshList();
                 }
 
@@ -364,7 +372,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             }
             TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasks);
             tasksList.setAdapter(taskAdapter);
-        } else if(service.equals(ConnectionHTTP.SIGNOUT)){
+        } else if (service.equals(ConnectionHTTP.SIGNOUT)) {
             try {
                 // Launch the login activity if all look perfect
                 JSONObject object = new JSONObject(result);
@@ -406,9 +414,9 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             final Task task = (Task) tasksList.getAdapter().getItem(positionItemSelected);
 
 
-            if(task.getTaskType()==1){
+            if (task.getTaskType() == 1) {
                 deliverableDialog.setBase64(encodedBase64);
-            }else {
+            } else {
                 TaskDialog taskDialog = new TaskDialog(TasksActivity.this, task, territorie);
                 taskDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
@@ -483,21 +491,21 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
 
                 StringBuilder extension = new StringBuilder();
-                String[] taskExtension = ((Task)tasksList.getAdapter().getItem(positionItemSelected)).getExtensionArchivo().split(", ");
+                String[] taskExtension = ((Task) tasksList.getAdapter().getItem(positionItemSelected)).getExtensionArchivo().split(", ");
                 for (int i = 0; i < taskExtension.length; i++) {
-                    if(taskExtension[i].equals(PDF)){
+                    if (taskExtension[i].equals(PDF)) {
                         extension.append("application/pdf");
-                    } else if(taskExtension[i].equals(XSL)){
+                    } else if (taskExtension[i].equals(XSL)) {
                         extension.append("application/vnd.ms-excel");
-                    } else if(taskExtension[i].equals(XSLX)){
+                    } else if (taskExtension[i].equals(XSLX)) {
                         extension.append("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                    } else if(taskExtension[i].equals(PNG)){
+                    } else if (taskExtension[i].equals(PNG)) {
                         extension.append("image/png");
-                    } else if(taskExtension[i].equals(JPG)){
+                    } else if (taskExtension[i].equals(JPG)) {
                         extension.append("image/jpg");
                     }
 
-                    if(i<taskExtension.length-1){
+                    if (i < taskExtension.length - 1) {
                         extension.append("||");
                     }
                 }
@@ -532,8 +540,8 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
 
                         String ex = ((Task) tasksList.getAdapter().getItem(positionItemSelected)).getExtensionArchivo();
                         //String extension = "application/pdf|application/vnd.ms-excel|" +
-                           //     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|" +
-                           //     "image/png|image/jpg";
+                        //     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|" +
+                        //     "image/png|image/jpg";
                         String extension = "application/pdf";
                         Log.e("EXTENCION", extension);
                         intent.setType(extension);

@@ -25,6 +25,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.checker.R;
 import com.example.checker.model.Project;
 import com.example.checker.model.Task;
@@ -45,8 +47,9 @@ import java.util.Objects;
 
 public class ProjectsActivity extends BaseTop implements ConnectionHTTP.ConnetionCallback {
 
-
+    private SwipeRefreshLayout swipeRefresh;
     private ListView projectsList;
+    private SwipeRefreshLayout swiperefresh;
     private ProgressBar progressBar;
 
     /**
@@ -60,6 +63,7 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
 
 
         // Initialize variables
+        swiperefresh = findViewById(R.id.swiperefresh);
         projectsList = findViewById(R.id.projectsList);
         progressBar = findViewById(R.id.progressBar);
 
@@ -76,6 +80,17 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
         titleOne.setText("");
         TextView titleTwo = findViewById(R.id.titleTwo);
         titleTwo.setText(R.string.projectsTitleTxt);
+
+        //Refreshing proyects
+
+        if (swiperefresh != null) {
+            swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    refreshProjects();
+                }
+            });
+        }
 
 
         // Get the projects
@@ -217,10 +232,6 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
     int getContentViewId() {
         return R.layout.activity_projects;
     }
-
-
-
-
 
 
 }
