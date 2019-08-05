@@ -21,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -76,6 +77,20 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Avoid refreshing list when scrolls up
+        tasksList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                int topRowVerticalPosition = (tasksList == null || tasksList.getChildCount() == 0) ? 0 : tasksList.getChildAt(0).getTop();
+                swiperefresh.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
+            }
+        });
 
         tasksList = findViewById(R.id.tasksList);
         progressBar = findViewById(R.id.progressBar);
