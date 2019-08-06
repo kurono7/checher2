@@ -74,7 +74,7 @@ public class TaskAdapter extends BaseAdapter implements ConnectionHTTP.Connetion
         taskExpirationDate.setText(task.getExpirationDate());
 
         ImageView message = convertView.findViewById(R.id.messageIcon);
-        message.setVisibility(View.VISIBLE);
+        message.setVisibility(View.GONE);
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
