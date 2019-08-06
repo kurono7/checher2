@@ -66,22 +66,39 @@ public class TaskAdapter extends BaseAdapter {
         taskName.setText(task.getTaskName());
         taskExpirationDate.setText(task.getExpirationDate());
 
+        ImageView message = convertView.findViewById(R.id.messageIcon);
+        message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("No aprobado");
+                builder.setMessage("Este es un programa solo de prueba y no la versión completa");
+                builder.setCancelable(true);
+                builder.create();
+                builder.show();
+            }
+        });
+
         // Ask if the task is a task or entregable
-        if (task.getTaskType() != 0) {
+        if (task.getTaskType() == 1) {
             attachIcon.setVisibility(View.VISIBLE);
+        }else{
+            attachIcon.setVisibility(View.GONE);
         }
 
         if (task.getStatus().equals("0")) {
             status.setText(context.getString(R.string.not_reportedTxt));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_not_reported);
         } else if (task.getStatus().equals("1")) {
-            status.setText(context.getString(R.string.approvedTxt));
-            corner_colored.setImageResource(R.drawable.ic_vector_corner_accepted);
-            attachIcon.setVisibility(View.GONE);
-        } else if (task.getStatus().equals("2")) {
             status.setText(context.getString(R.string.reportedTxt));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_reported);
-            attachIcon.setVisibility(View.GONE);
+        } else if (task.getStatus().equals("2")) {
+            status.setText(context.getString(R.string.approvedTxt));
+            corner_colored.setImageResource(R.drawable.ic_vector_corner_accepted);
+        }else {
+            status.setText(context.getString(R.string.not_approvedTxt));
+            corner_colored.setImageResource(R.drawable.ic_vector_corner_rejected);
+            message.setVisibility(View.VISIBLE);
         }
 
         return convertView;

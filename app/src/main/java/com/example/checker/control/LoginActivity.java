@@ -193,6 +193,11 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
             // Load the list with projects
             //ProjectAdapter pAdapter = new ProjectAdapter(getApplicationContext(), projects);
             //projectsList.setAdapter(pAdapter);
+
+
+            // Set the View's visibility back on the main UI Thread
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            progressBar.setVisibility(View.GONE);
         } else {
             try {
                 // Get the response
@@ -223,9 +228,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
             }
-            // Set the View's visibility back on the main UI Thread
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            progressBar.setVisibility(View.GONE);
         }
     }
 

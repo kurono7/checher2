@@ -44,10 +44,10 @@
     <string name="rejectionReasonTitleTxt">Motivo de rechazo:</string>
     <string name="commentTitleTxt">Comentarios:</string>
     <string name="commentContentTxt">Deja un comentario</string>
-    <string name="not_reportedTxt">NO REPORTADO</string>
+    <string name="not_reportedTxt">POR REPORTAR</string>
     <string name="approvedTxt">APROBADO</string>
     <string name="reportedTxt">REPORTADO</string>
-    <string name="not_approvedTxt">NO APROBADO</string>
+    <string name="not_approvedTxt">RECHAZADO</string>
     <string name="error_no_results">No hay tareas en este estado. Intente limpiando los filtros</string>
 
     <!--TASK DIALOG-->

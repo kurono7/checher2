@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -110,27 +111,6 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/rejectionReasonTitle"
-        style="@style/ContentSemiboldText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/normal_margin"
-        android:text="@string/rejectionReasonTitleTxt"
-        app:layout_constraintStart_toStartOf="@id/taskName"
-        app:layout_constraintTop_toBottomOf="@id/statusTitle" />
-
-    <TextView
-        android:id="@+id/rejectionReason"
-        style="@style/ContentRegularText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/min_margin"
-        android:text="rejectionReason"
-        app:layout_constraintBottom_toBottomOf="@id/rejectionReasonTitle"
-        app:layout_constraintStart_toEndOf="@id/rejectionReasonTitle"
-        app:layout_constraintTop_toTopOf="@id/rejectionReasonTitle" />
-
-    <TextView
         android:id="@+id/expirationDateTitle"
         style="@style/ContentSemiboldText"
         android:layout_width="wrap_content"
@@ -138,7 +118,7 @@
         android:layout_marginTop="@dimen/normal_margin"
         android:text="@string/expirationDateTitleTxt"
         app:layout_constraintStart_toStartOf="@id/taskName"
-        app:layout_constraintTop_toBottomOf="@id/rejectionReasonTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/statusTitle" />
 
     <TextView
         android:id="@+id/expirationDate"

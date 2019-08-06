@@ -78,20 +78,6 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Avoid refreshing list when scrolls up
-        tasksList.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                int topRowVerticalPosition = (tasksList == null || tasksList.getChildCount() == 0) ? 0 : tasksList.getChildAt(0).getTop();
-                swiperefresh.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
-            }
-        });
-
         tasksList = findViewById(R.id.tasksList);
         progressBar = findViewById(R.id.progressBar);
         ImageView optionsMenu = findViewById(R.id.optionsMenu);
@@ -265,6 +251,20 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             }
         });
 
+        //Avoid refreshing list when scrolls up
+        tasksList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                int topRowVerticalPosition = (tasksList == null || tasksList.getChildCount() == 0) ? 0 : tasksList.getChildAt(0).getTop();
+                swiperefresh.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
+            }
+        });
+
         refreshList();
     }
 
@@ -346,7 +346,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
 
     @Override
     public void onResultReceived(String result, String service) {
-        if (result.equals(ConnectionHTTP.ATTACH_TASK)) {
+        if (service.equals(ConnectionHTTP.ATTACH_TASK)) {
             try {
                 JSONObject respuesta = new JSONObject(result);
                 boolean exito = respuesta.getBoolean("exito");
@@ -397,7 +397,6 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 if (exito) {
                     finish();
-                    startActivity(new Intent(TasksActivity.this, LoginActivity.class));
                 }
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
@@ -432,6 +431,8 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
 
             if (task.getTaskType() == 1) {
                 deliverableDialog.setBase64(encodedBase64);
+                Button b = deliverableDialog.findViewById(R.id.attachFileBtn);
+                b.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_attach_icon, 0, 0, 0);
             } else {
                 TaskDialog taskDialog = new TaskDialog(TasksActivity.this, task, territorie);
                 taskDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -505,28 +506,26 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-                StringBuilder extension = new StringBuilder();
                 String[] taskExtension = ((Task) tasksList.getAdapter().getItem(positionItemSelected)).getExtensionArchivo().split(", ");
+                ArrayList<String> array = new ArrayList<>();
+
                 for (int i = 0; i < taskExtension.length; i++) {
                     if (taskExtension[i].equals(PDF)) {
-                        extension.append("application/pdf");
+                        array.add("application/pdf");
                     } else if (taskExtension[i].equals(XSL)) {
-                        extension.append("application/vnd.ms-excel");
+                        array.add("application/vnd.ms-excel");
                     } else if (taskExtension[i].equals(XSLX)) {
-                        extension.append("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                        array.add("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                     } else if (taskExtension[i].equals(PNG)) {
-                        extension.append("image/png");
+                        array.add("image/png");
                     } else if (taskExtension[i].equals(JPG)) {
-                        extension.append("image/jpg");
-                    }
-
-                    if (i < taskExtension.length - 1) {
-                        extension.append("||");
+                        array.add("image/jpg");
                     }
                 }
+                String [] mimeTypes =  array.toArray(new String[taskExtension.length]);
 
-                intent.setType(extension.toString());
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
                 startActivityForResult(intent, PICK_IMAGE_GALLERY);
             } else {
                 Toast.makeText(this, "Permiso de archivos denegado", Toast.LENGTH_LONG).show();
@@ -553,14 +552,26 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                     } else {
                         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                         intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        String[] taskExtension = ((Task) tasksList.getAdapter().getItem(positionItemSelected)).getExtensionArchivo().split(", ");
+                        ArrayList<String> array = new ArrayList<>();
 
-                        String ex = ((Task) tasksList.getAdapter().getItem(positionItemSelected)).getExtensionArchivo();
-                        //String extension = "application/pdf|application/vnd.ms-excel|" +
-                        //     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|" +
-                        //     "image/png|image/jpg";
-                        String extension = "application/pdf";
-                        Log.e("EXTENCION", extension);
-                        intent.setType(extension);
+                        for (int i = 0; i < taskExtension.length; i++) {
+                            if (taskExtension[i].equals(PDF)) {
+                                array.add("application/pdf");
+                            } else if (taskExtension[i].equals(XSL)) {
+                                array.add("application/vnd.ms-excel");
+                            } else if (taskExtension[i].equals(XSLX)) {
+                                array.add("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                            } else if (taskExtension[i].equals(PNG)) {
+                                array.add("image/png");
+                            } else if (taskExtension[i].equals(JPG)) {
+                                array.add("image/jpg");
+                            }
+                        }
+                        String [] mimeTypes =  array.toArray(new String[array.size()]);
+
+                        intent.setType("*/*");
+                        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
                         startActivityForResult(intent, PICK_IMAGE_GALLERY);
                     }
                 }

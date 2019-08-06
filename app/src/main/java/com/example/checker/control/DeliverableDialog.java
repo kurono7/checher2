@@ -3,6 +3,7 @@ package com.example.checker.control;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -48,7 +49,7 @@ public class DeliverableDialog extends Dialog {
         TextView processName = findViewById(R.id.process);
         TextView subprocessName = findViewById(R.id.subprocess);
         TextView expirationDate = findViewById(R.id.expirationDate);
-        taskID.setText(task.getTaskID());
+        taskID.setText(task.getTaskID().substring(0,8));
         processName.setText(task.getProcess());
         subprocessName.setText(task.getSubprocess());
         taskName.setText(task.getTaskName());
@@ -64,8 +65,11 @@ public class DeliverableDialog extends Dialog {
             }
         });
 
-        if(base64!=null && !base64.equals("")){
-            ((Button)findViewById(R.id.attachFileBtn)).setTextAppearance(getContext(), R.style.ButtonGreenNormal);
+        if(task.getStatus().equals("2")){
+            findViewById(R.id.attachFileBtn).setVisibility(View.GONE);
+            findViewById(R.id.sendReportBtn).setVisibility(View.GONE);
+            findViewById(R.id.commentTxt).setVisibility(View.GONE);
+            findViewById(R.id.commentTitle).setVisibility(View.GONE);
         }
     }
 

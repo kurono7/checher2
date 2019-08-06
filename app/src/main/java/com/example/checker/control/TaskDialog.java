@@ -71,7 +71,7 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
         TextView expirationDate = findViewById(R.id.expirationDate);
 
         taskName.setText(task.getTaskName());
-        taskID.setText(task.getTaskID());
+        taskID.setText(task.getTaskID().substring(0,5));
         process.setText(task.getProcess());
         subprocess.setText(task.getSubprocess());
         status.setText(task.getStatus());
@@ -91,6 +91,10 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
             reportTaskBtn.setBackground(getContext().getDrawable(R.drawable.rounded_green_button_shape_dissabled));
             reportTaskBtn.setText(getContext().getString(R.string.reportedTxt));
             Toast.makeText(getContext(), "La tarea esta reportada", Toast.LENGTH_LONG).show();
+        }
+
+        if(task.getStatus().equals("2")){
+            reportTaskBtn.setVisibility(View.GONE);
         }
 
         reportTaskBtn.setOnClickListener(new View.OnClickListener() {
