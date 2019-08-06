@@ -33,6 +33,7 @@ public class ConnectionHTTP {
     public final static String GETPROYECTS = "/api/v1/general/autenticacion/mobile/";
     private final static String UPDATETASKSTATE = "/api/v1/tareasProyecto/procesar-tarea/";
     public final static String ATTACH_TASK = "/api/v1/tareasProyecto/adjuntar-entregable/";
+    public final static String GETMESSAGE = "";
 
     public ConnectionHTTP(ConnetionCallback listener) {
         this.listener = listener;
@@ -95,6 +96,18 @@ public class ConnectionHTTP {
         new SendDeviceDetailsGET().execute(SIGNOUT, IdUsuario, token);
     }
 
+    public void getMessage(String idProject, String idTerritorie, String idTarea, String token) {
+        JSONObject post = new JSONObject();
+        try {
+            post.put("idProject", idProject);
+            post.put("idTerritorie", idTerritorie);
+            post.put("idTarea", idTarea);
+            new SendDeviceDetailsPOST().execute(GETMESSAGE, post.toString(),token);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public interface ConnetionCallback {
         void onResultReceived(String result, String service);
     }
@@ -114,7 +127,12 @@ public class ConnectionHTTP {
                 if (params[0].equals(UPDATETASKSTATE)) {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[3]).openConnection();
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[2]);
-                }else{
+                }else
+                if(params[0].equals(GETMESSAGE)) {
+                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]).openConnection();
+                    httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[2]);
+                }else
+                {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]).openConnection();
                 }
                 httpURLConnection.setRequestMethod("POST");

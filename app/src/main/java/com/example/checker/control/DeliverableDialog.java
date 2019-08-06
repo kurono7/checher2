@@ -66,8 +66,16 @@ public class DeliverableDialog extends Dialog {
         });
 
         if(task.getStatus().equals("2")){
-            findViewById(R.id.attachFileBtn).setVisibility(View.GONE);
-            findViewById(R.id.sendReportBtn).setVisibility(View.GONE);
+            Button attachFileBtn = findViewById(R.id.attachFileBtn);
+            Button sendReportBtn = findViewById(R.id.sendReportBtn);
+
+            attachFileBtn.setEnabled(false);
+            attachFileBtn.setBackground(getContext().getDrawable(R.drawable.rounded_green_button_shape_dissabled));
+            attachFileBtn.setText(getContext().getString(R.string.approvedTxt));
+            sendReportBtn.setEnabled(false);
+            sendReportBtn.setBackground(getContext().getDrawable(R.drawable.rounded_green_button_shape_dissabled));
+            sendReportBtn.setText(getContext().getString(R.string.approvedTxt));
+
             findViewById(R.id.commentTxt).setVisibility(View.GONE);
             findViewById(R.id.commentTitle).setVisibility(View.GONE);
         }

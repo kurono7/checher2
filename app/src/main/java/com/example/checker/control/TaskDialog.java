@@ -91,10 +91,11 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
             reportTaskBtn.setBackground(getContext().getDrawable(R.drawable.rounded_green_button_shape_dissabled));
             reportTaskBtn.setText(getContext().getString(R.string.reportedTxt));
             Toast.makeText(getContext(), "La tarea esta reportada", Toast.LENGTH_LONG).show();
-        }
-
-        if(task.getStatus().equals("2")){
-            reportTaskBtn.setVisibility(View.GONE);
+        }else if(task.getStatus().equals("2")){
+            reportTaskBtn.setEnabled(false);
+            reportTaskBtn.setBackground(getContext().getDrawable(R.drawable.rounded_green_button_shape_dissabled));
+            reportTaskBtn.setText(getContext().getString(R.string.approvedTxt));
+            Toast.makeText(getContext(), "La tarea esta aprobada", Toast.LENGTH_LONG).show();
         }
 
         reportTaskBtn.setOnClickListener(new View.OnClickListener() {
