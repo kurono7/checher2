@@ -20,6 +20,31 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <EditText
+            android:id="@+id/searchBar"
+            style="@style/EdidTextNormal"
+            android:paddingStart="@dimen/fab_margin"
+            android:maxLength="30"
+            android:paddingEnd="@dimen/fab_margin"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginEnd="@dimen/normal_margin"
+            app:layout_constraintBottom_toBottomOf="@id/button_filter"
+            app:layout_constraintEnd_toStartOf="@id/button_filter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/button_filter" />
+
+        <ImageView
+            android:id="@+id/searchBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/normal_margin"
+            android:src="@drawable/ic_vector_search_icon"
+            app:layout_constraintBottom_toBottomOf="@id/searchBar"
+            app:layout_constraintEnd_toEndOf="@id/searchBar"
+            app:layout_constraintTop_toTopOf="@id/searchBar" />
+
         <ImageView
             android:id="@+id/button_filter"
             android:layout_width="wrap_content"

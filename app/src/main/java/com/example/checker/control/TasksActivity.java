@@ -15,6 +15,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuInflater;
@@ -55,6 +57,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
     private ListView tasksList;
     private ArrayList<Task> tasks;
     private ProgressBar progressBar;
+    private EditText searchBar;
     private int positionItemSelected;
     private DeliverableDialog deliverableDialog;
     private SwipeRefreshLayout swiperefresh;
@@ -79,6 +82,24 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         super.onCreate(savedInstanceState);
 
         tasksList = findViewById(R.id.tasksList);
+        searchBar = findViewById(R.id.searchBar);
+
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                searchByName();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         progressBar = findViewById(R.id.progressBar);
         ImageView optionsMenu = findViewById(R.id.optionsMenu);
         TextView projectName = findViewById(R.id.titleOne);
@@ -116,6 +137,8 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                 @Override
                 public void onRefresh() {
                     refreshList();
+                    searchBar.setText("");
+                    filterLayout.setVisibility(View.INVISIBLE);
                     swiperefresh.setRefreshing(false);
                 }
             });
@@ -268,6 +291,33 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         refreshList();
     }
 
+
+    final public static boolean containsIgnoreCase(String str, String searchStr) {
+        if (str == null || searchStr == null) return false;
+
+        final int length = searchStr.length();
+        if (length == 0)
+            return true;
+
+        for (int i = str.length() - length; i >= 0; i--) {
+            if (str.regionMatches(true, i, searchStr, 0, length))
+                return true;
+        }
+        return false;
+    }
+
+    final public void searchByName() {
+        ArrayList<Task> tasksFiltered = new ArrayList<>();
+        String taskName = "";
+        for (int k = 0; k < tasks.size(); k++) {
+            Task task = tasks.get(k);
+            if (containsIgnoreCase(task.getTaskName(), searchBar.getText().toString())) {
+                tasksFiltered.add(task);
+            }
+        }
+        TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasksFiltered);
+        tasksList.setAdapter(taskAdapter);
+    }
 
     /**
      * Send server the get task of user. <br>
@@ -522,7 +572,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                         array.add("image/jpg");
                     }
                 }
-                String [] mimeTypes =  array.toArray(new String[taskExtension.length]);
+                String[] mimeTypes = array.toArray(new String[taskExtension.length]);
 
                 intent.setType("*/*");
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
@@ -568,7 +618,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                                 array.add("image/jpg");
                             }
                         }
-                        String [] mimeTypes =  array.toArray(new String[array.size()]);
+                        String[] mimeTypes = array.toArray(new String[array.size()]);
 
                         intent.setType("*/*");
                         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);

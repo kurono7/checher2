@@ -17,6 +17,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.example.checker.R;
 import com.example.checker.model.Task;
 
@@ -99,6 +101,7 @@ public class TaskAdapter extends BaseAdapter {
             status.setText(context.getString(R.string.not_approvedTxt));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_rejected);
             message.setVisibility(View.VISIBLE);
+            status.setTextColor(ContextCompat.getColor(context,R.color.colorRejected));
         }
 
         return convertView;
