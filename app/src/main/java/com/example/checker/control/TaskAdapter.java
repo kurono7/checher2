@@ -28,10 +28,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class TaskAdapter extends BaseAdapter implements ConnectionHTTP.ConnetionCallback{
-
     private Context context;
     private ArrayList<Task> tasksList;
     private ProgressBar progressBar;
+    private TextView taskName;
+    private TextView taskExpirationDate;
+    private TextView status;
+    private ImageView corner_colored;
+    private ImageView attachIcon;
+    private ImageView message;
 
     TaskAdapter(Context context, ArrayList<Task> tasksList) {
         this.context = context;
@@ -55,25 +60,27 @@ public class TaskAdapter extends BaseAdapter implements ConnectionHTTP.Connetion
 
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
+        // Inflate the task item from layout
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_task, parent, false);
         }
 
-        // Get the task selected
+        // Get the selected task
         final Task task = tasksList.get(position);
 
+        // Initialize variables
         progressBar = ((Activity)context).findViewById(R.id.progressBar);
-        // Set its name
-        TextView taskName = convertView.findViewById(R.id.taskName);
-        //TextView location = convertView.findViewById(R.id.location);
-        TextView taskExpirationDate = convertView.findViewById(R.id.taskExpirationDate);
-        TextView status = convertView.findViewById(R.id.status);
-        ImageView corner_colored = convertView.findViewById(R.id.corner_colored);
-        ImageView attachIcon = convertView.findViewById(R.id.attachIcon);
+        taskName = convertView.findViewById(R.id.taskName);
+        taskExpirationDate = convertView.findViewById(R.id.taskExpirationDate);
+        status = convertView.findViewById(R.id.status);
+        corner_colored = convertView.findViewById(R.id.corner_colored);
+        attachIcon = convertView.findViewById(R.id.attachIcon);
+        message = convertView.findViewById(R.id.messageIcon);
+
+
+        // Set views' data and behavior
         taskName.setText(task.getTaskName());
         taskExpirationDate.setText(task.getExpirationDate());
-
-        ImageView message = convertView.findViewById(R.id.messageIcon);
         message.setVisibility(View.GONE);
         message.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,21 +113,26 @@ public class TaskAdapter extends BaseAdapter implements ConnectionHTTP.Connetion
             status.setText(context.getString(R.string.not_approvedTxt));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_rejected);
             message.setVisibility(View.VISIBLE);
-            status.setTextColor(ContextCompat.getColor(context,R.color.colorRejected));
         }
 
         return convertView;
     }
 
+    /**
+     * Send the request to server to get rejected message<br>
+     * <b>pre: </b> progressBar != null. <br>
+     * <b>post: </b> The request is sent to server. <br>
+     */
+
     public void getMessage(String idProject, String idTerritorie, String idTarea) {
         final ConnectionHTTP connectionHTTP = new ConnectionHTTP(this);
-        // Ask if is there connection
+        // Ask if there is a connection available
         if (connectionHTTP.isNetworkAvailable(context)) {
-            // Block windows and show the progressbar
+            // Block window and show the progressbar
             progressBar.setVisibility(View.VISIBLE);
             ((Activity)context).getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-            // Call the data stored in preferences
+            // Get the data stored in preferences
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
             String token = preferences.getString("token", "");
 
@@ -131,10 +143,17 @@ public class TaskAdapter extends BaseAdapter implements ConnectionHTTP.Connetion
         }
     }
 
+    /**
+     * Receive the response of get message request from server<br>
+     * <b>pre: </b> progressBar != null. <br>
+     *
+     * @param result  Response of authentification from server. result != null && result != "".
+     * @param service Service sended to server. service != null && service != "".
+     */
+
     @Override
     public void onResultReceived(String result, String service) {
         // Set the View's visibility back on the main UI Thread
-
         if(service.equals(ConnectionHTTP.GETMESSAGE)){
             try {
                 JSONObject object = new JSONObject(result);

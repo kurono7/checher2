@@ -6,8 +6,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -22,15 +24,15 @@ public class ConnectionHTTP {
     private ConnetionCallback listener;
 
     //SERVER
-    private final static String SERVER = "http://192.168.43.218:8000";
-    //private final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8080";
+    //private final static String SERVER = "http://192.168.43.218:8000";
+    private final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8080";
     private final static int WAIT = 30000;
 
     // URL API'S
-    private final static String AUTENTIFICATION = "/auth/autenticar/mobile";
+    private final static String AUTHENTICATION = "/auth/autenticar/mobile";
     public final static String GETTASKS = "/api/v1/tareas/";
     public final static String SIGNOUT = "/api/v1/usuarios/cerrar-sesion/";
-    public final static String GETPROYECTS = "/api/v1/general/autenticacion/mobile/";
+    public final static String GETPROJECTS = "/api/v1/general/autenticacion/mobile/";
     private final static String UPDATETASKSTATE = "/api/v1/tareasProyecto/procesar-tarea/";
     public final static String ATTACH_TASK = "/api/v1/tareasProyecto/adjuntar-entregable/";
     public final static String GETMESSAGE = "/api/v1/tareasProyecto/mensajes/";
@@ -66,7 +68,7 @@ public class ConnectionHTTP {
         }
     }
 
-    public void sendAutentification(String idUsuario, String nombreUsuario, String claveUsuario, String captcha, String pdata) {
+    public void sendAuthentication(String idUsuario, String nombreUsuario, String claveUsuario, String captcha, String pdata) {
         JSONObject post = new JSONObject();
         try {
             post.put("idUsuario", idUsuario);
@@ -74,7 +76,7 @@ public class ConnectionHTTP {
             post.put("claveUsuario", claveUsuario);
             post.put("captcha", captcha);
             post.put("pdata", pdata);
-            new SendDeviceDetailsPOST().execute(AUTENTIFICATION, post.toString());
+            new SendDeviceDetailsPOST().execute(AUTHENTICATION, post.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -84,8 +86,8 @@ public class ConnectionHTTP {
         new SendDeviceDetailsGET().execute(GETTASKS, projectID, territorieID, responsable, token);
     }
 
-    public void getProyects(String IdPerfil, String idUsuario, String token) {
-        new SendDeviceDetailsGET().execute(GETPROYECTS, idUsuario, IdPerfil, token);
+    public void getProjects(String IdPerfil, String idUsuario, String token) {
+        new SendDeviceDetailsGET().execute(GETPROJECTS, idUsuario, IdPerfil, token);
     }
 
     public void logout(String IdUsuario, String token) {
@@ -98,7 +100,7 @@ public class ConnectionHTTP {
             post.put("idProyecto", idProject);
             post.put("idTerritorio", idTerritorie);
             post.put("idTarea", idTarea);
-            new SendDeviceDetailsPOST().execute(GETMESSAGE, post.toString(), idProject,token);
+            new SendDeviceDetailsPOST().execute(GETMESSAGE, post.toString(), idProject, token);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -116,19 +118,16 @@ public class ConnectionHTTP {
             StringBuilder data = new StringBuilder();
             HttpURLConnection httpURLConnection = null;
             try {
-                if(params[0].equals(ATTACH_TASK)){
+                if (params[0].equals(ATTACH_TASK)) {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[3]).openConnection();
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[2]);
-                }else
-                if (params[0].equals(UPDATETASKSTATE)) {
+                } else if (params[0].equals(UPDATETASKSTATE)) {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[3]).openConnection();
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[2]);
-                }else
-                if(params[0].equals(GETMESSAGE)) {
-                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]+params[2]).openConnection();
+                } else if (params[0].equals(GETMESSAGE)) {
+                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[2]).openConnection();
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[3]);
-                }else
-                {
+                } else {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]).openConnection();
                 }
                 httpURLConnection.setRequestMethod("POST");
@@ -171,7 +170,7 @@ public class ConnectionHTTP {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            if(listener!=null){
+            if (listener != null) {
                 listener.onResultReceived(result, service);
             }
             Log.e("TAG", result); // this is expecting a response code to be sent from your server upon receiving the POST data
@@ -190,11 +189,11 @@ public class ConnectionHTTP {
                 if (params[0].equals(SIGNOUT)) {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[1]).openConnection();
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[2]);
-                } else if (params[0].equals(GETPROYECTS)) {
+                } else if (params[0].equals(GETPROJECTS)) {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[2] + "/" + params[1]).openConnection();
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[3]);
                 } else {
-                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[1] +"/territorio/"+ params[2]+ "?responsable=" + params[3]).openConnection();
+                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[1] + "/territorio/" + params[2] + "?responsable=" + params[3]).openConnection();
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[4]);
                 }
                 httpURLConnection.setRequestMethod("GET");
@@ -224,7 +223,7 @@ public class ConnectionHTTP {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            if(listener!=null){
+            if (listener != null) {
                 listener.onResultReceived(result, service);
             }
             Log.e("TAG", result); // this is expecting a response code to be sent from your server upon receiving the POST data

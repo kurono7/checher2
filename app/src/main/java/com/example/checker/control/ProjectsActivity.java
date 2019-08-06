@@ -1,21 +1,10 @@
 package com.example.checker.control;
 
-import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
-import android.util.Base64;
-import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,24 +20,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.checker.R;
 import com.example.checker.model.Project;
-import com.example.checker.model.Task;
-import com.example.checker.model.Territorie;
 import com.example.checker.utils.ConnectionHTTP;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class ProjectsActivity extends BaseTop implements ConnectionHTTP.ConnetionCallback {
-
     private ListView projectsList;
     private SwipeRefreshLayout swiperefresh;
     private ProgressBar progressBar;
@@ -67,11 +47,19 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
         projectsList = findViewById(R.id.projectsList);
         progressBar = findViewById(R.id.progressBar);
 
-        //Avoid refreshing list when scrolls up
+        // Get the projects
+        refreshProjects();
+
+        //Load titles from topbar
+        TextView titleOne = findViewById(R.id.titleOne);
+        titleOne.setText("");
+        TextView titleTwo = findViewById(R.id.titleTwo);
+        titleTwo.setText(R.string.projectsTitleTxt);
+
+        //Avoid refreshing list scrolling up
         projectsList.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
-
             }
 
             @Override
@@ -81,8 +69,7 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
             }
         });
 
-
-        // Option to logout
+        // Set action to profile image icon to display the popup to logout
         findViewById(R.id.optionsMenu).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,14 +77,7 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
             }
         });
 
-        //Load titles
-        TextView titleOne = findViewById(R.id.titleOne);
-        titleOne.setText("");
-        TextView titleTwo = findViewById(R.id.titleTwo);
-        titleTwo.setText(R.string.projectsTitleTxt);
-
-        //Refreshing proyects
-
+        //Refresh projects swiping
         if (swiperefresh != null) {
             swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
@@ -107,44 +87,39 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
                 }
             });
         }
-
-        // Get the projects
-        refreshProjects();
     }
 
-
     /**
-     * Send server the get projects of user. <br>
+     * Send the request to server to get projects<br>
      * <b>pre: </b> progressBar != null. <br>
-     * <b>post: </b> The projects of user are obtained. <br>
+     * <b>post: </b> The request is sent to server. <br>
      */
 
     public void refreshProjects() {
         final ConnectionHTTP connectionHTTP = new ConnectionHTTP(this);
-        // Ask if is there connection
+        //Ask if there is a connection available
         if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
-            // Block windows and show the progressbar
+            // Block window and show the progressbar
             progressBar.setVisibility(View.VISIBLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-            // Call the data stored in preferences
+            // Get the data stored in preferences
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String token = preferences.getString("token", "");
             String IdUsuario = preferences.getString("IdUsuario", "");
             String IdPerfil = preferences.getString("IdPerfil", "");
 
             // Send the request to get projects
-            connectionHTTP.getProyects(IdPerfil, IdUsuario, token);
+            connectionHTTP.getProjects(IdPerfil, IdUsuario, token);
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
         }
     }
 
-
     /**
      * Initialize . <br>
-     * <b>pre: </b> Send server the close session of user. <br>
-     * <b>post: </b> The session of user is closed. <br>
+     * <b>pre: </b> Show popup to send to server the logout request. <br>
+     * <b>post: </b> The user session is closed. <br>
      *
      * @param v View of context. v != null && v != "".
      */
@@ -164,7 +139,7 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
                     progressBar.setVisibility(View.VISIBLE);
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                    // Call the data stored in preferences
+                    // Get the data stored in preferences
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     String token = preferences.getString("token", "");
                     String IdUsuario = preferences.getString("IdUsuario", "");
@@ -180,9 +155,8 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
         popup.show();
     }
 
-
     /**
-     * Receive the response of get projects and close session from server. <br>
+     * Receive the response of logout and get projects request from server<br>
      * <b>pre: </b> progressBar != null. <br>
      *
      * @param result  Response of request projects and close session from server. result != null && result != "".
@@ -191,8 +165,8 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
 
     @Override
     public void onResultReceived(String result, String service) {
-        if (service.equals(ConnectionHTTP.GETPROYECTS)) {
-            // If all look perfect so load projects
+        if (service.equals(ConnectionHTTP.GETPROJECTS)) {
+            // Load projects and territories to start the activity to display
             ArrayList<Project> projects = new ArrayList<>();
             try {
                 JSONObject respuesta = new JSONObject(result);
@@ -223,7 +197,7 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
             projectsList.setAdapter(pAdapter);
         } else {
             try {
-                // Launch the login activity if all look perfect
+                // Get the logout authorization and start the LoginActivity
                 JSONObject object = new JSONObject(result);
                 boolean exito = object.getBoolean("exito");
                 String message = object.getString("message");
@@ -236,7 +210,7 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
                 Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
             }
         }
-        // Set the View's visibility back on the main UI Thread
+        // Set the view's visibility back on the main UI Thread
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         progressBar.setVisibility(View.GONE);
     }

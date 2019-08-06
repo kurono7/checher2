@@ -21,7 +21,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class ProjectAdapter extends BaseAdapter {
-
     private Context context;
     private ArrayList<Project> projectsList;
 
@@ -47,21 +46,23 @@ public class ProjectAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+        // Inflate the project item from layout
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_project, parent, false);
         }
 
-        // Get the project selected
+        // Get the selected project
         final Project project = projectsList.get(position);
 
-        // Catch object selected
+        // Get the selected project
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Get the data stored in preferences
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
                 String territorios = preferences.getString("territorios", "");
 
-                // Load the list with territories in the project selected
+                // Load the list with territories in the selected project
                 ArrayList<Territorie> territories = new ArrayList<>();
                 try {
                     JSONObject t = new JSONObject(territorios);
@@ -80,14 +81,14 @@ public class ProjectAdapter extends BaseAdapter {
                         }
                     }
 
-                    // Verify and launch the tasks activity if there is only one territorie
+                    // Verify and start TasksActivity if there is only one territorie
                     if (territories.size() == 1) {
                         Intent intent = new Intent(context, TasksActivity.class);
                         intent.putExtra("territorie", territories.get(0));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     } else {
-                        // Launch the Territorie activity with the project selected
+                        // Start TerritoriesActivity of the selected project
                         Intent intent = new Intent(context, TerritoriesActivity.class);
                         intent.putExtra("project", project);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -99,7 +100,7 @@ public class ProjectAdapter extends BaseAdapter {
             }
         });
 
-        // Set its name
+        // Set the item project's name
         TextView projectName = convertView.findViewById(R.id.projectName);
         projectName.setText(project.getProjectName());
         return convertView;

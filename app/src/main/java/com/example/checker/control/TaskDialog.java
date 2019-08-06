@@ -25,8 +25,7 @@ import org.json.JSONObject;
 import java.util.Objects;
 
 public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallback {
-
-
+    private Context context;
     private Task task;
     private Button reportTaskBtn;
     private Territorie territorie;
@@ -41,6 +40,7 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
 
     TaskDialog(Context context, Task task, Territorie territorie) {
         super(context);
+        this.context = context;
         this.task = task;
         this.territorie = territorie;
     }
@@ -69,14 +69,23 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
         TextView subprocess = findViewById(R.id.subprocess);
         TextView status = findViewById(R.id.status);
         TextView expirationDate = findViewById(R.id.expirationDate);
+        progressBar = findViewById(R.id.progressBar);
 
         taskName.setText(task.getTaskName());
-        taskID.setText(task.getTaskID().substring(0,5));
+        taskID.setText(task.getTaskID().substring(0, 5));
         process.setText(task.getProcess());
         subprocess.setText(task.getSubprocess());
-        status.setText(task.getStatus());
         expirationDate.setText(task.getExpirationDate());
-        progressBar = findViewById(R.id.progressBar);
+        if (task.getStatus().equals("0")) {
+            status.setText(context.getString(R.string.not_reportedTxt));
+        } else if (task.getStatus().equals("1")) {
+            status.setText(context.getString(R.string.reportedTxt));
+        } else if (task.getStatus().equals("2")) {
+            status.setText(context.getString(R.string.approvedTxt));
+        } else {
+            status.setText(context.getString(R.string.not_approvedTxt));
+        }
+
 
         ImageView closeBtn = findViewById(R.id.closeBtn);
         closeBtn.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +100,7 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
             reportTaskBtn.setBackground(getContext().getDrawable(R.drawable.rounded_green_button_shape_dissabled));
             reportTaskBtn.setText(getContext().getString(R.string.reportedTxt));
             Toast.makeText(getContext(), "La tarea esta reportada", Toast.LENGTH_LONG).show();
-        }else if(task.getStatus().equals("2")){
+        } else if (task.getStatus().equals("2")) {
             reportTaskBtn.setEnabled(false);
             reportTaskBtn.setBackground(getContext().getDrawable(R.drawable.rounded_green_button_shape_dissabled));
             reportTaskBtn.setText(getContext().getString(R.string.approvedTxt));

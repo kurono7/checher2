@@ -26,8 +26,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.ConnetionCallback {
-
-
     private EditText loginUsername;
     private EditText loginPassword;
     private ProgressBar progressBar;
@@ -49,7 +47,15 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
         loginPassword = findViewById(R.id.loginPassword);
         progressBar = findViewById(R.id.progressBar);
 
-        // Button to login
+        // Set listener to button to login
+        findViewById(R.id.loginBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                login();
+            }
+        });
+
+        // Set listener to press enter key on SoftKeyboard to login
         loginPassword.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
@@ -66,62 +72,59 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
                 return false;
             }
         });
-        findViewById(R.id.loginBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                login();
-            }
-        });
     }
 
-
     /**
-     * Send server the authentification of user. <br>
+     * Send to server the users' authentification. <br>
      * <b>pre: </b> progressBar != null. <br>
-     * <b>post: </b> The authentification is sended to server. <br>
+     * <b>post: </b> The authentication is sended to server. <br>
      */
 
     private void login() {
         if (checkData()) {
             final ConnectionHTTP connectionHTTP = new ConnectionHTTP(this);
-            // Ask if is there connection
+            // Ask if there is a connection available
             if (connectionHTTP.isNetworkAvailable(LoginActivity.this)) {
                 // Block windows and show the progressbar
                 progressBar.setVisibility(View.VISIBLE);
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                // Send the request to authentification
-                connectionHTTP.sendAutentification("", loginUsername.getText().toString(), loginPassword.getText().toString(), "", "");
+                // Send the authentication request
+                connectionHTTP.sendAuthentication("", loginUsername.getText().toString(), loginPassword.getText().toString(), "", "");
             } else {
                 Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
             }
         }
     }
 
+    /**
+     * Send the request to server to get projects<br>
+     * <b>pre: </b> progressBar != null. <br>
+     * <b>post: </b> The request is sent to server. <br>
+     */
 
-    public void refreshProjects() {
+    public void getProjects() {
         final ConnectionHTTP connectionHTTP = new ConnectionHTTP(this);
-        // Ask if is there connection
+        //Ask if there is a connection available
         if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
-            // Block windows and show the progressbar
+            // Block window and show the progressbar
             progressBar.setVisibility(View.VISIBLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-            // Call the data stored in preferences
+            // Get the data stored in preferences
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String token = preferences.getString("token", "");
             String IdUsuario = preferences.getString("IdUsuario", "");
             String IdPerfil = preferences.getString("IdPerfil", "");
 
             // Send the request to get projects
-            connectionHTTP.getProyects(IdPerfil, IdUsuario, token);
+            connectionHTTP.getProjects(IdPerfil, IdUsuario, token);
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
         }
     }
 
-
     /**
-     * Receive the response of authentification from server. <br>
+     * Receive the response of authentication and get projects request from server<br>
      * <b>pre: </b> progressBar != null. <br>
      *
      * @param result  Response of authentification from server. result != null && result != "".
@@ -130,8 +133,8 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
 
     @Override
     public void onResultReceived(String result, String service) {
-        if (service.equals(ConnectionHTTP.GETPROYECTS)) {
-            // If all look perfect so load projects
+        if (service.equals(ConnectionHTTP.GETPROJECTS)) {
+            // Load projects and territories to start the activity to display
             ArrayList<Project> projects = new ArrayList<>();
             ArrayList<Territorie> territories = new ArrayList<>();
             try {
@@ -156,7 +159,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
                     Project p = new Project(NombreProyecto, IdProyecto);
                     projects.add(p);
                 }
-                // Check if there is only one project
+                // Check if there is only one project to skip activities
                 if (projects.size() == 1) {
                     for (int i = 0; i < array2.length(); i++) {
                         JSONObject territorie = array2.getJSONObject(i);
@@ -170,29 +173,26 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
                             territories.add(object);
                         }
                     }
-                    // Check if there is only one territorie and skip the activities with one item
+                    // Check if there is only one territorie to go directly to TasksActivity
                     if (territories.size() == 1) {
                         Intent intent = new Intent(context, TasksActivity.class);
                         intent.putExtra("territorie", territories.get(0));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     } else {
-                        // Launch the Territorie activity with the project selected
+                        // Launch the TerritorieActivity with the project selected
                         Intent intent = new Intent(context, TerritoriesActivity.class);
                         intent.putExtra("project", projects.get(0));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     }
                 } else {
-                    // Launch the projects activity
+                    // Launch the ProjectsActivity if there are more than one project
                     startActivity(new Intent(LoginActivity.this, ProjectsActivity.class));
                 }
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
             }
-            // Load the list with projects
-            //ProjectAdapter pAdapter = new ProjectAdapter(getApplicationContext(), projects);
-            //projectsList.setAdapter(pAdapter);
 
             // Set the View's visibility back on the main UI Thread
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -200,7 +200,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
 
         } else {
             try {
-                // Get the response
+                // Get the profile data from authentication response
                 JSONObject respon = new JSONObject(result);
                 JSONObject respuesta = respon.getJSONObject("respuesta");
                 String mensaje = respuesta.getString("message");
@@ -221,7 +221,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
                     editor.putString("Nombres", Nombres);
                     editor.apply();
 
-                    refreshProjects();
+                    getProjects();
                 } else {
                     Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_LONG).show();
                 }
@@ -232,9 +232,8 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
         }
     }
 
-
     /**
-     * Check user name and password are completed.
+     * Check if user name and password are completed.
      * <b>pre:</b> loginUsername != null && loginPassword != null.<br>
      * <b>post:</b> User name and password are checked.<br>
      */
@@ -257,7 +256,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
     @Override
     protected void onRestart() {
         super.onRestart();
-        if(loginPassword!=null){
+        if (loginPassword != null) {
             loginPassword.setText("");
         }
     }
@@ -265,7 +264,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
     @Override
     protected void onResume() {
         super.onResume();
-        if(loginPassword!=null){
+        if (loginPassword != null) {
             loginPassword.setText("");
         }
     }

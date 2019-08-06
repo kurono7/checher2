@@ -6,6 +6,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -58,6 +60,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
     private ArrayList<Task> tasks;
     private ProgressBar progressBar;
     private EditText searchBar;
+    private ImageView searchBtn;
     private int positionItemSelected;
     private DeliverableDialog deliverableDialog;
     private SwipeRefreshLayout swiperefresh;
@@ -83,6 +86,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
 
         tasksList = findViewById(R.id.tasksList);
         searchBar = findViewById(R.id.searchBar);
+        searchBtn = findViewById(R.id.searchBtn);
 
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
@@ -93,6 +97,17 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 searchByName();
+                if (charSequence.length() > 0) {
+                    searchBtn.setImageResource(R.drawable.ic_vector_close_green_icon);
+                    searchBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            searchBar.setText("");
+                        }
+                    });
+                } else {
+                    searchBtn.setImageResource(R.drawable.ic_vector_search_icon);
+                }
             }
 
             @Override
@@ -137,6 +152,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                 @Override
                 public void onRefresh() {
                     refreshList();
+                    hideSoftKeyBoard();
                     searchBar.setText("");
                     filterLayout.setVisibility(View.INVISIBLE);
                     swiperefresh.setRefreshing(false);
@@ -201,6 +217,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         tasksList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                filterLayout.setVisibility(View.INVISIBLE);
                 final Territorie territorie = (Territorie) getIntent().getSerializableExtra("territorie");
                 final Task task = (Task) tasksList.getAdapter().getItem(position);
                 if (task.getTaskType() == 1) {
@@ -317,6 +334,15 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         }
         TaskAdapter taskAdapter = new TaskAdapter(TasksActivity.this, tasksFiltered);
         tasksList.setAdapter(taskAdapter);
+    }
+
+    final public void hideSoftKeyBoard() {
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     /**
