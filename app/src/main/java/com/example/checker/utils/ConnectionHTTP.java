@@ -22,8 +22,8 @@ public class ConnectionHTTP {
     private ConnetionCallback listener;
 
     //SERVER
-    //private final static String SERVER = "http://192.168.137.77:8000";
-    private final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8080";
+    private final static String SERVER = "http://192.168.43.218:8000";
+    //private final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8080";
     private final static int WAIT = 30000;
 
     // URL API'S
@@ -33,7 +33,7 @@ public class ConnectionHTTP {
     public final static String GETPROYECTS = "/api/v1/general/autenticacion/mobile/";
     private final static String UPDATETASKSTATE = "/api/v1/tareasProyecto/procesar-tarea/";
     public final static String ATTACH_TASK = "/api/v1/tareasProyecto/adjuntar-entregable/";
-    public final static String GETMESSAGE = "";
+    public final static String GETMESSAGE = "/api/v1/tareasProyecto/mensajes/";
 
     public ConnectionHTTP(ConnetionCallback listener) {
         this.listener = listener;
@@ -42,10 +42,6 @@ public class ConnectionHTTP {
     public void setAttachTask(String IdProyecto, String IdTerritorio, String IdTarea, String token, String image, String comment) {
         JSONObject post = new JSONObject();
         try {
-            //token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyOTQ4MTQyLTM1ZjYtNDRkYi04ZDU2LTU5OGMyOGQ1MjdlZCIsImlwIjoiOjoxIiwiaWRVc3VhcmlvIjoiM2FhNTY5YjctNmE4OS00NTdkLWFmYjItNWUwMjBhYTk1ZTgwIiwidXN1YXJpbyI6Im1hc3RlciIsIm5vbWJyZUNvbXBsZXRvIjoiQWRtaW5pc3RyYWRvciBNYXN0ZXIiLCJpZFBlcmZpbCI6IjAwIiwiZW1haWwiOiJjaGVja2VyQGNhcnZhamFsLmNvbSIsImNvZGlnb0NhcmdvIjoiMCIsImlhdCI6MTU2NDU4MTQ0MSwiZXhwIjoxNTY0NjY3ODQxfQ.Vj6YkrjNqgnSqfv9V4DvP6Xnj34J2r-Gj98SHa7HoLg ";
-            //IdProyecto = "78065db9-89c9-45f2-a0b4-c38f5705b037";
-            //IdTerritorio = "57301f26-cce5-4c00-a099-b97252e102b6";
-            //IdTarea = "00fb628b-9d87-40fe-9d4a-2781e7d92f48";
             Log.e("COMMENT", comment);
             post.put("idProyecto", IdProyecto);
             post.put("idTerritorio", IdTerritorio);
@@ -99,10 +95,10 @@ public class ConnectionHTTP {
     public void getMessage(String idProject, String idTerritorie, String idTarea, String token) {
         JSONObject post = new JSONObject();
         try {
-            post.put("idProject", idProject);
-            post.put("idTerritorie", idTerritorie);
+            post.put("idProyecto", idProject);
+            post.put("idTerritorio", idTerritorie);
             post.put("idTarea", idTarea);
-            new SendDeviceDetailsPOST().execute(GETMESSAGE, post.toString(),token);
+            new SendDeviceDetailsPOST().execute(GETMESSAGE, post.toString(), idProject,token);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -129,8 +125,8 @@ public class ConnectionHTTP {
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[2]);
                 }else
                 if(params[0].equals(GETMESSAGE)) {
-                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]).openConnection();
-                    httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[2]);
+                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]+params[2]).openConnection();
+                    httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[3]);
                 }else
                 {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]).openConnection();

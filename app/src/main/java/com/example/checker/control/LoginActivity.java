@@ -194,10 +194,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
             //ProjectAdapter pAdapter = new ProjectAdapter(getApplicationContext(), projects);
             //projectsList.setAdapter(pAdapter);
 
-
-            // Set the View's visibility back on the main UI Thread
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            progressBar.setVisibility(View.GONE);
         } else {
             try {
                 // Get the response
@@ -229,6 +225,10 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
                 Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
             }
         }
+
+        // Set the View's visibility back on the main UI Thread
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        progressBar.setVisibility(View.GONE);
     }
 
 
@@ -251,5 +251,21 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
             complete = true;
         }
         return complete;
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(loginPassword!=null){
+            loginPassword.setText("");
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(loginPassword!=null){
+            loginPassword.setText("");
+        }
     }
 }

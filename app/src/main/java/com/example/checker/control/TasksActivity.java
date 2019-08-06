@@ -157,7 +157,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                 filter_reported.setChecked(false);
                 filter_approved.setChecked(false);
                 filter_not_approved.setChecked(false);
-                TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasks);
+                TaskAdapter taskAdapter = new TaskAdapter(TasksActivity.this, tasks);
                 tasksList.setAdapter(taskAdapter);
                 filterLayout.setVisibility(View.INVISIBLE);
             }
@@ -185,13 +185,13 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                         }
                     }
 
-                    TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasksFiltered);
+                    TaskAdapter taskAdapter = new TaskAdapter(TasksActivity.this, tasksFiltered);
                     tasksList.setAdapter(taskAdapter);
                     if (tasksFiltered.size() < 1)
                         Toast.makeText(TasksActivity.this, R.string.error_no_results, Toast.LENGTH_LONG).show();
 
                 } else {
-                    TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasks);
+                    TaskAdapter taskAdapter = new TaskAdapter(TasksActivity.this, tasks);
                     tasksList.setAdapter(taskAdapter);
                 }
                 filterLayout.setVisibility(View.INVISIBLE);
@@ -309,13 +309,13 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
     final public void searchByName() {
         ArrayList<Task> tasksFiltered = new ArrayList<>();
         String taskName = "";
-        for (int k = 0; k < tasks.size(); k++) {
+        for (int k = 0; tasks!=null && k < tasks.size(); k++) {
             Task task = tasks.get(k);
             if (containsIgnoreCase(task.getTaskName(), searchBar.getText().toString())) {
                 tasksFiltered.add(task);
             }
         }
-        TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasksFiltered);
+        TaskAdapter taskAdapter = new TaskAdapter(TasksActivity.this, tasksFiltered);
         tasksList.setAdapter(taskAdapter);
     }
 
@@ -436,7 +436,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
             }
-            TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasks);
+            TaskAdapter taskAdapter = new TaskAdapter(TasksActivity.this, tasks);
             tasksList.setAdapter(taskAdapter);
         } else if (service.equals(ConnectionHTTP.SIGNOUT)) {
             try {

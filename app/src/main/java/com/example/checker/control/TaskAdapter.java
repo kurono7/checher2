@@ -22,6 +22,9 @@ import com.example.checker.model.Task;
 import com.example.checker.model.Territorie;
 import com.example.checker.utils.ConnectionHTTP;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class TaskAdapter extends BaseAdapter implements ConnectionHTTP.ConnetionCallback{
@@ -59,7 +62,7 @@ public class TaskAdapter extends BaseAdapter implements ConnectionHTTP.Connetion
         // Get the task selected
         final Task task = tasksList.get(position);
 
-        progressBar = convertView.findViewById(R.id.progressBar);
+        progressBar = ((Activity)context).findViewById(R.id.progressBar);
         // Set its name
         TextView taskName = convertView.findViewById(R.id.taskName);
         //TextView location = convertView.findViewById(R.id.location);
@@ -71,6 +74,7 @@ public class TaskAdapter extends BaseAdapter implements ConnectionHTTP.Connetion
         taskExpirationDate.setText(task.getExpirationDate());
 
         ImageView message = convertView.findViewById(R.id.messageIcon);
+        message.setVisibility(View.VISIBLE);
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,12 +93,15 @@ public class TaskAdapter extends BaseAdapter implements ConnectionHTTP.Connetion
         if (task.getStatus().equals("0")) {
             status.setText(context.getString(R.string.not_reportedTxt));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_not_reported);
+            status.setTextColor(ContextCompat.getColor(context,R.color.colorBlack));
         } else if (task.getStatus().equals("1")) {
             status.setText(context.getString(R.string.reportedTxt));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_reported);
+            status.setTextColor(ContextCompat.getColor(context,R.color.colorReported));
         } else if (task.getStatus().equals("2")) {
             status.setText(context.getString(R.string.approvedTxt));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_accepted);
+            status.setTextColor(ContextCompat.getColor(context,R.color.colorAccepted));
         }else {
             status.setText(context.getString(R.string.not_approvedTxt));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_rejected);
@@ -129,12 +136,24 @@ public class TaskAdapter extends BaseAdapter implements ConnectionHTTP.Connetion
         // Set the View's visibility back on the main UI Thread
 
         if(service.equals(ConnectionHTTP.GETMESSAGE)){
-            AlertDialog.Builder builder = new AlertDialog.Builder((Activity)context);
-            builder.setTitle("No aprobado");
-            builder.setMessage("El documento no es legible");
-            builder.setCancelable(true);
-            builder.create();
-            builder.show();
+            try {
+                JSONObject object = new JSONObject(result);
+                boolean exito = object.getBoolean("exito");
+                if(exito){
+                    JSONObject data = object.getJSONObject("data");
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Activity)context);
+                    builder.setTitle("No aprobado");
+                    builder.setMessage(data.getString("comentario")+"\n\n"+data.getString("por"));
+                    builder.setCancelable(true);
+                    builder.create();
+                    builder.show();
+                }else{
+                    Toast.makeText(context, object.getString("message"),Toast.LENGTH_LONG).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         ((Activity)context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
