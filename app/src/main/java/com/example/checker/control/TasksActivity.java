@@ -192,9 +192,9 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                         taskStatus = task.getStatus();
                         if (filter_not_reported.isChecked() && taskStatus.equals("0")) {
                             tasksFiltered.add(task);
-                        } else if (filter_approved.isChecked() && taskStatus.equals("1")) {
+                        } else if (filter_reported.isChecked() && taskStatus.equals("1")) {
                             tasksFiltered.add(task);
-                        } else if (filter_reported.isChecked() && taskStatus.equals("2")) {
+                        } else if (filter_approved.isChecked() && taskStatus.equals("2")) {
                             tasksFiltered.add(task);
                         } else if (filter_not_approved.isChecked() && taskStatus.equals("3")) {
                             tasksFiltered.add(task);
@@ -326,7 +326,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
     final public void searchByName() {
         ArrayList<Task> tasksFiltered = new ArrayList<>();
         String taskName = "";
-        for (int k = 0; tasks!=null && k < tasks.size(); k++) {
+        for (int k = 0; tasks != null && k < tasks.size(); k++) {
             Task task = tasks.get(k);
             if (containsIgnoreCase(task.getTaskName(), searchBar.getText().toString())) {
                 tasksFiltered.add(task);
@@ -429,9 +429,10 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
 
                 if (exito) {
                     refreshList();
+                } else {
+                    Toast.makeText(TasksActivity.this, respuesta.getString("message"), Toast.LENGTH_LONG).show();
                 }
 
-                Toast.makeText(TasksActivity.this, respuesta.getString("message"), Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
             }
@@ -470,9 +471,11 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                 JSONObject object = new JSONObject(result);
                 boolean exito = object.getBoolean("exito");
                 String message = object.getString("message");
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 if (exito) {
-                    finish();
+                    Intent intent = new Intent(TasksActivity.this, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
@@ -658,32 +661,41 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setMessage("¿Estas seguro que deseas salir?")
-                .setCancelable(false)
-                .setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        final ConnectionHTTP connectionHTTP = new ConnectionHTTP(TasksActivity.this);
-                        // Ask if is there connection
-                        if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
-                            // Block windows and show the progressbar
-                            progressBar.setVisibility(View.VISIBLE);
-                            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        // Call the data stored in preferences
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean oneProject = preferences.getBoolean("one_project", false);
 
-                            // Call the data stored in preferences
-                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                            String token = preferences.getString("token", "");
-                            String IdUsuario = preferences.getString("IdUsuario", "");
+        //Validate if there is more than one project to go back there or exit the app otherwise
+        if (oneProject) {
+            new AlertDialog.Builder(this)
+                    .setMessage("¿Está seguro que desea salir?")
+                    .setCancelable(false)
+                    .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            final ConnectionHTTP connectionHTTP = new ConnectionHTTP(TasksActivity.this);
+                            // Ask if is there connection
+                            if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
+                                // Block windows and show the progressbar
+                                progressBar.setVisibility(View.VISIBLE);
+                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                            // Send the request to logout
-                            connectionHTTP.logout(IdUsuario, token);
-                        } else {
-                            Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
+                                // Call the data stored in preferences
+                                String token = preferences.getString("token", "");
+                                String IdUsuario = preferences.getString("IdUsuario", "");
+
+                                // Send the request to logout
+                                connectionHTTP.logout(IdUsuario, token);
+                            } else {
+                                Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
-                })
-                .setNegativeButton("No", null)
-                .show();
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        } else {
+            finish();
+            startActivity(new Intent(TasksActivity.this, ProjectsActivity.class));
+        }
     }
 
     @Override

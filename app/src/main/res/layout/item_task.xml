@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/normal_margin"
-    android:paddingBottom="@dimen/normal_margin">
+    android:paddingTop="@dimen/min_margin"
+    android:paddingBottom="@dimen/min_margin">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/intern_layout"

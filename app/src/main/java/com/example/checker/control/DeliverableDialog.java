@@ -102,8 +102,6 @@ public class DeliverableDialog extends Dialog {
 
             findViewById(R.id.commentTxt).setVisibility(View.GONE);
             findViewById(R.id.commentTitle).setVisibility(View.GONE);
-        } else {
-            //TODO
         }
     }
 

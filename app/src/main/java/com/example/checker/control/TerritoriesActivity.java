@@ -89,7 +89,7 @@ public class TerritoriesActivity extends BaseTop implements ConnectionHTTP.Conne
             TerritorieAdapter pAdapter = new TerritorieAdapter(getApplicationContext(), territories);
             territoriesList.setAdapter(pAdapter);
 
-            if(territories.size()==1){
+            if (territories.size() == 1) {
                 // Launch the Task activity with the territorie selected
                 intent = new Intent(TerritoriesActivity.this, TasksActivity.class);
                 intent.putExtra("territorie", territories.get(0));
@@ -160,8 +160,9 @@ public class TerritoriesActivity extends BaseTop implements ConnectionHTTP.Conne
             String message = object.getString("message");
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             if (exito) {
-                finish();
-                startActivity(new Intent(TerritoriesActivity.this, LoginActivity.class));
+                Intent intent = new Intent(TerritoriesActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         } catch (JSONException e) {
             Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();

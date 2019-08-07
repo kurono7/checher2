@@ -27,7 +27,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TaskAdapter extends BaseAdapter implements ConnectionHTTP.ConnetionCallback{
+public class TaskAdapter extends BaseAdapter implements ConnectionHTTP.ConnetionCallback {
     private Context context;
     private ArrayList<Task> tasksList;
     private ProgressBar progressBar;
@@ -69,7 +69,7 @@ public class TaskAdapter extends BaseAdapter implements ConnectionHTTP.Connetion
         final Task task = tasksList.get(position);
 
         // Initialize variables
-        progressBar = ((Activity)context).findViewById(R.id.progressBar);
+        progressBar = ((Activity) context).findViewById(R.id.progressBar);
         taskName = convertView.findViewById(R.id.taskName);
         taskExpirationDate = convertView.findViewById(R.id.taskExpirationDate);
         status = convertView.findViewById(R.id.status);
@@ -90,28 +90,29 @@ public class TaskAdapter extends BaseAdapter implements ConnectionHTTP.Connetion
             }
         });
 
-        // Ask if the task is a task or entregable
+        // Ask if the item is a task or a derivable
         if (task.getTaskType() == 1) {
             attachIcon.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             attachIcon.setVisibility(View.GONE);
         }
 
         if (task.getStatus().equals("0")) {
             status.setText(context.getString(R.string.not_reportedTxt));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_not_reported);
-            status.setTextColor(ContextCompat.getColor(context,R.color.colorBlack));
+            status.setTextColor(ContextCompat.getColor(context, R.color.colorBlack));
         } else if (task.getStatus().equals("1")) {
             status.setText(context.getString(R.string.reportedTxt));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_reported);
-            status.setTextColor(ContextCompat.getColor(context,R.color.colorReported));
+            status.setTextColor(ContextCompat.getColor(context, R.color.colorReported));
         } else if (task.getStatus().equals("2")) {
             status.setText(context.getString(R.string.approvedTxt));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_accepted);
-            status.setTextColor(ContextCompat.getColor(context,R.color.colorAccepted));
-        }else {
+            status.setTextColor(ContextCompat.getColor(context, R.color.colorAccepted));
+        } else {
             status.setText(context.getString(R.string.not_approvedTxt));
             corner_colored.setImageResource(R.drawable.ic_vector_corner_rejected);
+            status.setTextColor(ContextCompat.getColor(context, R.color.colorRejected));
             message.setVisibility(View.VISIBLE);
         }
 
@@ -130,7 +131,7 @@ public class TaskAdapter extends BaseAdapter implements ConnectionHTTP.Connetion
         if (connectionHTTP.isNetworkAvailable(context)) {
             // Block window and show the progressbar
             progressBar.setVisibility(View.VISIBLE);
-            ((Activity)context).getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            ((Activity) context).getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
             // Get the data stored in preferences
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -154,28 +155,28 @@ public class TaskAdapter extends BaseAdapter implements ConnectionHTTP.Connetion
     @Override
     public void onResultReceived(String result, String service) {
         // Set the View's visibility back on the main UI Thread
-        if(service.equals(ConnectionHTTP.GETMESSAGE)){
+        if (service.equals(ConnectionHTTP.GETMESSAGE)) {
             try {
                 JSONObject object = new JSONObject(result);
                 boolean exito = object.getBoolean("exito");
-                if(exito){
+                if (exito) {
                     JSONObject data = object.getJSONObject("data");
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder((Activity)context);
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Activity) context);
                     builder.setTitle("No aprobado");
-                    builder.setMessage(data.getString("comentario")+"\n\n"+data.getString("por"));
+                    builder.setMessage(data.getString("comentario") + "\n\n" + data.getString("por"));
                     builder.setCancelable(true);
                     builder.create();
                     builder.show();
-                }else{
-                    Toast.makeText(context, object.getString("message"),Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, object.getString("message"), Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        ((Activity)context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         progressBar.setVisibility(View.GONE);
     }
 }

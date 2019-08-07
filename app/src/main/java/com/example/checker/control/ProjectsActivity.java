@@ -1,6 +1,8 @@
 package com.example.checker.control;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -203,8 +205,9 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
                 String message = object.getString("message");
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 if (exito) {
-                    finish();
-                    startActivity(new Intent(ProjectsActivity.this, LoginActivity.class));
+                    Intent intent = new Intent(ProjectsActivity.this, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
@@ -213,6 +216,36 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
         // Set the view's visibility back on the main UI Thread
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setMessage("¿Está seguro que desea salir?")
+                .setCancelable(false)
+                .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        final ConnectionHTTP connectionHTTP = new ConnectionHTTP(ProjectsActivity.this);
+                        // Ask if is there connection
+                        if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
+                            // Block windows and show the progressbar
+                            progressBar.setVisibility(View.VISIBLE);
+                            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                            // Call the data stored in preferences
+                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            String token = preferences.getString("token", "");
+                            String IdUsuario = preferences.getString("IdUsuario", "");
+
+                            // Send the request to logout
+                            connectionHTTP.logout(IdUsuario, token);
+                        } else {
+                            Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     @Override

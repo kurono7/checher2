@@ -7,12 +7,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.checker.R;
 import com.example.checker.model.Project;
@@ -28,6 +32,7 @@ import java.util.ArrayList;
 public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.ConnetionCallback {
     private EditText loginUsername;
     private EditText loginPassword;
+    private ToggleButton showHidePassword;
     private ProgressBar progressBar;
     private Context context;
 
@@ -45,7 +50,21 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
         context = LoginActivity.this;
         loginUsername = findViewById(R.id.loginUsername);
         loginPassword = findViewById(R.id.loginPassword);
+        showHidePassword = findViewById(R.id.showHidePassword);
         progressBar = findViewById(R.id.progressBar);
+
+        // Set listener to show and hide password button
+        showHidePassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (showHidePassword.isChecked()) {
+                    loginPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                } else {
+                    loginPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+                loginPassword.setSelection(loginPassword.getText().length());
+            }
+        });
 
         // Set listener to button to login
         findViewById(R.id.loginBtn).setOnClickListener(new View.OnClickListener() {
@@ -146,6 +165,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("territorios", territorios.toString());
                 editor.putString("proyectos", proyectos.toString());
+                editor.putBoolean("one_project", false);
                 editor.apply();
 
                 JSONArray array = proyectos.getJSONArray("data");
@@ -161,6 +181,10 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
                 }
                 // Check if there is only one project to skip activities
                 if (projects.size() == 1) {
+                    editor = preferences.edit();
+                    editor.putBoolean("one_project", true);
+                    editor.apply();
+
                     for (int i = 0; i < array2.length(); i++) {
                         JSONObject territorie = array2.getJSONObject(i);
                         String NombreLocalizacion = territorie.getString("NombreLocalizacion");
@@ -224,6 +248,13 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
                     getProjects();
                 } else {
                     Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    loginUsername.setText("");
+                    loginPassword.setText("");
+                    loginPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    loginUsername.requestFocus();
+
                 }
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
