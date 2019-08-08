@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.checker">
+    package="com.innovacion.checker">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -17,18 +17,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:ignore="GoogleAppIndexingWarning">
+        android:debuggable="false"
+        tools:ignore="GoogleAppIndexingWarning,HardcodedDebugMode">
+
+
         <activity
-            android:name=".control.TasksActivity"
+            android:name="com.innovacion.checker.control.TasksActivity"
             android:theme="@style/BlueStatusbarTheme" />
         <activity
-            android:name=".control.TerritoriesActivity"
+            android:name="com.innovacion.checker.control.TerritoriesActivity"
             android:theme="@style/BlueStatusbarTheme" />
         <activity
-            android:name=".control.ProjectsActivity"
+            android:name="com.innovacion.checker.control.ProjectsActivity"
             android:theme="@style/BlueStatusbarTheme"/>
         <activity
-            android:name=".control.LoginActivity"
+            android:name="com.innovacion.checker.control.LoginActivity"
             android:theme="@style/BlueStatusbarTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,11 +1,10 @@
-package com.example.checker.utils;
+package com.innovacion.checker.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +43,6 @@ public class ConnectionHTTP {
     public void setAttachTask(String IdProyecto, String IdTerritorio, String IdTarea, String token, String image, String comment) {
         JSONObject post = new JSONObject();
         try {
-            Log.e("COMMENT", comment);
             post.put("idProyecto", IdProyecto);
             post.put("idTerritorio", IdTerritorio);
             post.put("idTarea", IdTarea);
@@ -172,8 +170,7 @@ public class ConnectionHTTP {
             super.onPostExecute(result);
             if (listener != null) {
                 listener.onResultReceived(result, service);
-            }
-            Log.e("TAG", result); // this is expecting a response code to be sent from your server upon receiving the POST data
+            } // this is expecting a response code to be sent from your server upon receiving the POST data
         }
     }
 
@@ -225,8 +222,7 @@ public class ConnectionHTTP {
             super.onPostExecute(result);
             if (listener != null) {
                 listener.onResultReceived(result, service);
-            }
-            Log.e("TAG", result); // this is expecting a response code to be sent from your server upon receiving the POST data
+            } // this is expecting a response code to be sent from your server upon receiving the POST data
         }
     }
 

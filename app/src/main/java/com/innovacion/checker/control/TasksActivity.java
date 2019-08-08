@@ -1,4 +1,4 @@
-package com.example.checker.control;
+package com.innovacion.checker.control;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -37,11 +37,11 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.checker.R;
-import com.example.checker.model.Task;
-import com.example.checker.model.Territorie;
-import com.example.checker.utils.ConnectionHTTP;
-import com.example.checker.utils.ExternalStorage;
+import com.innovacion.checker.R;
+import com.innovacion.checker.model.Task;
+import com.innovacion.checker.model.Territorie;
+import com.innovacion.checker.utils.ConnectionHTTP;
+import com.innovacion.checker.utils.ExternalStorage;
 
 import org.json.JSONArray;
 import org.json.JSONException;

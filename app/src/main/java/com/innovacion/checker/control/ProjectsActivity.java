@@ -1,4 +1,4 @@
-package com.example.checker.control;
+package com.innovacion.checker.control;
 
 
 import android.app.AlertDialog;
@@ -20,9 +20,9 @@ import android.widget.Toast;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.checker.R;
-import com.example.checker.model.Project;
-import com.example.checker.utils.ConnectionHTTP;
+import com.innovacion.checker.R;
+import com.innovacion.checker.model.Project;
+import com.innovacion.checker.utils.ConnectionHTTP;
 
 import org.json.JSONArray;
 import org.json.JSONException;

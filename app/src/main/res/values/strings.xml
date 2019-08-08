@@ -2,6 +2,7 @@
 
     <!--GENERAL  -->
     <string name="app_name">Checker</string>
+    <string name="version">1.0.1</string>
 
     <!--SHARED PREFERENCES -->
     <string name="shared_username">username</string>

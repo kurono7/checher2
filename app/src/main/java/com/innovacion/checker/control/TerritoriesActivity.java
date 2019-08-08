@@ -1,4 +1,4 @@
-package com.example.checker.control;
+package com.innovacion.checker.control;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,10 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.checker.R;
-import com.example.checker.model.Project;
-import com.example.checker.model.Territorie;
-import com.example.checker.utils.ConnectionHTTP;
+import com.innovacion.checker.R;
+import com.innovacion.checker.model.Project;
+import com.innovacion.checker.model.Territorie;
+import com.innovacion.checker.utils.ConnectionHTTP;
 
 import org.json.JSONArray;
 import org.json.JSONException;

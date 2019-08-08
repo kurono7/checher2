@@ -1,4 +1,4 @@
-package com.example.checker.control;
+package com.innovacion.checker.control;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -12,9 +12,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.checker.R;
-import com.example.checker.model.Task;
-import com.example.checker.model.Territorie;
+import com.innovacion.checker.R;
+import com.innovacion.checker.model.Task;
+import com.innovacion.checker.model.Territorie;
 
 public class DeliverableDialog extends Dialog {
     private Context context;

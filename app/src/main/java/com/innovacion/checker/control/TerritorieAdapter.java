@@ -1,4 +1,4 @@
-package com.example.checker.control;
+package com.innovacion.checker.control;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.checker.R;
-import com.example.checker.model.Territorie;
+import com.innovacion.checker.R;
+import com.innovacion.checker.model.Territorie;
 
 import java.util.ArrayList;
 

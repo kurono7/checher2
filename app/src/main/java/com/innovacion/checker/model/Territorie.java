@@ -1,4 +1,4 @@
-package com.example.checker.model;
+package com.innovacion.checker.model;
 
 import java.io.Serializable;
 
