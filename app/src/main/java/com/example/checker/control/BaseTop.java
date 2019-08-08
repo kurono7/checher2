@@ -10,6 +10,11 @@ import com.example.checker.R;
 
 public abstract class BaseTop extends AppCompatActivity {
 
+    /**
+     * Initialize variables. <br>
+     * <b>post: </b> Variables are initialized. <br>
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -42,9 +42,10 @@ public class TerritorieAdapter extends BaseAdapter {
         if(convertView==null)
         convertView = LayoutInflater.from(context).inflate(R.layout.item_territorie, parent,false);
 
-        // Get the territorie selected
+        // Get the selected territorie
         final Territorie territorie = territoriesList.get(position);
 
+        // Set actions when a territorie is selected
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,7 +57,7 @@ public class TerritorieAdapter extends BaseAdapter {
             }
         });
 
-        // Set its name
+        // Set the territorie name
         TextView territorieName = convertView.findViewById(R.id.territorieName);
         territorieName.setText(territorie.getTerritorieName());
         return convertView;

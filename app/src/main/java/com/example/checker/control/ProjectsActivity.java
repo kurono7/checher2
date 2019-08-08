@@ -36,7 +36,7 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
     private ProgressBar progressBar;
 
     /**
-     * Initialize variables UI. <br>
+     * Initialize UI variables. <br>
      * <b>post: </b> Variables are initialized. <br>
      */
 
@@ -119,7 +119,7 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
     }
 
     /**
-     * Initialize . <br>
+     * Initialize and assign action to the options menu. <br>
      * <b>pre: </b> Show popup to send to server the logout request. <br>
      * <b>post: </b> The user session is closed. <br>
      *
@@ -161,8 +161,8 @@ public class ProjectsActivity extends BaseTop implements ConnectionHTTP.Connetio
      * Receive the response of logout and get projects request from server<br>
      * <b>pre: </b> progressBar != null. <br>
      *
-     * @param result  Response of request projects and close session from server. result != null && result != "".
-     * @param service Service sended to server. service != null && service != "".
+     * @param result  Response of logout and get projects request from server. result != null && result != "".
+     * @param service Service requested to server. service != null && service != "".
      */
 
     @Override

@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
     private Context context;
 
     /**
-     * Initialize variables UI. <br>
+     * Initialize UI variables. <br>
      * <b>post: </b> Variables are initialized. <br>
      */
 
@@ -216,6 +216,12 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
                 }
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
+                progressBar.setVisibility(View.INVISIBLE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                loginUsername.setText("");
+                loginPassword.setText("");
+                loginPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                loginUsername.requestFocus();
             }
 
             // Set the View's visibility back on the main UI Thread
@@ -258,6 +264,12 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
                 }
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
+                progressBar.setVisibility(View.INVISIBLE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                loginUsername.setText("");
+                loginPassword.setText("");
+                loginPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                loginUsername.requestFocus();
             }
 
         }

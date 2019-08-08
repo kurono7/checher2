@@ -27,13 +27,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class TerritoriesActivity extends BaseTop implements ConnectionHTTP.ConnetionCallback {
-
-
     private ProgressBar progressBar;
 
-
     /**
-     * Initialize variables UI. <br>
+     * Initialize UI variables. <br>
      * <b>post: </b> Variables are initialized. <br>
      */
 
@@ -52,22 +49,22 @@ public class TerritoriesActivity extends BaseTop implements ConnectionHTTP.Conne
             }
         });
 
-        // Get the project that was select in list
+        // Get the project that was selected in the list
         Intent intent = getIntent();
         Project project = (Project) intent.getSerializableExtra("project");
         String IdProyecto = project != null ? project.getProjectID() : null;
 
-        // Load the data of preference
+        // Get the data from preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String territorios = preferences.getString("territorios", "{}");
 
-        //Load Titles
+        //Set titles
         TextView territoriesTitle = findViewById(R.id.titleTwo);
         territoriesTitle.setText(R.string.territoriesTitleTxt);
         TextView projectTitle = findViewById(R.id.titleOne);
         projectTitle.setText(project.getProjectName());
 
-        // Load the list with territories in the project selected
+        // Load the list with territories in the selected project
         ArrayList<Territorie> territories = new ArrayList<>();
         try {
             JSONObject t = new JSONObject(territorios);
@@ -104,14 +101,12 @@ public class TerritoriesActivity extends BaseTop implements ConnectionHTTP.Conne
 
 
     /**
-     * Initialize . <br>
-     * <b>pre: </b> Send server the close session of user. <br>
-     * <b>post: </b> The session of user is closed. <br>
+     * Initialize and assign action to the options menu. <br>
+     * <b>pre: </b> Show popup to send to server the logout request. <br>
+     * <b>post: </b> The user session is closed. <br>
      *
      * @param v View of context. v != null && v != "".
      */
-
-    // Option to logout
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
@@ -144,32 +139,49 @@ public class TerritoriesActivity extends BaseTop implements ConnectionHTTP.Conne
 
 
     /**
-     * Receive the response of close session from server. <br>
+     * Receive the response of logout and get tasks request from server<br>
      * <b>pre: </b> progressBar != null. <br>
      *
-     * @param result  Response of close session from server. result != null && result != "".
-     * @param service Service sended to server. service != null && service != "".
+     * @param result  Response of logout and get tasks request from server. result != null && result != "".
+     * @param service Service requested to server. service != null && service != "".
      */
 
     @Override
     public void onResultReceived(String result, String service) {
-        try {
-            // Launch the login activity if all look perfect
-            JSONObject object = new JSONObject(result);
-            boolean exito = object.getBoolean("exito");
-            String message = object.getString("message");
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-            if (exito) {
-                Intent intent = new Intent(TerritoriesActivity.this, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+        if (service.equals(ConnectionHTTP.GETTASKS)) {
+            try {
+                // Launch the login activity if all look perfect
+                JSONObject object = new JSONObject(result);
+                boolean exito = object.getBoolean("exito");
+                String message = object.getString("message");
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                if (exito) {
+                    Intent intent = new Intent(TerritoriesActivity.this, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            } catch (JSONException e) {
+                Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
             }
-        } catch (JSONException e) {
-            Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
+        } else {
+            try {
+                // Get the logout authorization and start the LoginActivity
+                JSONObject object = new JSONObject(result);
+                boolean exito = object.getBoolean("exito");
+                String message = object.getString("message");
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                if (exito) {
+                    Intent intent = new Intent(TerritoriesActivity.this, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            } catch (JSONException e) {
+                Toast.makeText(getApplicationContext(), getString(R.string.error_json), Toast.LENGTH_LONG).show();
+            }
+            // Set the View's visibility back on the main UI Thread
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            progressBar.setVisibility(View.GONE);
         }
-        // Set the View's visibility back on the main UI Thread
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        progressBar.setVisibility(View.GONE);
     }
 
     @Override

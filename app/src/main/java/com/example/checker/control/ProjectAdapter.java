@@ -54,7 +54,7 @@ public class ProjectAdapter extends BaseAdapter {
         // Get the selected project
         final Project project = projectsList.get(position);
 
-        // Get the selected project
+        // Set actions when a project is selected
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,7 +100,7 @@ public class ProjectAdapter extends BaseAdapter {
             }
         });
 
-        // Set the item project's name
+        // Set the project name
         TextView projectName = convertView.findViewById(R.id.projectName);
         projectName.setText(project.getProjectName());
         return convertView;

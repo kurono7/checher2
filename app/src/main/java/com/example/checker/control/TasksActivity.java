@@ -76,22 +76,24 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
     final static int PICK_IMAGE_GALLERY = 4;
 
     /**
-     * Initialize variables UI. <br>
+     * Initialize UI variables. <br>
      * <b>post: </b> Variables are initialized. <br>
      */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         tasksList = findViewById(R.id.tasksList);
         searchBar = findViewById(R.id.searchBar);
         searchBtn = findViewById(R.id.searchBtn);
+        swiperefresh = findViewById(R.id.swiperefresh);
+        progressBar = findViewById(R.id.progressBar);
 
+
+        // Set listener to the search bar
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -112,29 +114,37 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
-        progressBar = findViewById(R.id.progressBar);
-        ImageView optionsMenu = findViewById(R.id.optionsMenu);
+
+        //Set titles of the top bar
         TextView projectName = findViewById(R.id.titleOne);
         TextView territorieName = findViewById(R.id.titleTwo);
-
-        final ImageView button_filter = findViewById(R.id.button_filter);
-        final ConstraintLayout filterLayout = findViewById(R.id.filter_layout);
-        filterLayout.setVisibility(View.INVISIBLE);
 
         Territorie territorie = (Territorie) getIntent().getSerializableExtra("territorie");
         projectName.setText(territorie != null ? territorie.getProjectName() : null);
         territorieName.setText(territorie != null ? territorie.getTerritorieName() : null);
 
-        optionsMenu.setOnClickListener(new View.OnClickListener() {
+
+        // Set action to profile image icon to display the popup to logout
+        findViewById(R.id.optionsMenu).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showPopup(view);
             }
         });
 
+        //Initialize variables related with layout filter
+        final ImageView button_filter = findViewById(R.id.button_filter);
+        final ConstraintLayout filterLayout = findViewById(R.id.filter_layout);
+        filterLayout.setVisibility(View.INVISIBLE);
+        final CheckBox filter_not_reported = filterLayout.findViewById(R.id.filter_not_reported);
+        final CheckBox filter_reported = filterLayout.findViewById(R.id.filter_reported);
+        final CheckBox filter_approved = filterLayout.findViewById(R.id.filter_approved);
+        final CheckBox filter_not_approved = filterLayout.findViewById(R.id.filter_not_approved);
+        Button filter_clear = filterLayout.findViewById(R.id.filter_clear);
+
+        //Set listener to show filter layout when the button is clicked
         button_filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -145,8 +155,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             }
         });
 
-        //Refreshing tasks
-        swiperefresh = findViewById(R.id.swiperefresh);
+        //Set listener to refresh tasks swiping
         if (swiperefresh != null) {
             swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
@@ -160,12 +169,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             });
         }
 
-        //Cleaning filters
-        final CheckBox filter_not_reported = filterLayout.findViewById(R.id.filter_not_reported);
-        final CheckBox filter_reported = filterLayout.findViewById(R.id.filter_reported);
-        final CheckBox filter_approved = filterLayout.findViewById(R.id.filter_approved);
-        final CheckBox filter_not_approved = filterLayout.findViewById(R.id.filter_not_approved);
-        Button filter_clear = filterLayout.findViewById(R.id.filter_clear);
+        //Set listener to clean filters
         filter_clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -179,7 +183,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             }
         });
 
-        //Filtering results
+        //Set listener to filter results
         Button filter_find = filterLayout.findViewById(R.id.filter_find);
         filter_find.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,6 +218,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             }
         });
 
+        //Set on item click listener to show and load the correct dialog and info, according to the task type
         tasksList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -226,6 +231,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                     deliverableDialog.setCancelable(true);
                     deliverableDialog.show();
 
+                    //Set listener to the attach file button
                     Button attachFileBtn = deliverableDialog.findViewById(R.id.attachFileBtn);
                     attachFileBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -234,6 +240,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                         }
                     });
 
+                    //Set listener to the send report button
                     Button sendReportBtn = deliverableDialog.findViewById(R.id.sendReportBtn);
                     sendReportBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -304,10 +311,15 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                 swiperefresh.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
             }
         });
-
         refreshList();
     }
 
+    /**
+     * Returns true if the searched text is contained in the destination text . <br>
+     *
+     * @param str       The destination. v != null && v != "".
+     * @param searchStr The searched text (introduced by user). v != null && v != "".
+     */
 
     final public static boolean containsIgnoreCase(String str, String searchStr) {
         if (str == null || searchStr == null) return false;
@@ -323,6 +335,12 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         return false;
     }
 
+    /**
+     * Load the list of tasks which each name contains the content of the search bar text. <br>
+     * <b>pre: </b> The list is loaded with all project/territory tasks. <br>
+     * <b>post: </b> The list contains only the tasks that contains the search characters in their names<br>
+     */
+
     final public void searchByName() {
         ArrayList<Task> tasksFiltered = new ArrayList<>();
         String taskName = "";
@@ -336,6 +354,11 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         tasksList.setAdapter(taskAdapter);
     }
 
+    /**
+     * Hide the soft keyboard <br>
+     * <b>post: </b> The soft keyboard is hide<br>
+     */
+
     final public void hideSoftKeyBoard() {
         // Check if no view has focus:
         View view = this.getCurrentFocus();
@@ -346,7 +369,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
     }
 
     /**
-     * Send server the get task of user. <br>
+     * Send to server the user request to get tasks. <br>
      * <b>pre: </b> progressbar != null. <br>
      * <b>post: </b> The task of user are obtained. <br>
      */
@@ -372,11 +395,10 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         }
     }
 
-
     /**
-     * Initialize . <br>
-     * <b>pre: </b> Send server the close session of user. <br>
-     * <b>post: </b> The session of user is closed. <br>
+     * Initialize and assign action to the options menu. <br>
+     * <b>pre: </b> Show popup to send to server the logout request. <br>
+     * <b>post: </b> The user session is closed. <br>
      *
      * @param v View of context. v != null && v != "".
      */
@@ -413,11 +435,11 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
 
 
     /**
-     * Receive the response of get tasks and close session from server. <br>
+     * Receive the response of logout, attach and get projects request from server<br>
      * <b>pre: </b> progressBar != null. <br>
      *
-     * @param result  Response of request tasks and close session from server. result != null && result != "".
-     * @param service Service sended to server. service != null && service != "".
+     * @param result  Response of logout, attach and get projects request from server. result != null && result != "".
+     * @param service Service requested to server. service != null && service != "".
      */
 
     @Override
@@ -488,11 +510,11 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
 
 
     /**
-     * Receive the image that was captured by camera. <br>
+     * Receive the image captured by camera. <br>
      *
      * @param requestCode Request code from activity. requestCode != null && requestCode != "".
      * @param resultCode  Result code from activity sended to server. resultCode != null && resultCode != "".
-     * @param data        Data sended from activity. data != null && data != "".
+     * @param data        Data sent from activity. data != null && data != "".
      */
 
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
@@ -532,6 +554,13 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         }
     }
 
+    /**
+     * Encode the image captured by camera. <br>
+     * <b>post: </b> The file is encoded <br>
+     *
+     * @param data The image captured. data != null && data != "".
+     */
+
     private String sendImageCaptured(Intent data) {
         Bundle extras = data.getExtras();
         Bitmap imageBitmap = (Bitmap) (extras != null ? extras.get("data") : null);
@@ -539,9 +568,15 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         Objects.requireNonNull(imageBitmap).compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         String base64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
-
         return base64;
     }
+
+    /**
+     * Encode the image selected from gallery. <br>
+     * <b>post: </b> The file is encoded <br>
+     *
+     * @param data The image selected. data != null && data != "".
+     */
 
     private String sendFileSelected(Intent data) {
         String base64 = "";
@@ -560,15 +595,14 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return base64;
     }
 
     /**
-     * Receive the permissions that was requered by camera. <br>
+     * Receive the permissions required by camera. <br>
      *
      * @param requestCode  Request code from activity. requestCode != null && requestCode != "".
-     * @param permissions  Permissions that are requered by camera. permissions != null && permissions != "".
+     * @param permissions  Permissions that are required by camera. permissions != null && permissions != "".
      * @param grantResults Permissions given. grantResults != null && grantResults != "".
      */
 
@@ -611,6 +645,11 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             }
         }
     }
+
+    /**
+     * Open the image chooser. <br>
+     * <b>post: </b> The image chooser is opened  <br>
+     */
 
     public void openImageChooser() {
         final CharSequence[] items = {"Tomar foto", "Seleccionar archivo"};
@@ -658,6 +697,11 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         });
         builder.show();
     }
+
+    /**
+     * Set actions to back pressure. <br>
+     * <b>post: </b> The image chooser is opened  <br>
+     */
 
     @Override
     public void onBackPressed() {

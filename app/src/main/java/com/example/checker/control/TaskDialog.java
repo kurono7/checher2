@@ -35,7 +35,7 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
     /**
      * Create a Task Dialog. <br>
      * <b>pre: </b> context != null && task != null && territorie != null. <br>
-     * <b>post: </b> Task Dialog was created. <br>
+     * <b>post: </b> Task Dialog is created. <br>
      */
 
     TaskDialog(Context context, Task task, Territorie territorie) {
@@ -47,7 +47,7 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
 
 
     /**
-     * Initialize variables UI. <br>
+     * Initialize UI variables. <br>
      * <b>pre: </b> context != null && task != null && territorie != null. <br>
      * <b>post: </b> Variables are initialized. <br>
      */
@@ -58,7 +58,7 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_task);
 
-        // Initialized variables
+        // Initialize variables
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         preferences.edit().putBoolean("update", false).apply();
 
@@ -119,9 +119,9 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
 
 
     /**
-     * Send server the report state of task. <br>
+     * Send to server the report request of the task. <br>
      * <b>pre: </b> progressbar != null. <br>
-     * <b>post: </b> The task was report. <br>
+     * <b>post: </b> The task is reported. <br>
      */
 
     private void updateTaskState() {
@@ -132,11 +132,11 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
             progressBar.setVisibility(View.VISIBLE);
             Objects.requireNonNull(getWindow()).setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-            // Call the data stored in preferences
+            // Get the data stored in preferences
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             String token = preferences.getString("token", "");
 
-            // Send the request to update task
+            // Send the request to update the task
             connectionHTTP.updateTaskState(territorie.getProjectID(), territorie.getTerritorieID(), task.getTaskID(), token);
         } else {
             Toast.makeText(getContext(), getContext().getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
@@ -145,11 +145,11 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
 
 
     /**
-     * Receive the response of state changed from server. <br>
+     * Receive the response of task state change request from server<br>
      * <b>pre: </b> progressBar != null. <br>
      *
-     * @param result  Response of request report task from server. result != null && result != "".
-     * @param service Service sended to server. service != null && service != "".
+     * @param result  Response of state change request from server. result != null && result != "".
+     * @param service Service requested to server. service != null && service != "".
      */
 
     @Override
