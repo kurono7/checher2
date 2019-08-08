@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.checker.R;
 import com.example.checker.model.Territorie;
+
 import java.util.ArrayList;
 
 public class TerritorieAdapter extends BaseAdapter {

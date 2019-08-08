@@ -1,9 +1,5 @@
 package com.example.checker.control;
 
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -36,6 +32,10 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.checker.R;
 import com.example.checker.model.Task;
