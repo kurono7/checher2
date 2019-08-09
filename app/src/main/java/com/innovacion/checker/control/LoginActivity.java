@@ -60,8 +60,10 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
 
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String password = preferences.getString("password", "");
+        String name = preferences.getString("name","");
         if(!password.isEmpty()){
             loginPassword.setText(password);
+            loginUsername.setText(name);
             loginRememberPassword.setChecked(true);
         }
 
@@ -70,6 +72,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(!b){
                     preferences.edit().putString("password","").apply();
+                    preferences.edit().putString("name","").apply();
                 }
             }
         });
@@ -273,8 +276,10 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
 
                     if(loginRememberPassword.isChecked()){
                         preferences.edit().putString("password", loginPassword.getText().toString()).apply();
+                        preferences.edit().putString("name",loginUsername.getText().toString()).apply();
                     }else{
                         preferences.edit().putString("password","").apply();
+                        preferences.edit().putString("name","").apply();
                     }
 
                     getProjects();
@@ -325,16 +330,9 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
     @Override
     protected void onRestart() {
         super.onRestart();
-        if (loginPassword != null) {
+        if (loginPassword != null && !loginRememberPassword.isChecked()) {
             loginPassword.setText("");
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (loginPassword != null) {
-            loginPassword.setText("");
+            loginUsername.setText("");
         }
     }
 }
