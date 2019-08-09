@@ -70,7 +70,7 @@ public class DeliverableDialog extends Dialog {
         processName.setText(task.getProcess());
         subprocessName.setText(task.getSubprocess());
         taskName.setText(task.getTaskName());
-        expirationDate.setText(task.getExpirationDate());
+        expirationDate.setText(task.getExpirationDate().substring(0,10));
         if (task.getStatus().equals("0")) {
             status.setText(context.getString(R.string.not_reportedTxt));
         } else if (task.getStatus().equals("1")) {

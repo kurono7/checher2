@@ -75,7 +75,7 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
         taskID.setText(task.getTaskID().substring(0, 5));
         process.setText(task.getProcess());
         subprocess.setText(task.getSubprocess());
-        expirationDate.setText(task.getExpirationDate());
+        expirationDate.setText(task.getExpirationDate().substring(0,10));
         if (task.getStatus().equals("0")) {
             status.setText(context.getString(R.string.not_reportedTxt));
         } else if (task.getStatus().equals("1")) {
@@ -99,12 +99,12 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
             reportTaskBtn.setEnabled(false);
             reportTaskBtn.setBackground(getContext().getDrawable(R.drawable.rounded_green_button_shape_dissabled));
             reportTaskBtn.setText(getContext().getString(R.string.reportedTxt));
-            Toast.makeText(getContext(), "La tarea esta reportada", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getContext(), "La tarea esta reportada", Toast.LENGTH_LONG).show();
         } else if (task.getStatus().equals("2")) {
             reportTaskBtn.setEnabled(false);
             reportTaskBtn.setBackground(getContext().getDrawable(R.drawable.rounded_green_button_shape_dissabled));
             reportTaskBtn.setText(getContext().getString(R.string.approvedTxt));
-            Toast.makeText(getContext(), "La tarea esta aprobada", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getContext(), "La tarea esta aprobada", Toast.LENGTH_LONG).show();
         }
 
         reportTaskBtn.setOnClickListener(new View.OnClickListener() {

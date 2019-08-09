@@ -80,7 +80,7 @@ public class TaskAdapter extends BaseAdapter implements ConnectionHTTP.Connetion
 
         // Set views' data and behavior
         taskName.setText(task.getTaskName());
-        taskExpirationDate.setText(task.getExpirationDate());
+        taskExpirationDate.setText(task.getExpirationDate().substring(0,10));
         message.setVisibility(View.GONE);
         message.setOnClickListener(new View.OnClickListener() {
             @Override
