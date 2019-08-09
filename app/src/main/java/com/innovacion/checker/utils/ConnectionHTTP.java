@@ -25,7 +25,7 @@ public class ConnectionHTTP {
     //SERVER
     //private final static String SERVER = "http://192.168.43.218:8000";
     private final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8080";
-    private final static int WAIT = 30000;
+    private final static int WAIT = 20000;
 
     // URL API'S
     private final static String AUTHENTICATION = "/auth/autenticar/mobile";

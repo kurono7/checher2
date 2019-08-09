@@ -47,10 +47,10 @@
             android:layout_marginEnd="@dimen/normal_margin"
             android:drawableLeft="@drawable/ic_vector_user_icon"
             android:drawablePadding="@dimen/normal_margin"
-            android:paddingEnd="@dimen/header_logo_margin"
             android:hint="@string/usernameTxt"
             android:inputType="text"
             android:paddingLeft="@dimen/normal_margin"
+            android:paddingEnd="@dimen/header_logo_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginTitle" />
@@ -65,17 +65,19 @@
             android:layout_marginEnd="@dimen/normal_margin"
             android:drawableLeft="@drawable/ic_vector_password_icon"
             android:drawablePadding="@dimen/normal_margin"
-            android:paddingEnd="@dimen/header_logo_margin"
             android:hint="@string/passwordTxt"
             android:inputType="textPassword"
             android:paddingLeft="@dimen/normal_margin"
+            android:paddingEnd="@dimen/header_logo_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginUsername" />
+
         <ToggleButton
             android:id="@+id/showHidePassword"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_marginEnd="@dimen/normal_margin"
             android:background="@drawable/show_hide_password_selector"
             android:checked="false"
             android:text=""
@@ -85,18 +87,31 @@
             app:layout_constraintEnd_toEndOf="@id/loginPassword"
             app:layout_constraintTop_toTopOf="@id/loginPassword" />
 
-        <Switch
-            android:id="@+id/loginRememberPassword"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="18dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="12dp"
-            android:paddingEnd="12dp"
-            android:text="@string/rememberPasswordTxt"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/normal_margin"
+            app:layout_constraintStart_toStartOf="@id/loginPassword"
+            app:layout_constraintTop_toBottomOf="@id/loginPassword">
+
+            <Switch
+                android:id="@+id/loginRememberPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/ContentSemiboldText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/min_margin"
+                android:text="@string/rememberUserTxt"
+                app:layout_constraintBottom_toBottomOf="@id/loginRememberPassword"
+                app:layout_constraintStart_toEndOf="@id/loginRememberPassword"
+                app:layout_constraintTop_toTopOf="@id/loginRememberPassword" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

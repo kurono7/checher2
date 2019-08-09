@@ -25,7 +25,7 @@
     <string name="usernameTxt">Usuario</string>
     <string name="passwordTxt">Contraseña</string>
     <string name="loginTxt">Ingresar</string>
-    <string name="rememberPasswordTxt">Recordar datos</string>
+    <string name="rememberUserTxt">Recordar usuario</string>
     <string name="logoutTxt">Cerrar sesión</string>
     <string name="error_user_name">Ingrese el nombre de usuario</string>
     <string name="error_user_password">Ingrese la contraseña</string>

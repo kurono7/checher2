@@ -330,9 +330,5 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
     @Override
     protected void onRestart() {
         super.onRestart();
-        if (loginPassword != null && !loginRememberPassword.isChecked()) {
-            loginPassword.setText("");
-            loginUsername.setText("");
-        }
     }
 }
