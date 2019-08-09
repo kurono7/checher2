@@ -7,12 +7,15 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -35,6 +38,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
     private ToggleButton showHidePassword;
     private ProgressBar progressBar;
     private Context context;
+    private Switch loginRememberPassword;
 
     /**
      * Initialize UI variables. <br>
@@ -52,6 +56,23 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
         loginPassword = findViewById(R.id.loginPassword);
         showHidePassword = findViewById(R.id.showHidePassword);
         progressBar = findViewById(R.id.progressBar);
+        loginRememberPassword = findViewById(R.id.loginRememberPassword);
+
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String password = preferences.getString("password", "");
+        if(!password.isEmpty()){
+            loginPassword.setText(password);
+            loginRememberPassword.setChecked(true);
+        }
+
+        loginRememberPassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(!b){
+                    preferences.edit().putString("password","").apply();
+                }
+            }
+        });
 
         // Set listener to show and hide password button
         showHidePassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -219,7 +240,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
                 progressBar.setVisibility(View.INVISIBLE);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 loginUsername.setText("");
-                loginPassword.setText("");
                 loginPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 loginUsername.requestFocus();
             }
@@ -250,6 +270,12 @@ public class LoginActivity extends AppCompatActivity implements ConnectionHTTP.C
                     editor.putString("IdPerfil", IdPerfil);
                     editor.putString("Nombres", Nombres);
                     editor.apply();
+
+                    if(loginRememberPassword.isChecked()){
+                        preferences.edit().putString("password", loginPassword.getText().toString()).apply();
+                    }else{
+                        preferences.edit().putString("password","").apply();
+                    }
 
                     getProjects();
                 } else {

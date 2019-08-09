@@ -72,12 +72,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginUsername" />
-
         <ToggleButton
             android:id="@+id/showHidePassword"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginEnd="@dimen/normal_margin"
             android:background="@drawable/show_hide_password_selector"
             android:checked="false"
             android:text=""
@@ -86,6 +84,19 @@
             app:layout_constraintBottom_toBottomOf="@id/loginPassword"
             app:layout_constraintEnd_toEndOf="@id/loginPassword"
             app:layout_constraintTop_toTopOf="@id/loginPassword" />
+
+        <Switch
+            android:id="@+id/loginRememberPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"
+            android:paddingEnd="12dp"
+            android:text="@string/rememberPasswordTxt"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
