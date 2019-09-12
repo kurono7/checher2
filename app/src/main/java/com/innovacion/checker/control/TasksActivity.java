@@ -7,11 +7,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
@@ -35,6 +37,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.innovacion.checker.R;
@@ -42,6 +45,7 @@ import com.innovacion.checker.model.Task;
 import com.innovacion.checker.model.Territorie;
 import com.innovacion.checker.utils.ConnectionHTTP;
 import com.innovacion.checker.utils.ExternalStorage;
+import com.innovacion.checker.utils.Filepath;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,6 +56,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCallback {
@@ -227,7 +232,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                 final Task task = (Task) tasksList.getAdapter().getItem(position);
                 if (task.getTaskType() == 1) {
                     positionItemSelected = position;
-                    deliverableDialog = new DeliverableDialog(TasksActivity.this, task, territorie, "");
+                    deliverableDialog = new DeliverableDialog(TasksActivity.this, task, territorie, "", "");
                     deliverableDialog.setCancelable(true);
                     deliverableDialog.show();
 
@@ -246,6 +251,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                         @Override
                         public void onClick(View view) {
                             String base64 = deliverableDialog.getBase64();
+                            String nameFile = deliverableDialog.getNameFile();
 
                             if (base64 != null && !base64.isEmpty()) {
                                 final ConnectionHTTP connectionHTTP = new ConnectionHTTP(TasksActivity.this);
@@ -256,7 +262,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                     String token = preferences.getString("token", "");
 
-                                    connectionHTTP.setAttachTask(territorie.getProjectID(), territorie.getTerritorieID(), task.getTaskID(), token, base64, ((EditText) deliverableDialog.findViewById(R.id.commentTxt)).getText().toString());
+                                    connectionHTTP.setAttachTask(territorie.getProjectID(), territorie.getTerritorieID(), task.getTaskID(), token, base64, ((EditText) deliverableDialog.findViewById(R.id.commentTxt)).getText().toString(), nameFile);
                                     deliverableDialog.dismiss();
                                 } else {
                                     Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
@@ -388,8 +394,9 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             Territorie territorie = (Territorie) intent.getSerializableExtra("territorie");
             String idProject = territorie != null ? territorie.getProjectID() : null;
             String idTerritore = territorie != null ? territorie.getTerritorieID() : null;
+            String idUser = preferences.getString("IdUsuario", "");
 
-            connectionHTTP.getTasks(idProject, idTerritore, code, token);
+            connectionHTTP.getTasks(idUser,idProject, idTerritore, code, token);
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
         }
@@ -477,7 +484,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                         String subprocess = task.getString("SubProceso");
                         String extensionArchivo = task.getString("ExtensionArchivo");
 
-                        tasks.add(new Task(taskID, taskType, processID, process, subprocess, taskName, status, expirationDate, extensionArchivo));
+                        tasks.add(new Task(taskID, taskType, processID, process, subprocess, taskName, status, expirationDate, extensionArchivo, task));
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), respuesta.getString("message"), Toast.LENGTH_LONG).show();
@@ -522,13 +529,15 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             String encodedBase64 = "";
             if (requestCode == PICK_IMAGE_CAMERA) {
                 encodedBase64 = sendImageCaptured(data);
+
+                String filename = "CAM-"+(new Date()).toString()+".png";
+                deliverableDialog.setNameFile(filename);
             } else if (requestCode == PICK_IMAGE_GALLERY) {
                 encodedBase64 = sendFileSelected(data);
             }
 
             final Territorie territorie = (Territorie) getIntent().getSerializableExtra("territorie");
             final Task task = (Task) tasksList.getAdapter().getItem(positionItemSelected);
-
 
             if (task.getTaskType() == 1) {
                 deliverableDialog.setBase64(encodedBase64);
@@ -580,21 +589,49 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
 
     private String sendFileSelected(Intent data) {
         String base64 = "";
-        // Get the Uri of the selected file
-        Uri uri = Uri.parse(Objects.requireNonNull(data.getData()).toString());
-        String getPath = ExternalStorage.getPath(this, uri);
 
+        // Get the Uri of the selected file
+        Uri uri = data.getData();
+        String uriString = uri.toString();
+        File myFile = new File(uriString);
+        String path = myFile.getAbsolutePath();
+        String displayName = "";
+
+        if (uriString.startsWith("content://")) {
+            Cursor cursor = null;
+            try {
+                cursor = getContentResolver().query(uri, null, null, null, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        } else if (uriString.startsWith("file://")) {
+            displayName = myFile.getName();
+        }
+
+        String getPath = Filepath.getRealPath(TasksActivity.this, uri);
+
+        deliverableDialog.setNameFile(displayName);
         try {
             File file = new File(getPath);
-            byte[] buffer = new byte[(int) file.length()];
-            @SuppressWarnings("resource")
-            int length = new FileInputStream(file).read(buffer);
-            base64 = Base64.encodeToString(buffer, 0, length,
-                    Base64.DEFAULT);
-            Log.e("BASE64", base64);
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            if((file.length()/(1024*1024))< 20){
+                byte[] buffer = new byte[(int) file.length()+100];
+                @SuppressWarnings("resource")
+                int length = new FileInputStream(file).read(buffer);
+                base64 = Base64.encodeToString(buffer, 0, length,
+                        Base64.DEFAULT);
+                Log.e("BASE64", base64);
+            }else{
+                base64="";
+                Toast.makeText(TasksActivity.this, "Se ha superado el tamaño maximo", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            base64="";
         }
+
         return base64;
     }
 
@@ -617,8 +654,10 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             }
         } else if (requestCode == MY_GALLERY_REQUES_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 String[] taskExtension = ((Task) tasksList.getAdapter().getItem(positionItemSelected)).getExtensionArchivo().split(", ");
                 ArrayList<String> array = new ArrayList<>();
 
@@ -668,8 +707,13 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                     if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_GALLERY_REQUES_CODE);
                     } else {
-                        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                        verifyStoragePermissions();
+
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                         intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
                         String[] taskExtension = ((Task) tasksList.getAdapter().getItem(positionItemSelected)).getExtensionArchivo().split(", ");
                         ArrayList<String> array = new ArrayList<>();
 
@@ -698,47 +742,13 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         builder.show();
     }
 
-    /**
-     * Set actions to back pressure. <br>
-     * <b>post: </b> The image chooser is opened  <br>
-     */
+    private void verifyStoragePermissions() {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
 
-    @Override
-    public void onBackPressed() {
-        // Call the data stored in preferences
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean oneProject = preferences.getBoolean("one_project", false);
-
-        //Validate if there is more than one project to go back there or exit the app otherwise
-        if (oneProject) {
-            new AlertDialog.Builder(this)
-                    .setMessage("¿Está seguro que desea salir?")
-                    .setCancelable(false)
-                    .setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            final ConnectionHTTP connectionHTTP = new ConnectionHTTP(TasksActivity.this);
-                            // Ask if is there connection
-                            if (connectionHTTP.isNetworkAvailable(getApplicationContext())) {
-                                // Block windows and show the progressbar
-                                progressBar.setVisibility(View.VISIBLE);
-                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                                // Call the data stored in preferences
-                                String token = preferences.getString("token", "");
-                                String IdUsuario = preferences.getString("IdUsuario", "");
-
-                                // Send the request to logout
-                                connectionHTTP.logout(IdUsuario, token);
-                            } else {
-                                Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    })
-                    .setNegativeButton("No", null)
-                    .show();
-        } else {
-            finish();
-            startActivity(new Intent(TasksActivity.this, ProjectsActivity.class));
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_GALLERY_REQUES_CODE);
         }
     }
 

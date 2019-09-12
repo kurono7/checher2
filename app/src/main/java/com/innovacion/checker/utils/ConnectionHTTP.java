@@ -23,14 +23,14 @@ public class ConnectionHTTP {
     private ConnetionCallback listener;
 
     //SERVER
-    //private final static String SERVER = "http://192.168.43.218:8000";
+    private final static String SERVER = "http://192.168.137.72:8000";
     //private final static String SERVER = "http://checkerapp.westus2.cloudapp.azure.com:8080";
-    private final static String SERVER = "https://api.checkerapp.co";
+    //private final static String SERVER = "https://api.checkerapp.co";
     private final static int WAIT = 20000;
 
     // URL API'S
     private final static String AUTHENTICATION = "/auth/autenticar/mobile";
-    public final static String GETTASKS = "/api/v1/tareas/";
+    public final static String GETTASKS = "/api/v1/tareasProyecto/filtro-tareas-proyecto/estados-mobile/";
     public final static String SIGNOUT = "/api/v1/usuarios/cerrar-sesion/";
     public final static String GETPROJECTS = "/api/v1/general/autenticacion/mobile/";
     private final static String UPDATETASKSTATE = "/api/v1/tareasProyecto/procesar-tarea/";
@@ -41,7 +41,7 @@ public class ConnectionHTTP {
         this.listener = listener;
     }
 
-    public void setAttachTask(String IdProyecto, String IdTerritorio, String IdTarea, String token, String image, String comment) {
+    public void setAttachTask(String IdProyecto, String IdTerritorio, String IdTarea, String token, String image, String comment, String nameFile) {
         JSONObject post = new JSONObject();
         try {
             post.put("idProyecto", IdProyecto);
@@ -49,18 +49,21 @@ public class ConnectionHTTP {
             post.put("idTarea", IdTarea);
             post.put("image", image);
             post.put("comment", comment);
+            post.put("nombreArchivo",nameFile);
+            post.put("upload", false);
             new SendDeviceDetailsPOST().execute(ATTACH_TASK, post.toString(), token, IdProyecto);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public void updateTaskState(String IdProyecto, String IdTerritorio, String IdTarea, String token) {
+    public void updateTaskState(String IdProyecto, String IdTerritorio, String IdTarea, String token, JSONObject json) {
         JSONObject post = new JSONObject();
         try {
             post.put("idProyecto", IdProyecto);
             post.put("idTerritorio", IdTerritorio);
             post.put("idTarea", IdTarea);
+            post.put("tarea", json);
             new SendDeviceDetailsPOST().execute(UPDATETASKSTATE, post.toString(), token, IdProyecto);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -81,8 +84,17 @@ public class ConnectionHTTP {
         }
     }
 
-    public void getTasks(String projectID, String territorieID, String responsable, String token) {
-        new SendDeviceDetailsGET().execute(GETTASKS, projectID, territorieID, responsable, token);
+    public void getTasks(String userID, String projectID, String territorieID, String responsable, String token) {
+        JSONObject post = new JSONObject();
+        try {
+            post.put("IdProyecto", projectID);
+            post.put("IdUsuario", userID);
+            post.put("IdTerritorio", territorieID);
+            post.put("IdResponsable", responsable);
+            new SendDeviceDetailsPOST().execute(GETTASKS, post.toString(), token, projectID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void getProjects(String IdPerfil, String idUsuario, String token) {
@@ -126,7 +138,10 @@ public class ConnectionHTTP {
                 } else if (params[0].equals(GETMESSAGE)) {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[2]).openConnection();
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[3]);
-                } else {
+                } else if(params[0].equals(GETTASKS)) {
+                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]+params[3]+"/0").openConnection();
+                    httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[2]);
+                }else {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0]).openConnection();
                 }
                 httpURLConnection.setRequestMethod("POST");
@@ -191,7 +206,7 @@ public class ConnectionHTTP {
                     httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[2] + "/" + params[1]).openConnection();
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[3]);
                 } else {
-                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[1] + "/territorio/" + params[2] + "?responsable=" + params[3]).openConnection();
+                    httpURLConnection = (HttpURLConnection) new URL(SERVER + params[0] + params[1] + "?responsable=" + params[3]).openConnection();
                     httpURLConnection.setRequestProperty("Authorization", "Bearer " + params[4]);
                 }
                 httpURLConnection.setRequestMethod("GET");

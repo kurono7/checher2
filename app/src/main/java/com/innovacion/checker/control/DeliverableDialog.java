@@ -22,6 +22,7 @@ public class DeliverableDialog extends Dialog {
     private Territorie territorie;
     private ProgressBar progressBar;
     private String base64;
+    private String nameFile;
     private TextView taskID;
     private TextView taskName;
     private TextView status;
@@ -31,13 +32,14 @@ public class DeliverableDialog extends Dialog {
     private ImageView closeBtn;
 
 
-    public DeliverableDialog(Context context, Task task, Territorie territorie, String base64) {
+    public DeliverableDialog(Context context, Task task, Territorie territorie, String base64, String nameFile) {
         super(context);
         this.context = context;
         this.task = task;
         this.territorie = territorie;
         this.territorie = territorie;
         this.base64 = base64;
+        this.nameFile = nameFile;
     }
 
     /**
@@ -111,5 +113,13 @@ public class DeliverableDialog extends Dialog {
 
     public String getBase64() {
         return base64;
+    }
+
+    public String getNameFile() {
+        return nameFile;
+    }
+
+    public void setNameFile(String nameFile){
+        this.nameFile = nameFile;
     }
 }

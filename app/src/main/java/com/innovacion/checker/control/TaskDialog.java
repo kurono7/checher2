@@ -137,7 +137,7 @@ public class TaskDialog extends Dialog implements ConnectionHTTP.ConnetionCallba
             String token = preferences.getString("token", "");
 
             // Send the request to update the task
-            connectionHTTP.updateTaskState(territorie.getProjectID(), territorie.getTerritorieID(), task.getTaskID(), token);
+            connectionHTTP.updateTaskState(territorie.getProjectID(), territorie.getTerritorieID(), task.getTaskID(), token, task.getJson());
         } else {
             Toast.makeText(getContext(), getContext().getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
         }
