@@ -59,5 +59,12 @@
     <string name="attachDeliverableTxt">Adjuntar entregable</string>
     <string name="sendReportTxt">Enviar reporte</string>
 
+    <!--FILE STORAGE-->
+    <string name="empty_directory">Directorio vacio</string>
+    <string name="storage_removed">Almacenamiento eliminado.</string>
+    <string name="choose_file">Selecione un archivo</string>
+    <string name="error_selecting_file">Error seleccionando un archivo</string>
+    <string name="internal_storage">Memoria interna</string>
+
 
 </resources>

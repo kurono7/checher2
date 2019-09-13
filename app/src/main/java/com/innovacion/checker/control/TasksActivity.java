@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.MimeTypeMap;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -44,8 +45,7 @@ import com.innovacion.checker.R;
 import com.innovacion.checker.model.Task;
 import com.innovacion.checker.model.Territorie;
 import com.innovacion.checker.utils.ConnectionHTTP;
-import com.innovacion.checker.utils.ExternalStorage;
-import com.innovacion.checker.utils.Filepath;
+import com.innovacion.checker.utils.FileChooserActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +54,6 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
@@ -69,6 +68,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
     private int positionItemSelected;
     private DeliverableDialog deliverableDialog;
     private SwipeRefreshLayout swiperefresh;
+    private String[] mimeTypes;
 
     final static String PDF = ".pdf";
     final static String PNG = ".png";
@@ -457,6 +457,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                 boolean exito = respuesta.getBoolean("exito");
 
                 if (exito) {
+                    Toast.makeText(TasksActivity.this, respuesta.getString("message"), Toast.LENGTH_LONG).show();
                     refreshList();
                 } else {
                     Toast.makeText(TasksActivity.this, respuesta.getString("message"), Toast.LENGTH_LONG).show();
@@ -542,7 +543,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             if (task.getTaskType() == 1) {
                 deliverableDialog.setBase64(encodedBase64);
                 Button b = deliverableDialog.findViewById(R.id.attachFileBtn);
-                b.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_attach_icon, 0, 0, 0);
+                if(!encodedBase64.equals("")) b.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vector_attach_icon, 0, 0, 0);
             } else {
                 TaskDialog taskDialog = new TaskDialog(TasksActivity.this, task, territorie);
                 taskDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -611,28 +612,49 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             displayName = myFile.getName();
         }
 
-        String getPath = Filepath.getRealPath(TasksActivity.this, uri);
+        String getPath = uri.getPath();
 
+        String mime = getMimeType(getPath);
+        boolean mim = false;
+        for (int i = 0; mime!=null && i < mimeTypes.length && !mim; i++) {
+            if (mime.equals(mimeTypes[i])) {
+                mim = true;
+            }
+        }
+
+        if (!mim) {
+            Toast.makeText(TasksActivity.this, "No se permite este tipo de archivos", Toast.LENGTH_LONG).show();
+        } else {
         deliverableDialog.setNameFile(displayName);
         try {
             File file = new File(getPath);
 
-            if((file.length()/(1024*1024))< 20){
-                byte[] buffer = new byte[(int) file.length()+100];
+            if ((file.length() / (1024 * 1024)) < 20) {
+                byte[] buffer = new byte[(int) file.length() + 100];
                 @SuppressWarnings("resource")
                 int length = new FileInputStream(file).read(buffer);
                 base64 = Base64.encodeToString(buffer, 0, length,
                         Base64.DEFAULT);
-                Log.e("BASE64", base64);
-            }else{
-                base64="";
+            } else {
+                base64 = "";
                 Toast.makeText(TasksActivity.this, "Se ha superado el tamaño maximo", Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
-            base64="";
+            base64 = "";
         }
+    }
 
         return base64;
+    }
+
+    // url = file path or whatever suitable URL you want.
+    public static String getMimeType(String url) {
+        String type = null;
+        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        }
+        return type;
     }
 
     /**
@@ -655,9 +677,6 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         } else if (requestCode == MY_GALLERY_REQUES_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 String[] taskExtension = ((Task) tasksList.getAdapter().getItem(positionItemSelected)).getExtensionArchivo().split(", ");
                 ArrayList<String> array = new ArrayList<>();
 
@@ -674,11 +693,9 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                         array.add("image/jpg");
                     }
                 }
-                String[] mimeTypes = array.toArray(new String[taskExtension.length]);
 
-                intent.setType("*/*");
-                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-                startActivityForResult(intent, PICK_IMAGE_GALLERY);
+                mimeTypes = array.toArray(new String[taskExtension.length]);
+                startActivityForResult(new Intent(TasksActivity.this, FileChooserActivity.class), PICK_IMAGE_GALLERY);
             } else {
                 Toast.makeText(this, "Permiso de archivos denegado", Toast.LENGTH_LONG).show();
             }
@@ -709,11 +726,6 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                     } else {
                         verifyStoragePermissions();
 
-                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
-                                | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-
                         String[] taskExtension = ((Task) tasksList.getAdapter().getItem(positionItemSelected)).getExtensionArchivo().split(", ");
                         ArrayList<String> array = new ArrayList<>();
 
@@ -730,11 +742,9 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
                                 array.add("image/jpg");
                             }
                         }
-                        String[] mimeTypes = array.toArray(new String[array.size()]);
+                        mimeTypes = array.toArray(new String[array.size()]);
 
-                        intent.setType("*/*");
-                        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-                        startActivityForResult(intent, PICK_IMAGE_GALLERY);
+                        startActivityForResult(new Intent(TasksActivity.this, FileChooserActivity.class), PICK_IMAGE_GALLERY);
                     }
                 }
             }
