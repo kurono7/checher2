@@ -4,7 +4,7 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.innovacion.checker"
-        minSdkVersion 23
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 6
         versionName '1.0.6'

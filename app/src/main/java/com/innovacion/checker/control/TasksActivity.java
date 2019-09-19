@@ -1,6 +1,7 @@
 package com.innovacion.checker.control;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -37,6 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -396,7 +399,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             String idTerritore = territorie != null ? territorie.getTerritorieID() : null;
             String idUser = preferences.getString("IdUsuario", "");
 
-            connectionHTTP.getTasks(idUser,idProject, idTerritore, code, token);
+            connectionHTTP.getTasks(idUser, idProject, idTerritore, code, token);
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.failed_connection), Toast.LENGTH_LONG).show();
         }
@@ -714,17 +717,46 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (items[item].equals(items[0])) {
-                    if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
-                    } else {
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+                        } else {
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(intent, PICK_IMAGE_CAMERA);
+                        }
+                    }else{
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         startActivityForResult(intent, PICK_IMAGE_CAMERA);
                     }
                 } else if (items[item].equals(items[1])) {
-                    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_GALLERY_REQUES_CODE);
-                    } else {
-                        verifyStoragePermissions();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_GALLERY_REQUES_CODE);
+                        } else {
+                            verifyStoragePermissions();
+
+                            String[] taskExtension = ((Task) tasksList.getAdapter().getItem(positionItemSelected)).getExtensionArchivo().split(", ");
+                            ArrayList<String> array = new ArrayList<>();
+
+                            for (int i = 0; i < taskExtension.length; i++) {
+                                if (taskExtension[i].equals(PDF)) {
+                                    array.add("application/pdf");
+                                } else if (taskExtension[i].equals(XSL)) {
+                                    array.add("application/vnd.ms-excel");
+                                } else if (taskExtension[i].equals(XSLX)) {
+                                    array.add("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                                } else if (taskExtension[i].equals(PNG)) {
+                                    array.add("image/png");
+                                } else if (taskExtension[i].equals(JPG)) {
+                                    array.add("image/jpg");
+                                }
+                            }
+                            mimeTypes = array.toArray(new String[array.size()]);
+
+                            startActivityForResult(new Intent(TasksActivity.this, FileChooserActivity.class), PICK_IMAGE_GALLERY);
+                        }
+                    }else{
 
                         String[] taskExtension = ((Task) tasksList.getAdapter().getItem(positionItemSelected)).getExtensionArchivo().split(", ");
                         ArrayList<String> array = new ArrayList<>();
@@ -752,6 +784,7 @@ public class TasksActivity extends BaseTop implements ConnectionHTTP.ConnetionCa
         builder.show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void verifyStoragePermissions() {
         // Check if we have write permission
         int permission = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
